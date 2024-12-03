@@ -1,6 +1,18 @@
-import { Box, Container, Divider, Typography } from "@mui/material";
+import { Box, Button, Container, Divider, Typography } from "@mui/material";
+import { ModalBox } from "./Modal";
+import { useState } from "react";
 
 export function Section() {
+  const [openRegister, setOpenRegister] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpenRegister(true);
+  };
+
+  const handleClose = () => {
+    setOpenRegister(false);
+  };
+
   return (
     <Box
       component="section"
@@ -25,6 +37,7 @@ export function Section() {
           width: "100%",
           height: "100%",
           backgroundColor: "rgba(0, 0, 0, 0.5)",
+          zIndex: "1",
         }}
       />
       <Container
@@ -34,6 +47,7 @@ export function Section() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          zIndex: "2",
         }}
       >
         <Typography
@@ -49,17 +63,24 @@ export function Section() {
         <Divider />
         <Typography
           component="h3"
-          sx={{ fontSize: "1.5rem", color: "ButtonFace" }}
+          sx={{ fontSize: "1.5rem", color: "ButtonFace", padding: "1rem" }}
         >
-          Aproveite ofertas incríveis nos melhores locais.
+          Aproveite ofertas incríveis para os melhores locais.
         </Typography>
-        <Typography
-          component="h3"
-          sx={{ fontSize: "1.5rem", color: "ButtonFace" }}
+        <Button
+          variant="contained"
+          onClick={handleClickOpen}
+          sx={{
+            fontSize: "1.5rem",
+            fontWeight: "bold",
+            backgroundColor: "#ff3366",
+            zIndex: "3",
+          }}
         >
           REGISTRAR
-        </Typography>
+        </Button>
       </Container>
+      <ModalBox open={openRegister} onClose={handleClose} />
     </Box>
   );
 }
