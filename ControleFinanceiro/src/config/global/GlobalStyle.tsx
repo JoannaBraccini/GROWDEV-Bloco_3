@@ -6,8 +6,6 @@ import "@fontsource/roboto/700.css";
 
 const styles: Record<string, CSSObject> = {
   "*": {
-    margin: 0,
-    padding: 0,
     fontFamily: "Roboto",
   },
   a: {

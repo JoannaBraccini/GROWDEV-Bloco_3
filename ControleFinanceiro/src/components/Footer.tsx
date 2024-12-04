@@ -15,16 +15,25 @@ export function Footer() {
       color={"white"}
     >
       <Typography variant="body1">Desenvolvido por Joanna Braccini</Typography>
-      <CopyrightIcon sx={{ width: 15, mx: 0.5 }} />
-      <Link
-        href="https://www.growdev.com.br/"
-        target="_blank"
-        underline="hover"
-        color="inherit"
-        rel="noopener"
+      <Box
+        sx={{
+          display: {
+            xs: "none",
+            sm: "flex",
+          },
+        }}
       >
-        Growdev
-      </Link>
+        <CopyrightIcon sx={{ width: 15, mx: 0.5 }} />
+        <Link
+          href="https://www.growdev.com.br/"
+          target="_blank"
+          underline="hover"
+          color="inherit"
+          rel="noopener"
+        >
+          Growdev
+        </Link>
+      </Box>
     </Box>
   );
 }

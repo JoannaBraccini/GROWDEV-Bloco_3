@@ -8,16 +8,18 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { CurrencyExchangeTwoTone } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
-const settings = ["Perfil", "Conta", "Sair"];
-const pages = ["Entradas", "Saídas", "Resumo Financeiro"];
+const pages = ["Painel", "Conta"];
 
 export function Header() {
+  const [alignment, setAlignment] = React.useState("Painel");
+  const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -40,12 +42,36 @@ export function Header() {
     setAnchorElUser(null);
   };
 
+  const handleChange = (
+    _event: React.MouseEvent<HTMLElement>, //sublinhado para prevenir warning, retirar caso precise usar
+    newAlignment: string | null
+  ) => {
+    if (newAlignment !== null) {
+      setAlignment(newAlignment);
+    }
+  };
+
+  const handlePageChange = (page: string) => {
+    if (page === "Painel") {
+      navigate("/");
+    } else {
+      navigate(`/${page.toLowerCase()}`);
+    }
+    setAnchorElNav(null); // Fecha o menu após a navegação (mobile)
+  };
+
+  function handleLogout() {}
+
   return (
     <AppBar position="static" color="success">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <CurrencyExchangeTwoTone
-            sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+            sx={{
+              display: { xs: "none", md: "flex" },
+              mr: 1,
+              color: "#FFD700",
+            }}
           />
           <Typography
             variant="h6"
@@ -64,11 +90,11 @@ export function Header() {
           >
             FINANCEIRO ONLINE
           </Typography>
-
+          {/* Menu mobile */}
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
-              aria-label="conta do usuário"
+              aria-label="menu"
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
@@ -90,47 +116,37 @@ export function Header() {
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              sx={{ display: { xs: "block", md: "none" } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: "center" }}>{page}</Typography>
+                <MenuItem key={page} onClick={() => handlePageChange(page)}>
+                  <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          <CurrencyExchangeTwoTone
-            sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
-          />
-          <Typography
-            variant="h5"
-            noWrap
-            component={Link}
-            to="/"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            FINANCEIRO ONLINE
-          </Typography>
+
+          {/* Menu em telas grandes */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))}
+            <ToggleButtonGroup
+              aria-label="Página"
+              value={alignment}
+              exclusive
+              color="warning" //resolver problema de flicker
+              onChange={handleChange}
+            >
+              {pages.map((page) => (
+                <ToggleButton
+                  key={page}
+                  value={page}
+                  onClick={() => handlePageChange(page)}
+                >
+                  {page}
+                </ToggleButton>
+              ))}
+            </ToggleButtonGroup>
           </Box>
+
+          {/* Avatar */}
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Configurações">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -153,13 +169,14 @@ export function Header() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: "center" }}>
-                    {setting}
-                  </Typography>
-                </MenuItem>
-              ))}
+              <MenuItem key={"logout"} onClick={handleCloseUserMenu}>
+                <Typography
+                  onClick={() => handleLogout()}
+                  sx={{ textAlign: "center" }}
+                >
+                  Logout
+                </Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
