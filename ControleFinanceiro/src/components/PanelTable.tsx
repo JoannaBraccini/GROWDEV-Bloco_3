@@ -1,10 +1,10 @@
 import React from "react";
 import { styled } from "@mui/material/styles";
 import { tableCellClasses } from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
@@ -18,6 +18,10 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import { SelectType } from "./SelectType";
+import { pink } from "@mui/material/colors";
+import { Fab } from "@mui/material";
+import { Add } from "@mui/icons-material";
+import { Modal } from "./Modal";
 //paginação
 interface TablePaginationActionsProps {
   count: number;
@@ -62,14 +66,14 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
-        aria-label="first page"
+        aria-label="primeira página"
       >
         {theme.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
       </IconButton>
       <IconButton
         onClick={handleBackButtonClick}
         disabled={page === 0}
-        aria-label="previous page"
+        aria-label="página anterior"
       >
         {theme.direction === "rtl" ? (
           <KeyboardArrowRight />
@@ -80,7 +84,7 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
       <IconButton
         onClick={handleNextButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="next page"
+        aria-label="próxima página"
       >
         {theme.direction === "rtl" ? (
           <KeyboardArrowLeft />
@@ -91,7 +95,7 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
       <IconButton
         onClick={handleLastPageButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="last page"
+        aria-label="última página"
       >
         {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
@@ -100,12 +104,13 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 }
 //estilização da tabela
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  fontSize: 18,
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: pink[600],
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
+    fontSize: 16,
   },
 }));
 
@@ -143,7 +148,16 @@ const rows = [
 export function PanelTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [selectedType, setSelectedType] = React.useState<string>("all");
+  const [selectedType, setSelectedType] = React.useState<string>("Todos");
+  const [openModal, setOpenModal] = React.useState(false);
+
+  const handleModalOpen = () => {
+    setOpenModal(true);
+  };
+
+  const handleModalClose = () => {
+    setOpenModal(false);
+  };
 
   // Filtrar as linhas com base no tipo selecionado
   const filteredRows =
@@ -172,7 +186,7 @@ export function PanelTable() {
     <>
       <SelectType onChange={(selection) => setSelectedType(selection)} />
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <Table sx={{ minWidth: 700 }} aria-label="tabela customizada">
           <TableHead>
             <TableRow>
               <StyledTableCell>Descrição</StyledTableCell>
@@ -195,7 +209,12 @@ export function PanelTable() {
                 </StyledTableCell>
                 <StyledTableCell align="right">{row.type}</StyledTableCell>
                 <StyledTableCell align="right">{row.date}</StyledTableCell>
-                <StyledTableCell align="right">{row.amount}</StyledTableCell>
+                <StyledTableCell align="right">
+                  {new Intl.NumberFormat("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  }).format(row.amount)}
+                </StyledTableCell>
               </StyledTableRow>
             ))}
             {emptyRows > 0 && (
@@ -226,6 +245,22 @@ export function PanelTable() {
           </TableFooter>
         </Table>
       </TableContainer>
+      <Box
+        position="fixed"
+        bottom={70}
+        right={50}
+        sx={{ "& > :not(style)": { m: 1 } }}
+      >
+        <Fab aria-label="adicionar" color="secondary" onClick={handleModalOpen}>
+          <Add />
+        </Fab>
+      </Box>
+      <Modal
+        openModal={openModal}
+        onClose={handleModalClose}
+        title="Adicionar Transação"
+        onSubmit={() => {}}
+      />
     </>
   );
 }

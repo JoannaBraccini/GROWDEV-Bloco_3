@@ -1,4 +1,4 @@
-import { PanelTable } from "../components/Table";
+import { PanelTable } from "../components/PanelTable";
 import { DefaultLayout } from "../config/layout/DefaultLayout";
 
 export function Home() {

@@ -14,6 +14,7 @@ import { CurrencyExchangeTwoTone } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import { purple } from "@mui/material/colors";
 
 const pages = ["Painel", "Conta"];
 
@@ -60,17 +61,19 @@ export function Header() {
     setAnchorElNav(null); // Fecha o menu após a navegação (mobile)
   };
 
-  function handleLogout() {}
+  function handleLogout() {
+    alert("Deslogou!");
+  }
 
   return (
-    <AppBar position="static" color="success">
+    <AppBar position="static" sx={{ backgroundColor: purple[700] }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <CurrencyExchangeTwoTone
             sx={{
               display: { xs: "none", md: "flex" },
               mr: 1,
-              color: "#FFD700",
+              color: "#dabc12",
             }}
           />
           <Typography
@@ -79,7 +82,7 @@ export function Header() {
             component={Link}
             to="/"
             sx={{
-              mr: 2,
+              mx: 3,
               display: { xs: "none", md: "flex" },
               fontFamily: "monospace",
               fontWeight: 700,
@@ -131,13 +134,14 @@ export function Header() {
               aria-label="Página"
               value={alignment}
               exclusive
-              color="warning" //resolver problema de flicker
+              color="warning"
               onChange={handleChange}
             >
               {pages.map((page) => (
                 <ToggleButton
                   key={page}
                   value={page}
+                  sx={{ color: "white" }}
                   onClick={() => handlePageChange(page)}
                 >
                   {page}
