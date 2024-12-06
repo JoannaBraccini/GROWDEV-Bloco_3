@@ -12,8 +12,6 @@ const styles: Record<string, CSSObject> = {
     textDecoration: "none",
     color: "black",
   },
-
-  // Outros estilos compartilhados...
 };
 
 export function GlobalStyle() {

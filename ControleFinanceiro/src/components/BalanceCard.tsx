@@ -16,7 +16,7 @@ export function BalanceCard({ balance }: BalanceCardProps) {
         color: balance >= 0 ? green[800] : red[800],
         boxShadow: 3,
         borderRadius: 2,
-        mb: 2,
+        mb: 1,
       }}
     >
       <CardContent>
@@ -24,7 +24,7 @@ export function BalanceCard({ balance }: BalanceCardProps) {
           display="flex"
           justifyContent="space-between"
           alignItems="center"
-          paddingBottom={0}
+          padding={0}
         >
           <Typography variant="h6">Saldo da Conta</Typography>
           <Typography variant="h5" fontWeight="bold">

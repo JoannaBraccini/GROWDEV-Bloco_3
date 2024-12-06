@@ -8,9 +8,15 @@ interface DefaultLayoutProps {
 
 export function DefaultLayout({ children }: DefaultLayoutProps) {
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+      }}
+    >
       <Header />
-      <Container sx={{ py: 10, flexGrow: 1 }}>{children}</Container>
+      <Container sx={{ py: 3, flexGrow: 1 }}>{children}</Container>
       <Footer />
     </Box>
   );

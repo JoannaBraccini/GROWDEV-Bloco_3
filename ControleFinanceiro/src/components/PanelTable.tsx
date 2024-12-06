@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {
-  Button,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -10,11 +10,12 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Tooltip,
 } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 import { tableCellClasses } from "@mui/material/TableCell";
-import { pink } from "@mui/material/colors";
+import { blue, pink } from "@mui/material/colors";
 import { SelectType } from "./SelectType";
 import { Transaction } from "../types/Transaction";
 
@@ -123,14 +124,24 @@ export function PanelTable({
                   }).format(row.amount)}
                 </StyledTableCell>
                 <StyledTableCell align="right">
-                  <Button onClick={() => onEdit(row)}>
-                    <Edit />
-                    Editar
-                  </Button>
-                  <Button onClick={() => onDelete(row)}>
-                    <Delete />
-                    Excluir
-                  </Button>
+                  <IconButton
+                    onClick={() => onEdit(row)}
+                    aria-label="Editar"
+                    sx={{ color: blue[900] }}
+                  >
+                    <Tooltip title="Editar">
+                      <Edit />
+                    </Tooltip>
+                  </IconButton>
+                  <IconButton
+                    onClick={() => onDelete(row)}
+                    aria-label="Excluir"
+                    sx={{ color: blue[900] }}
+                  >
+                    <Tooltip title="Excluir">
+                      <Delete onClick={() => onDelete(row)} />
+                    </Tooltip>
+                  </IconButton>
                 </StyledTableCell>
               </StyledTableRow>
             ))}

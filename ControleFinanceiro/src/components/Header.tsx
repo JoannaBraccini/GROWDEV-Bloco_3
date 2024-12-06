@@ -67,7 +67,7 @@ export function Header() {
 
   return (
     <AppBar position="static" sx={{ backgroundColor: purple[700] }}>
-      <Container maxWidth="xl">
+      <Container maxWidth="lg">
         <Toolbar disableGutters>
           <CurrencyExchangeTwoTone
             sx={{

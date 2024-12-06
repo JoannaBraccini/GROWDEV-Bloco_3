@@ -6,7 +6,7 @@ import { Transaction } from "../types/Transaction";
 import { Modal } from "../components/Modal";
 import { Toast } from "../components/Toast";
 import { Add } from "@mui/icons-material";
-import { Box, Fab } from "@mui/material";
+import { Box, Fab, Tooltip } from "@mui/material";
 import { BalanceCard } from "../components/BalanceCard";
 
 export function Home() {
@@ -106,7 +106,9 @@ export function Home() {
           color="secondary"
           onClick={handleOpenAddModal}
         >
-          <Add />
+          <Tooltip title="Adicionar">
+            <Add />
+          </Tooltip>
         </Fab>
       </Box>
       <Modal
