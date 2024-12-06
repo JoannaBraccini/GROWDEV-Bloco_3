@@ -5,10 +5,11 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 interface SelectTypeProps {
+  title?: string;
   onChange: (value: string) => void;
 }
 
-export function SelectType({ onChange }: SelectTypeProps) {
+export function SelectType({ title, onChange }: SelectTypeProps) {
   const [type, setType] = React.useState("");
 
   const handleSelectChange = (event: SelectChangeEvent) => {
@@ -19,7 +20,7 @@ export function SelectType({ onChange }: SelectTypeProps) {
 
   return (
     <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-      <InputLabel id="demo-select-small-label">Filtrar</InputLabel>
+      <InputLabel id="demo-select-small-label">{title || "Filtrar"}</InputLabel>
       <Select
         labelId="demo-select-small-label"
         id="demo-select-small"
@@ -27,7 +28,8 @@ export function SelectType({ onChange }: SelectTypeProps) {
         label="Tipo"
         onChange={handleSelectChange}
       >
-        <MenuItem value={"Todos"}>Todos</MenuItem>
+        {/* Renderiza "Todos" apenas se o título não for fornecido */}
+        {!title && <MenuItem value="Todos">Todos</MenuItem>}
         <MenuItem value={"Entrada"}>Entrada</MenuItem>
         <MenuItem value={"Saída"}>Saída</MenuItem>
       </Select>
