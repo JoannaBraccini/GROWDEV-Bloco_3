@@ -6,17 +6,23 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 interface SelectTypeProps {
   title?: string;
+  value: string;
   onChange: (value: string) => void;
 }
 
-export function SelectType({ title, onChange }: SelectTypeProps) {
-  const [type, setType] = React.useState("");
+export function SelectType({ title, value, onChange }: SelectTypeProps) {
+  const [type, setType] = React.useState(value);
 
   const handleSelectChange = (event: SelectChangeEvent) => {
     const selection = event.target.value;
     setType(selection); //atualiza o estado
     onChange(selection); // Passa o valor selecionado para o pai
   };
+
+  // Atualiza o setType quando o valor da prop value mudar
+  React.useEffect(() => {
+    setType(value);
+  }, [value]);
 
   return (
     <FormControl sx={{ m: 1, minWidth: 120 }} size="small">

@@ -26,7 +26,12 @@ export function BalanceCard({ balance }: BalanceCardProps) {
           alignItems="center"
           padding={0}
         >
-          <Typography variant="h6">Saldo da Conta</Typography>
+          <Typography variant="h6" sx={{ display: { xs: "none", sm: "flex" } }}>
+            Saldo da Conta
+          </Typography>
+          <Typography variant="h6" sx={{ display: { xs: "flex", sm: "none" } }}>
+            Saldo
+          </Typography>
           <Typography variant="h5" fontWeight="bold">
             {balance.toLocaleString("pt-BR", {
               style: "currency",

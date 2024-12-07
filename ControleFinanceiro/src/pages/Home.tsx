@@ -22,14 +22,65 @@ export function Home() {
     message: "",
   });
 
+  function validate(transaction: Transaction) {
+    if (
+      !transaction.type ||
+      (transaction.type !== "Entrada" && transaction.type !== "Saída")
+    ) {
+      setToastProps({
+        message: "Selecione o tipo correto da transação",
+        type: "error",
+      });
+      setToastOpen(true);
+      return false;
+    }
+
+    if (!transaction.description || transaction.description.length < 3) {
+      setToastProps({
+        message: "Insira uma descrição maior",
+        type: "error",
+      });
+      setToastOpen(true);
+      return false;
+    }
+
+    const inputDate = new Date(transaction.date).toLocaleDateString("pt-BR");
+    const currentDate = new Date().toLocaleDateString("pt-BR");
+
+    // Se a data da transação for no futuro
+    if (inputDate > currentDate) {
+      setToastProps({
+        message: "A data da transação não pode ser no futuro",
+        type: "error",
+      });
+      setToastOpen(true);
+      return false;
+    }
+
+    if (!transaction.amount || transaction.amount <= 0) {
+      setToastProps({
+        message: "Valor deve ser maior que ZERO",
+        type: "error",
+      });
+      setToastOpen(true);
+      return false;
+    }
+
+    return true;
+  }
+
+  //CRUD
   function handleAddTransaction(newTransaction: Transaction) {
+    //Validação
+    if (!validate(newTransaction)) return;
+
     setTransactions((prev) => [...prev, newTransaction]);
     setToastProps({
       message: "Transação adicionada com sucesso",
       type: "success",
     });
     setToastOpen(true);
-    setModalOpen(false);
+    handleModalClose();
   }
 
   function handleEditTransaction(updatedTransaction: Transaction) {
@@ -41,7 +92,7 @@ export function Home() {
       type: "success",
     });
     setToastOpen(true);
-    setModalOpen(false);
+    handleModalClose();
   }
 
   function handleDeleteTransaction(transactionToDelete: Transaction) {
@@ -53,7 +104,7 @@ export function Home() {
       type: "success",
     });
     setToastOpen(true);
-    setModalOpen(false);
+    handleModalClose();
   }
 
   const balance = useMemo(() => {
@@ -85,11 +136,16 @@ export function Home() {
   }
 
   function handleModalClose() {
+    setSelectedTransaction(undefined);
     setModalOpen(false);
   }
 
   function handleToastClose() {
-    setToastOpen(false); // Fecha o Toast
+    setToastProps({
+      message: "",
+      type: "success",
+    });
+    setToastOpen(false);
   }
 
   return (
@@ -100,7 +156,16 @@ export function Home() {
         onEdit={handleOpenEditModal}
         onDelete={handleOpenDeleteModal}
       />
-      <Box position="fixed" bottom={70} right={50}>
+      <Box
+        position="fixed"
+        bottom={70}
+        sx={{
+          right: {
+            xs: 20,
+            sm: 50,
+          },
+        }}
+      >
         <Fab
           aria-label="adicionar"
           color="secondary"

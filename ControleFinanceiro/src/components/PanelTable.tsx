@@ -56,8 +56,14 @@ export function PanelTable({
 
   const filteredRows =
     selectedType === "Todos"
-      ? transactions
-      : transactions.filter((t) => t.type === selectedType);
+      ? transactions.sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+        )
+      : transactions
+          .filter((t) => t.type === selectedType)
+          .sort(
+            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+          );
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredRows.length) : 0;
@@ -78,7 +84,10 @@ export function PanelTable({
 
   return (
     <>
-      <SelectType onChange={(selection) => setSelectedType(selection)} />
+      <SelectType
+        onChange={(selection) => setSelectedType(selection)}
+        value=""
+      />
       <TableContainer
         component={Paper}
         sx={{
@@ -110,7 +119,7 @@ export function PanelTable({
                 </StyledTableCell>
                 <StyledTableCell align="right">{row.type}</StyledTableCell>
                 <StyledTableCell align="right">
-                  {new Date(row.date).toLocaleDateString()}
+                  {new Date(row.date).toLocaleDateString("pt-BR")}
                 </StyledTableCell>
                 <StyledTableCell
                   align="right"

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Transaction } from "../types/Transaction";
 import {
   Dialog,
@@ -19,6 +19,12 @@ interface ModalProps {
   transaction?: Transaction;
 }
 
+const generateUniqueId = (): string => {
+  return "xxxxxx".replace(/[x]/g, () =>
+    ((Math.random() * 16) | 0).toString(16)
+  );
+};
+
 export function Modal({
   isOpen,
   onClose,
@@ -27,22 +33,35 @@ export function Modal({
   transaction,
 }: ModalProps) {
   //estado inicial
+  const emptyTransaction: Transaction = {
+    id: generateUniqueId(),
+    type: "",
+    description: "",
+    amount: 0,
+    date: new Date(),
+  };
+
   const [formData, setFormData] = useState<Transaction>(
-    transaction || {
-      id: "",
-      type: "",
-      description: "",
-      amount: 0,
-      date: new Date(),
-    }
+    transaction || emptyTransaction
   );
+
+  useEffect(() => {
+    if (type === "edit" && transaction) {
+      setFormData(transaction); // Atualiza com os dados da transação quando editar
+    } else if (type === "add") {
+      setFormData(emptyTransaction); // Reseta o formulário quando adicionar
+    }
+  }, [type, transaction, isOpen]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: name === "amount" ? parseFloat(value) : value,
-    }));
+    setFormData((prev) => {
+      if (name === "amount") {
+        return { ...prev, [name]: parseFloat(value) }; // Converte para número
+      }
+
+      return { ...prev, [name]: value };
+    });
   };
 
   const handleTypeChange = (value: string) => {
@@ -67,7 +86,11 @@ export function Modal({
                 : "Edite os dados da transação abaixo."}
             </DialogContentText>
 
-            <SelectType onChange={handleTypeChange} title="Tipo" />
+            <SelectType
+              onChange={handleTypeChange}
+              title="Tipo"
+              value={formData.type}
+            />
             <TextField
               autoFocus
               required
