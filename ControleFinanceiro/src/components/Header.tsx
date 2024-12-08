@@ -151,10 +151,16 @@ export function Header() {
           </Box>
 
           {/* Avatar */}
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Configurações">
+          <Box
+            sx={{ flexGrow: 0, display: "flex", alignItems: "center", gap: 2 }}
+          >
+            <Typography variant="button">Nome do Usuário</Typography>
+            <Tooltip title="Sair">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Usuário" src="/static/images/avatar/2.jpg" />
+                {/*logged*/}
+                {/* <Avatar alt="Usuário" src="/static/images/avatar/2.jpg" /> */}
+                {/*!looged*/}
+                <Avatar src="/broken-image.jpg" />
               </IconButton>
             </Tooltip>
             <Menu

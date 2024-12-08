@@ -84,10 +84,6 @@ export function PanelTable({
 
   return (
     <>
-      <SelectType
-        onChange={(selection) => setSelectedType(selection)}
-        value=""
-      />
       <TableContainer
         component={Paper}
         sx={{
@@ -99,7 +95,12 @@ export function PanelTable({
           <TableHead>
             <TableRow>
               <StyledTableCell>Descrição</StyledTableCell>
-              <StyledTableCell align="right">Tipo</StyledTableCell>
+              <StyledTableCell sx={{ paddingY: 0 }} align="right">
+                <SelectType
+                  onChange={(selection) => setSelectedType(selection)}
+                  value=""
+                />
+              </StyledTableCell>
               <StyledTableCell align="right">Data</StyledTableCell>
               <StyledTableCell align="right">Valor</StyledTableCell>
               <StyledTableCell align="right">Ações</StyledTableCell>

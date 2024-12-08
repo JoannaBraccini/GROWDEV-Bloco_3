@@ -16,7 +16,7 @@ export function BalanceCard({ balance }: BalanceCardProps) {
         color: balance >= 0 ? green[800] : red[800],
         boxShadow: 3,
         borderRadius: 2,
-        mb: 1,
+        mb: 3,
       }}
     >
       <CardContent>

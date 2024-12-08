@@ -26,8 +26,24 @@ export function SelectType({ title, value, onChange }: SelectTypeProps) {
 
   return (
     <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-      <InputLabel id="demo-select-small-label">{title || "Filtrar"}</InputLabel>
+      <InputLabel
+        id="demo-select-small-label"
+        sx={{
+          color: "white",
+          fontWeight: "500",
+          fontSize: 18,
+          lineHeight: "1.5rem",
+        }}
+      >
+        {title || "Tipo"}
+      </InputLabel>
       <Select
+        sx={{
+          color: "white",
+          fontWeight: "500",
+          fontSize: 18,
+          lineHeight: "1.5rem",
+        }}
         labelId="demo-select-small-label"
         id="demo-select-small"
         value={type}
