@@ -1,14 +1,17 @@
+import { Provider } from "react-redux";
 import { GlobalStyle } from "./config/global/GlobalStyle";
 import { AppRoutes } from "./config/routes/AppRoutes";
-import { CssBaseline } from "@mui/material";
+import { store, persistor } from "./config/store";
+import { PersistGate } from "redux-persist/integration/react";
 
 function App() {
   return (
-    <>
-      <CssBaseline enableColorScheme />
-      <GlobalStyle />
-      <AppRoutes />
-    </>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <GlobalStyle />
+        <AppRoutes />
+      </PersistGate>
+    </Provider>
   );
 }
 

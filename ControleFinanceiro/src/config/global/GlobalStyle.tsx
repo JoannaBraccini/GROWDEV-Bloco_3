@@ -1,4 +1,4 @@
-import { GlobalStyles, CSSObject } from "@mui/material";
+import { GlobalStyles, CSSObject, CssBaseline } from "@mui/material";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
@@ -15,5 +15,10 @@ const styles: Record<string, CSSObject> = {
 };
 
 export function GlobalStyle() {
-  return <GlobalStyles styles={styles} />;
+  return (
+    <>
+      <CssBaseline />
+      <GlobalStyles styles={styles} />
+    </>
+  );
 }

@@ -36,7 +36,7 @@ const userLoggedSlice = createSlice({
       );
 
       if (!userFound) {
-        state.errors = "Invalid email or password!!";
+        state.errors = "E-mail ou senha inválidos";
         return state;
       }
 

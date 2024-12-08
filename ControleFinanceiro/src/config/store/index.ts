@@ -9,18 +9,20 @@ import {
   PERSIST,
   PURGE,
   REGISTER,
-} from "redux-persist"; //npm i redux-persist@4.6.0
-import storage from "redux-persist/lib/storage";
+} from "redux-persist";
+import storage from "redux-persist/lib/storage"; // Para persistência no localStorage
 
+// Configuração de persistência
 const persistConfig = {
   key: "mui-app-academy",
   storage,
-  whitelist: ["userLogged"], // OS ESTADOS QUE EU QUERO PERSISTIR
-  // blacklist: ["userLogged"], // OS ESTADOS QUE EU NÃO QUERO
+  whitelist: ["userLogged"], // Estados que serão persistidos
 };
 
+// Aplicando persistência no reducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
+// Configuração da store
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
@@ -31,7 +33,9 @@ export const store = configureStore({
     }),
 });
 
+// Persistor
 export const persistor = persistStore(store);
 
+// Tipos
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
