@@ -15,12 +15,16 @@ import { Link, useNavigate } from "react-router-dom";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { purple } from "@mui/material/colors";
+import { useAppDispatch, useAppSelector } from "../config/store/hooks";
+import { logout } from "../config/store/modules/userLoggedSlice";
 
 const pages = ["Painel", "Conta"];
 
 export function Header() {
-  const [alignment, setAlignment] = React.useState("Painel");
+  const dispatch = useAppDispatch();
+  const userLoggedRedux = useAppSelector((state) => state.userLogged);
   const navigate = useNavigate();
+  const [alignment, setAlignment] = React.useState("Painel");
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -62,8 +66,15 @@ export function Header() {
   };
 
   function handleLogout() {
-    alert("Deslogou!");
+    // disparar o logout
+    dispatch(logout());
   }
+
+  React.useEffect(() => {
+    if (!userLoggedRedux.id) {
+      navigate("/login");
+    }
+  }, [userLoggedRedux, navigate]);
 
   return (
     <AppBar position="static" sx={{ backgroundColor: purple[700] }}>
