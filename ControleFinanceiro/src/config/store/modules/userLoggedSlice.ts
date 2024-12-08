@@ -11,6 +11,7 @@ interface InitialState {
   id: string;
   name: string;
   email: string;
+  avatar: string | undefined;
   remember: boolean;
   errors: string;
 }
@@ -19,6 +20,7 @@ const initialState: InitialState = {
   id: "",
   name: "",
   email: "",
+  avatar: "",
   remember: false,
   errors: "",
 };
@@ -44,6 +46,7 @@ const userLoggedSlice = createSlice({
       state.name = userFound.name;
       state.email = userFound.email;
       state.remember = remember;
+      state.avatar = userFound.avatar;
       state.errors = "";
 
       return state;

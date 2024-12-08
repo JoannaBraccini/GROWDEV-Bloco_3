@@ -70,12 +70,6 @@ export function Header() {
     dispatch(logout());
   }
 
-  React.useEffect(() => {
-    if (!userLoggedRedux.id) {
-      navigate("/login");
-    }
-  }, [userLoggedRedux, navigate]);
-
   return (
     <AppBar position="static" sx={{ backgroundColor: purple[700] }}>
       <Container maxWidth="lg">
@@ -165,13 +159,17 @@ export function Header() {
           <Box
             sx={{ flexGrow: 0, display: "flex", alignItems: "center", gap: 2 }}
           >
-            <Typography variant="button">Nome do Usuário</Typography>
+            <Typography variant="button">{userLoggedRedux.name}</Typography>
             <Tooltip title="Sair">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                {/*logged*/}
-                {/* <Avatar alt="Usuário" src="/static/images/avatar/2.jpg" /> */}
-                {/*!looged*/}
-                <Avatar src="/broken-image.jpg" />
+                {userLoggedRedux ? (
+                  <Avatar
+                    src={userLoggedRedux.avatar}
+                    alt={userLoggedRedux.name}
+                  />
+                ) : (
+                  <Avatar src="/broken-image.jpg" />
+                )}
               </IconButton>
             </Tooltip>
             <Menu

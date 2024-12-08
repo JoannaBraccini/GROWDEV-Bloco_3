@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PanelTable } from "../components/PanelTable";
 import { DefaultLayout } from "../config/layout/DefaultLayout";
 import { rows } from "../mock/Transactions";
@@ -8,6 +8,8 @@ import { Toast } from "../components/Toast";
 import { Add } from "@mui/icons-material";
 import { Box, Fab, Tooltip } from "@mui/material";
 import { BalanceCard } from "../components/BalanceCard";
+import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../config/store/hooks";
 
 export function Home() {
   const [transactions, setTransactions] = useState<Transaction[]>(rows);
@@ -21,8 +23,19 @@ export function Home() {
     type: "success" as "success" | "error",
     message: "",
   });
+  const navigate = useNavigate();
+  const userLoggedRedux = useAppSelector((state) => state.userLogged);
+
+  useEffect(() => {
+    if (!userLoggedRedux.id) {
+      navigate("/login");
+    }
+  }, [userLoggedRedux, navigate]);
 
   function validate(transaction: Transaction) {
+    const inputDate = new Date(transaction.date).toLocaleDateString("pt-BR");
+    const currentDate = new Date().toLocaleDateString("pt-BR");
+
     if (
       !transaction.type ||
       (transaction.type !== "Entrada" && transaction.type !== "Saída")
@@ -43,9 +56,6 @@ export function Home() {
       setToastOpen(true);
       return false;
     }
-
-    const inputDate = new Date(transaction.date).toLocaleDateString("pt-BR");
-    const currentDate = new Date().toLocaleDateString("pt-BR");
 
     // Se a data da transação for no futuro
     if (inputDate > currentDate) {
