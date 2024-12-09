@@ -3,12 +3,11 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { green, red } from "@mui/material/colors";
+import { useAppSelector } from "../config/store/hooks";
 
-interface BalanceCardProps {
-  balance: number; // Saldo total
-}
-
-export function BalanceCard({ balance }: BalanceCardProps) {
+export function BalanceCard() {
+  const userLogged = useAppSelector((state) => state.userLogged);
+  const balance = useAppSelector((state) => state.transactions.balance);
   return (
     <Card
       sx={{
@@ -33,10 +32,12 @@ export function BalanceCard({ balance }: BalanceCardProps) {
             Saldo
           </Typography>
           <Typography variant="h5" fontWeight="bold">
-            {balance.toLocaleString("pt-BR", {
-              style: "currency",
-              currency: "BRL",
-            })}
+            {userLogged.id
+              ? balance.toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })
+              : "R$ 0,00"}
           </Typography>
         </Box>
       </CardContent>

@@ -14,9 +14,10 @@ import storage from "redux-persist/lib/storage"; // Para persistência no localS
 
 // Configuração de persistência
 const persistConfig = {
-  key: "mui-app-academy",
+  key: "controle-financeiro",
   storage,
-  whitelist: ["userLogged"], // Estados que serão persistidos
+  // Estados que serão persistidos
+  whitelist: ["userLogged"],
 };
 
 // Aplicando persistência no reducer

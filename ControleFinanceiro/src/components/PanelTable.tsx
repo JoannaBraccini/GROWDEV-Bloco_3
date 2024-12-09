@@ -56,10 +56,10 @@ export function PanelTable({
 
   const filteredRows =
     selectedType === "Todos"
-      ? transactions.sort(
+      ? [...transactions].sort(
           (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
         )
-      : transactions
+      : [...transactions]
           .filter((t) => t.type === selectedType)
           .sort(
             (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()

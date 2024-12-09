@@ -6,16 +6,16 @@ import { Home } from "../../pages/Home";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Home />,
-  },
-  {
     path: "/perfil",
     element: <Profile />,
   },
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/",
+    element: <Home />,
   },
   {
     path: "*",

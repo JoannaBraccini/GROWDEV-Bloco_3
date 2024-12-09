@@ -18,7 +18,7 @@ import { purple } from "@mui/material/colors";
 import { useAppDispatch, useAppSelector } from "../config/store/hooks";
 import { logout } from "../config/store/modules/userLoggedSlice";
 
-const pages = ["Painel", "Conta"];
+const pages = ["Painel", "Perfil"];
 
 export function Header() {
   const dispatch = useAppDispatch();
@@ -160,16 +160,12 @@ export function Header() {
             sx={{ flexGrow: 0, display: "flex", alignItems: "center", gap: 2 }}
           >
             <Typography variant="button">{userLoggedRedux.name}</Typography>
-            <Tooltip title="Sair">
+            <Tooltip title="Conta">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                {userLoggedRedux ? (
-                  <Avatar
-                    src={userLoggedRedux.avatar}
-                    alt={userLoggedRedux.name}
-                  />
-                ) : (
-                  <Avatar src="/broken-image.jpg" />
-                )}
+                <Avatar
+                  src={userLoggedRedux.avatar}
+                  alt={userLoggedRedux.name}
+                />
               </IconButton>
             </Tooltip>
             <Menu
@@ -190,10 +186,12 @@ export function Header() {
             >
               <MenuItem key={"logout"} onClick={handleCloseUserMenu}>
                 <Typography
-                  onClick={() => handleLogout()}
+                  onClick={() =>
+                    userLoggedRedux.id ? handleLogout() : navigate("/login")
+                  }
                   sx={{ textAlign: "center" }}
                 >
-                  Logout
+                  {userLoggedRedux.id ? "Logout" : "Login"}
                 </Typography>
               </MenuItem>
             </Menu>
