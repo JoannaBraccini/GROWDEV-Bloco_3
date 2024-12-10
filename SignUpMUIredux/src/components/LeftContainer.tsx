@@ -35,7 +35,6 @@ export default function LeftContainer() {
         onChange={handleChange}
         sx={{
           "& .MuiToggleButton-root": {
-            backgroundColor: "#fff",
             cursor: "pointer",
             display: "flex",
             flexDirection: "column",
@@ -46,13 +45,14 @@ export default function LeftContainer() {
             width: "189px",
             zIndex: 100,
             textAlign: "center",
-            // color: "#111",
+            color: "#111 !important",
+            backgroundColor: "#fff !important",
           },
           "& .Mui-selected": {
-            backgroundColor: "#00AD45",
-            color: "#fff",
+            backgroundColor: "#00AD45 !important",
+            color: "#fff !important",
             "&:hover": {
-              backgroundColor: "#00AD45",
+              backgroundColor: "#00AD45 !important",
             },
           },
         }}
