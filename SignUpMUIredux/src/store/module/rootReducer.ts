@@ -1,3 +1,6 @@
-import { persistCombineReducers } from "redux-persist";
+import { combineReducers } from "@reduxjs/toolkit";
+import { userLoggedReducer } from "./userLoggedSlice";
 
-export const rootReducer = persistCombineReducers({});
+export const rootReducer = combineReducers({
+  userLogged: userLoggedReducer,
+});

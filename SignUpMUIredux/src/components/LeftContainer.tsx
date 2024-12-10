@@ -9,7 +9,7 @@ export default function LeftContainer() {
   const [view, setView] = React.useState("login");
 
   const handleChange = (
-    event: React.MouseEvent<HTMLElement>,
+    _event: React.MouseEvent<HTMLElement>,
     nextView: string
   ) => {
     if (nextView !== null) {
