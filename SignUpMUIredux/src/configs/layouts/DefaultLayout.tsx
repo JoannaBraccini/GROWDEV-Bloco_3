@@ -17,7 +17,7 @@ export function DefaultLayout({ children }: DefaultLayoutProps) {
       <Header />
       <Container
         sx={{
-          margin: "4.5rem auto",
+          margin: "5rem auto",
           maxWidth: "1067px",
           display: "flex",
         }}

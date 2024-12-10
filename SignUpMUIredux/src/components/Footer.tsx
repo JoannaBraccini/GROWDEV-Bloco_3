@@ -10,6 +10,7 @@ export function Footer() {
           fontSize: "15px",
           letterSpacing: "1px",
           lineHeight: 1.8,
+          marginTop: "3rem",
         }}
       >
         © 2024 Joanna Braccini - Desenvolvido na{" "}
