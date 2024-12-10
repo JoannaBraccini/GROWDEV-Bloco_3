@@ -1,32 +1,63 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const users: UserState[] = [];
+interface User {
+  id: number;
+  email: string;
+}
 
+interface UserState {
+  id: number;
+  email: string;
+  errors: string;
+  users: User[];
+}
+const initialState: UserState = {
+  id: 0,
+  email: "",
+  errors: "",
+  users: [],
+};
 interface LoginRequest {
   email: string;
   password: string;
 }
 
-interface UserState {
-  id: string;
+interface SignupRequest {
   email: string;
-  errors: string;
+  password: string;
+  passwordConfirm: string;
 }
-
-const initialState: UserState = {
-  id: "",
-  email: "",
-  errors: "",
-};
 
 const userLoggedSlice = createSlice({
   name: "userLogged",
   initialState,
   reducers: {
+    signup(state, action: PayloadAction<SignupRequest>) {
+      const { email, password, passwordConfirm } = action.payload;
+
+      if (password !== passwordConfirm) {
+        state.errors = "As senhas não coincidem";
+        return;
+      }
+
+      const emailExists = state.users.some((user) => user.email === email);
+      if (emailExists) {
+        state.errors = "E-mail já cadastrado";
+        return;
+      }
+
+      const newUser: User = {
+        id: state.users.length + 1,
+        email,
+      };
+      state.users.push(newUser);
+      state.errors = "";
+    },
+
     login(state, action: PayloadAction<LoginRequest>) {
       const { email } = action.payload;
 
-      const userFound = users.find((user) => user.email === email && user.id);
+      const userFound = state.users.find((user) => user.email === email);
 
       if (!userFound) {
         state.errors = "Usuário não encontrado";
@@ -40,11 +71,12 @@ const userLoggedSlice = createSlice({
       return state;
     },
     // Logout
-    logout() {
-      return initialState;
+    logout(state) {
+      state.id = 0;
+      state.email = "";
     },
   },
 });
 
-export const { login, logout } = userLoggedSlice.actions;
+export const { signup, login, logout } = userLoggedSlice.actions;
 export const userLoggedReducer = userLoggedSlice.reducer;
