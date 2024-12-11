@@ -4,20 +4,20 @@ import {
   FormControl,
   Typography,
   Box,
-  Avatar,
   TextField,
   Button,
   Link,
 } from "@mui/material";
 
-export interface FormProps {
-  method: "Login" | "Register" | "ForgotPassword";
+interface FormProps {
+  method: "Login" | "Register" | "Forgot Password";
 }
 
 export function Form({ method }: FormProps) {
-  console.log(method);
   return (
     <Container
+      component="form"
+      onMethodChange
       sx={{
         position: "absolute",
         top: 0,
@@ -28,7 +28,7 @@ export function Form({ method }: FormProps) {
         action="#"
         sx={{
           background: "#ffff",
-          padding: "2em",
+          padding: "1.5em",
           height: "371px",
           minWidth: "570px",
         }}
@@ -40,7 +40,7 @@ export function Form({ method }: FormProps) {
             color: "#000",
             fontSize: "24px",
             textAlign: "center",
-            marginBottom: "1.2em",
+            marginBottom: "1rem",
             fontWeight: 400,
           }}
         >
@@ -50,12 +50,11 @@ export function Form({ method }: FormProps) {
             ? "Registre aqui"
             : "Resetar Senha"}
         </Typography>
-        {method === "ForgotPassword" && (
+        {method === "Forgot Password" && (
           <>
             <Typography
               variant="body1"
               sx={{
-                marginBottom: ".8em",
                 fontSize: "15px",
                 letterSpacing: ".5px",
                 lineHeight: 1.8,
@@ -69,7 +68,7 @@ export function Form({ method }: FormProps) {
                 fontSize: "15px",
                 letterSpacing: ".5px",
                 lineHeight: 1.8,
-                marginBottom: "2em",
+                marginBottom: ".7rem",
               }}
             >
               <Typography sx={{ fontWeight: 600 }}>
@@ -101,7 +100,7 @@ export function Form({ method }: FormProps) {
           <TextField
             size="small"
             variant="standard"
-            fullwidth
+            fullWidth
             type="email"
             placeholder="Email"
             name="email"
@@ -139,7 +138,7 @@ export function Form({ method }: FormProps) {
           <TextField
             size="small"
             variant="standard"
-            fullwidth
+            fullWidth
             type="password"
             placeholder="Password"
             name="password"
@@ -168,20 +167,17 @@ export function Form({ method }: FormProps) {
               alignItems: "center",
             }}
           >
-            <Avatar
-              aria-hidden="true"
+            <Key
               sx={{
                 fontSize: "15px",
                 color: "#464646",
                 marginRight: "10px",
               }}
-            >
-              <Key />
-            </Avatar>
+            />
             <TextField
               size="small"
               variant="standard"
-              fullwidth
+              fullWidth
               type="password"
               placeholder="Confirm Password"
               name="password"

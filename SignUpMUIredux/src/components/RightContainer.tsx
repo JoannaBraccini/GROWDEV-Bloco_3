@@ -1,7 +1,11 @@
 import { Box } from "@mui/material";
 import { Form } from "./Form";
 
-export function RightContainer() {
+interface RightContainerProps {
+  method: "Login" | "Register" | "Forgot Password";
+}
+
+export function RightContainer({ method }: RightContainerProps) {
   return (
     <Box
       sx={{
@@ -15,7 +19,7 @@ export function RightContainer() {
         color: "#111",
       }}
     >
-      <Form />
+      <Form method={method} />
     </Box>
   );
 }

@@ -4,10 +4,11 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { AccountCircle, AppRegistration, Lock } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
 import img from "../assets/img.jpg";
+interface LeftContainerProps {
+  onMethodChange: (method: "Login" | "Register" | "Forgot Password") => void;
+}
 
-interface LeftContainerProps {}
-
-export default function LeftContainer({ method }: LeftContainerProps) {
+export default function LeftContainer({ onMethodChange }: LeftContainerProps) {
   const [view, setView] = React.useState("Login");
 
   const handleChange = (
@@ -20,8 +21,11 @@ export default function LeftContainer({ method }: LeftContainerProps) {
   };
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    const method = event.currentTarget.ariaLabel;
-    return method;
+    const method = event.currentTarget.ariaLabel as
+      | "Login"
+      | "Register"
+      | "Forgot Password";
+    onMethodChange(method);
   };
 
   return (
@@ -92,7 +96,7 @@ export default function LeftContainer({ method }: LeftContainerProps) {
         </ToggleButton>
         <ToggleButton
           value="forgot"
-          aria-label="ForgotPassword"
+          aria-label="Forgot Password"
           onClick={handleClick}
         >
           <Lock
