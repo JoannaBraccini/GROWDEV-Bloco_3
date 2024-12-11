@@ -11,10 +11,11 @@ import {
 } from "@mui/material";
 
 export interface FormProps {
-  method: "login" | "register" | "forgot";
+  method: "Login" | "Register" | "ForgotPassword";
 }
 
 export function Form({ method }: FormProps) {
+  console.log(method);
   return (
     <Container
       sx={{
@@ -43,13 +44,13 @@ export function Form({ method }: FormProps) {
             fontWeight: 400,
           }}
         >
-          {method === "login"
+          {method === "Login"
             ? "Entre aqui"
-            : method === "register"
+            : method === "Register"
             ? "Registre aqui"
             : "Resetar Senha"}
         </Typography>
-        {method === "forgot" && (
+        {method === "ForgotPassword" && (
           <>
             <Typography
               variant="body1"
@@ -156,7 +157,7 @@ export function Form({ method }: FormProps) {
           />
         </Box>
         {/* Confirmar senha*/}
-        {method === "register" && (
+        {method === "Register" && (
           <Box
             sx={{
               marginBottom: "1em",
@@ -216,13 +217,13 @@ export function Form({ method }: FormProps) {
             width: "100%",
           }}
         >
-          {method === "login"
+          {method === "Login"
             ? "Entrar"
-            : method === "register"
+            : method === "Register"
             ? "Cadastrar"
             : "Resetar"}
         </Button>
-        {method === "login" && (
+        {method === "Login" && (
           <Link
             href="#"
             sx={{

@@ -5,8 +5,10 @@ import { AccountCircle, AppRegistration, Lock } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
 import img from "../assets/img.jpg";
 
-export default function LeftContainer() {
-  const [view, setView] = React.useState("login");
+interface LeftContainerProps {}
+
+export default function LeftContainer({ method }: LeftContainerProps) {
+  const [view, setView] = React.useState("Login");
 
   const handleChange = (
     _event: React.MouseEvent<HTMLElement>,
@@ -15,6 +17,11 @@ export default function LeftContainer() {
     if (nextView !== null) {
       setView(nextView);
     }
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    const method = event.currentTarget.ariaLabel;
+    return method;
   };
 
   return (
@@ -57,7 +64,7 @@ export default function LeftContainer() {
           },
         }}
       >
-        <ToggleButton value="login" label="Login" aria-label="Login">
+        <ToggleButton value="login" aria-label="Login" onClick={handleClick}>
           <AccountCircle
             sx={{
               fontSize: "30px",
@@ -68,7 +75,11 @@ export default function LeftContainer() {
             Login
           </Typography>
         </ToggleButton>
-        <ToggleButton value="register" aria-label="Register">
+        <ToggleButton
+          value="register"
+          aria-label="Register"
+          onClick={handleClick}
+        >
           <AppRegistration
             sx={{
               fontSize: "30px",
@@ -79,7 +90,11 @@ export default function LeftContainer() {
             Register
           </Typography>
         </ToggleButton>
-        <ToggleButton value="forgot" aria-label="Forgot Password?">
+        <ToggleButton
+          value="forgot"
+          aria-label="ForgotPassword"
+          onClick={handleClick}
+        >
           <Lock
             sx={{
               fontSize: "30px",
