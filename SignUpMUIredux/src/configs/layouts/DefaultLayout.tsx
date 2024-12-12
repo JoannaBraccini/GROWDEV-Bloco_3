@@ -1,5 +1,5 @@
 import { Box, Container } from "@mui/material";
-import { Header } from "../../components/Header";
+import { Header } from "../../components/Header/index.tsx";
 import { Footer } from "../../components/Footer";
 interface DefaultLayoutProps {
   children: React.ReactNode;

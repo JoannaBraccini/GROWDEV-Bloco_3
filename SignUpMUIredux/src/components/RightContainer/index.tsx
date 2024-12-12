@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { Form } from "./Form";
+import { Form } from "../Form";
 
 interface RightContainerProps {
   method: "Login" | "Register" | "Forgot Password";

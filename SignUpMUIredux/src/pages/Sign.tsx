@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
-import LeftContainer from "../components/LeftContainer.tsx";
-import { RightContainer } from "../components/RightContainer.tsx";
+import { useState } from "react";
 import { DefaultLayout } from "../configs/layouts/DefaultLayout";
-import { useAppDispatch, useAppSelector } from "../store/hooks.ts";
+import { LeftContainer } from "../components/LeftContainer/index.tsx";
+import { RightContainer } from "../components/RightContainer/index.tsx";
 
 export function Sign() {
   const [method, setMethod] = useState<
@@ -14,16 +13,6 @@ export function Sign() {
   ) => {
     setMethod(newMethod);
   };
-
-  // const dispatch = useAppDispatch();
-  // const signupRedux = useAppSelector((state) => state.signup);
-  // const userLoggedRedux = useAppSelector((state) => state.userLogged);
-
-  // useEffect(() => {
-  //   if (!userLoggedRedux.id) {
-
-  //   }
-  // }, [userLoggedRedux]);
 
   return (
     <DefaultLayout>

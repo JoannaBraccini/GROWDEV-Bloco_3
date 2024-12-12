@@ -17,20 +17,11 @@ const userLoggedSlice = createSlice({
   initialState,
   reducers: {
     login(state, action: PayloadAction<LoginRequest>) {
-      const { email, password } = action.payload;
-
-      const userFound = state.users.find(
-        (user) => user.email === email && user.password === password
-      );
-
-      if (!userFound) {
-        state.errors = "Usuário não encontrado";
-        return state;
+      if (action.payload.id) {
+        state.id = action.payload.id;
+        state.email = action.payload.email;
+        state.errors = "";
       }
-
-      state.id = userFound.id;
-      state.email = userFound.email;
-      state.errors = "";
 
       return state;
     },

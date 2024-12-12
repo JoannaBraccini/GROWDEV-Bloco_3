@@ -3,13 +3,13 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { AccountCircle, AppRegistration, Lock } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
-import img from "../assets/img.jpg";
+import img from "../../assets/img.jpg";
 interface LeftContainerProps {
   onMethodChange: (method: "Login" | "Register" | "Forgot Password") => void;
 }
 
-export default function LeftContainer({ onMethodChange }: LeftContainerProps) {
-  const [view, setView] = React.useState("Login");
+export function LeftContainer({ onMethodChange }: LeftContainerProps) {
+  const [view, setView] = React.useState("login");
 
   const handleChange = (
     _event: React.MouseEvent<HTMLElement>,

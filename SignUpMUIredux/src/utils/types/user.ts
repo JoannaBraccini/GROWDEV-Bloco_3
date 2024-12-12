@@ -2,13 +2,11 @@ export interface User {
   id: string;
   email: string;
   password: string; //no bd seria um hash
-  createdAt: Date;
 }
 
-export interface SignupRequest {
-  email: string;
-  password: string;
-  passwordConfirm: string;
+export interface SignupRequest extends Omit<User, "id"> {
+  confirmPassword?: string;
 }
 
-export type LoginRequest = Pick<SignupRequest, "email" | "password">;
+export type LoginRequest = Pick<User, "email" | "password"> &
+  Partial<Pick<User, "id">>;
