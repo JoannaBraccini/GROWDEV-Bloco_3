@@ -116,13 +116,8 @@ export function Form({ method }: FormProps) {
     }
   }
 
-  function handleForgot(email: string | null) {
-    if (email) {
-      showToast("success", `Recuperar senha para: ${email}`);
-    } else {
-      showToast("error", "Clique em Resetar Senha");
-    }
-    console.log("forgot:", email);
+  function handleForgot(email: string) {
+    showToast("success", `Recuperar senha para: ${email}`);
   }
 
   function handleClose(
@@ -133,6 +128,8 @@ export function Form({ method }: FormProps) {
       return;
     }
     setToastOpen(false);
+    dispatch(clearMessage());
+    dispatch(clearUserMessage());
   }
 
   return (
@@ -224,7 +221,7 @@ export function Form({ method }: FormProps) {
             variant="standard"
             fullWidth
             type="email"
-            placeholder="Email"
+            placeholder="E-mail"
             name="email"
             required
             error={!!formErrors.email}
@@ -267,7 +264,7 @@ export function Form({ method }: FormProps) {
                 variant="standard"
                 fullWidth
                 type={showPassword ? "text" : "password"}
-                placeholder="Password"
+                placeholder="Senha"
                 name="password"
                 required
                 error={!!formErrors.password}
@@ -320,7 +317,7 @@ export function Form({ method }: FormProps) {
                   variant="standard"
                   fullWidth
                   type={showPassword ? "text" : "password"}
-                  placeholder="Confirm Password"
+                  placeholder="Confirmar Senha"
                   name="confirm-password"
                   required
                   error={!!formErrors.confirmPassword}
@@ -381,7 +378,6 @@ export function Form({ method }: FormProps) {
         {method === "Login" && (
           <Link
             href="#"
-            onClick={handleForgot}
             sx={{
               color: "#757474",
               fontSize: "14px",

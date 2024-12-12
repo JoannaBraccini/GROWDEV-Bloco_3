@@ -17,15 +17,14 @@ export function LeftContainer({ onMethodChange }: LeftContainerProps) {
   ) => {
     if (nextView !== null) {
       setView(nextView);
+      const method =
+        nextView === "login"
+          ? "Login"
+          : nextView === "register"
+          ? "Register"
+          : "Forgot Password";
+      onMethodChange(method);
     }
-  };
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    const method = event.currentTarget.ariaLabel as
-      | "Login"
-      | "Register"
-      | "Forgot Password";
-    onMethodChange(method);
   };
 
   return (
@@ -68,7 +67,7 @@ export function LeftContainer({ onMethodChange }: LeftContainerProps) {
           },
         }}
       >
-        <ToggleButton value="login" aria-label="Login" onClick={handleClick}>
+        <ToggleButton value="login" aria-label="Entrar">
           <AccountCircle
             sx={{
               fontSize: "30px",
@@ -79,11 +78,7 @@ export function LeftContainer({ onMethodChange }: LeftContainerProps) {
             Login
           </Typography>
         </ToggleButton>
-        <ToggleButton
-          value="register"
-          aria-label="Register"
-          onClick={handleClick}
-        >
+        <ToggleButton value="register" aria-label="Registrar">
           <AppRegistration
             sx={{
               fontSize: "30px",
@@ -94,11 +89,7 @@ export function LeftContainer({ onMethodChange }: LeftContainerProps) {
             Register
           </Typography>
         </ToggleButton>
-        <ToggleButton
-          value="forgot"
-          aria-label="Forgot Password"
-          onClick={handleClick}
-        >
+        <ToggleButton value="forgot" aria-label="Esqueci a Senha">
           <Lock
             sx={{
               fontSize: "30px",
