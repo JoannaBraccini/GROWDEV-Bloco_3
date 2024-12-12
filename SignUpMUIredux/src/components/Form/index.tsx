@@ -1,4 +1,4 @@
-import { Key, Email } from "@mui/icons-material";
+import { Key, Email, VisibilityOff, Visibility } from "@mui/icons-material";
 import {
   Container,
   FormControl,
@@ -7,15 +7,21 @@ import {
   TextField,
   Button,
   Link,
+  InputAdornment,
+  IconButton,
+  SnackbarCloseReason,
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useEffect, useState } from "react";
-import { login } from "../../store/module/user/userLoggedSlice";
+import {
+  login,
+  clearUserMessage,
+} from "../../store/module/user/userLoggedSlice";
 import {
   FieldsErrors,
   validateSignup,
 } from "../../utils/validations/sign.validation";
-import { resetState, signup } from "../../store/module/user/authSlice";
+import { clearMessage, signup } from "../../store/module/user/authSlice";
 import { SnackbarToast } from "../Snackbar";
 import { useNavigate } from "react-router";
 
@@ -30,8 +36,9 @@ interface ToastProps {
 export function Form({ method }: FormProps) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { errors, success, users } = useAppSelector((state) => state.auth);
+  const authRedux = useAppSelector((state) => state.auth);
   const userLoggedRedux = useAppSelector((state) => state.userLogged);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [formErrors, setFormErrors] = useState<FieldsErrors>({
     email: "",
     password: "",
@@ -43,66 +50,59 @@ export function Form({ method }: FormProps) {
     message: "",
   });
 
-  // useEffect(() => {
-  //   if (errors) {
-  //     setToastProps({ type: "error", message: errors });
-  //     setToastOpen(true);
-  //   } else if (success) {
-  //     setToastProps({
-  //       type: "success",
-  //       message: "Sucesso",
-  //     });
-  //     setToastOpen(true);
-  //   } else if (userLoggedRedux.errors) {
-  //     setToastProps({ type: "error", message: userLoggedRedux.errors });
-  //     setToastOpen(true);
-  //   }
-  //   console.log("useeffect", errors);
-  //   return () => {
-  //     dispatch(resetState());
-  //   };
-  // }, [errors, success, userLoggedRedux.errors, dispatch]);
+  const showToast = (type: ToastProps["type"], message: string) => {
+    setToastProps({ type, message });
+    setToastOpen(true);
+  };
 
   useEffect(() => {
-    if (userLoggedRedux.id && !userLoggedRedux.errors) {
-      setToastProps({ type: "success", message: "Logado com sucesso" });
+    if (authRedux.message || userLoggedRedux.message) {
+      const message = authRedux.message || userLoggedRedux.message;
+      showToast(
+        authRedux.success || userLoggedRedux.success ? "success" : "error",
+        message
+      );
+      setTimeout(() => {
+        dispatch(clearUserMessage()); // Limpa a mensagem do User
+        dispatch(clearMessage()); // Limpa a mensagem do Auth
+      }, 2000);
+    }
+
+    if (userLoggedRedux.id) {
       setToastOpen(true);
       setTimeout(() => {
         navigate("/home");
-      }, 1000);
+        dispatch(clearUserMessage()); // Limpa a mensagem do User após redirecionamento
+      }, 2000);
     }
-  }, [userLoggedRedux, navigate]);
+  }, [authRedux, navigate, dispatch, userLoggedRedux]);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const email = e.currentTarget["email"].value;
-    const password = e.currentTarget["password"].value;
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
     // Register
     if (method === "Register") {
-      const confirmPassword = e.currentTarget["confirm-password"].value;
+      const confirmPassword = formData.get("confirm-password") as string;
       const errors = validateSignup(email, password, confirmPassword);
       if (Object.keys(errors).length > 0) {
         setFormErrors(errors);
-        setToastProps({
-          type: "error",
-          message: Object.values(errors).join("\n"),
-        });
-        setToastOpen(true);
+        showToast("error", Object.values(errors).join("\n"));
         return;
       }
+
       setFormErrors({} as FieldsErrors);
       dispatch(signup({ email, password }));
 
       // login
     } else if (method === "Login") {
-      const userFound = users.find(
-        (user) => user.email === email && user.password === password
-      );
+      const userFound = authRedux.users.find((user) => user.email === email);
       if (!userFound) {
         const errorMessage = "Usuário não encontrado";
         setFormErrors({ email: errorMessage } as FieldsErrors);
-        setToastProps({ type: "error", message: errorMessage });
+        showToast("error", errorMessage);
         setToastOpen(true);
         return;
       } else {
@@ -112,13 +112,27 @@ export function Form({ method }: FormProps) {
     }
     // forgot
     if (method === "Forgot Password") {
-      setToastProps({
-        type: "success",
-        message: `Recuperar senha para: ${email}`,
-      });
-      setToastOpen(true);
-      console.log("forgot", email);
+      handleForgot(email);
     }
+  }
+
+  function handleForgot(email: string | null) {
+    if (email) {
+      showToast("success", `Recuperar senha para: ${email}`);
+    } else {
+      showToast("error", "Clique em Resetar Senha");
+    }
+    console.log("forgot:", email);
+  }
+
+  function handleClose(
+    _event: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason
+  ) {
+    if (reason === "clickaway") {
+      return;
+    }
+    setToastOpen(false);
   }
 
   return (
@@ -213,8 +227,8 @@ export function Form({ method }: FormProps) {
             placeholder="Email"
             name="email"
             required
-            // error={!!formErrors.email || !!userLoggedRedux.errors}
-            // helperText={formErrors.email || userLoggedRedux.errors}
+            error={!!formErrors.email}
+            helperText={formErrors.email}
             wfd-id="id1"
             sx={{
               color: "#000",
@@ -232,7 +246,7 @@ export function Form({ method }: FormProps) {
           <>
             <Box
               sx={{
-                marginBottom: "1.5em",
+                marginBottom: "1em",
                 padding: "13px 15px",
                 border: "1px solid #eee",
                 background: "#eee",
@@ -252,12 +266,12 @@ export function Form({ method }: FormProps) {
                 size="small"
                 variant="standard"
                 fullWidth
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 name="password"
                 required
-                // error={!!formErrors.password || !!userLoggedRedux.errors}
-                // helperText={formErrors.password || userLoggedRedux.errors}
+                error={!!formErrors.password}
+                helperText={formErrors.password}
                 wfd-id="id2"
                 sx={{
                   color: "#000",
@@ -268,13 +282,25 @@ export function Form({ method }: FormProps) {
                   background: "transparent",
                   width: "100%",
                 }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        edge="end"
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Box>
             {/* Confirmar senha*/}
             {method === "Register" && (
               <Box
                 sx={{
-                  marginBottom: "1em",
+                  marginBottom: "0.4em",
                   padding: "13px 15px",
                   border: "1px solid #eee",
                   background: "#eee",
@@ -293,12 +319,12 @@ export function Form({ method }: FormProps) {
                   size="small"
                   variant="standard"
                   fullWidth
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="Confirm Password"
                   name="confirm-password"
                   required
-                  // error={!!formErrors.confirmPassword || !!userLoggedRedux.errors}
-                  // helperText={formErrors.confirmPassword || userLoggedRedux.errors}
+                  error={!!formErrors.confirmPassword}
+                  helperText={formErrors.confirmPassword}
                   wfd-id="id6"
                   sx={{
                     color: "#000",
@@ -308,6 +334,18 @@ export function Form({ method }: FormProps) {
                     outline: "none",
                     background: "transparent",
                     width: "100%",
+                  }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword((prev) => !prev)}
+                          edge="end"
+                        >
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
                   }}
                 />
               </Box>
@@ -343,6 +381,7 @@ export function Form({ method }: FormProps) {
         {method === "Login" && (
           <Link
             href="#"
+            onClick={handleForgot}
             sx={{
               color: "#757474",
               fontSize: "14px",
@@ -359,7 +398,7 @@ export function Form({ method }: FormProps) {
         open={toastOpen}
         type={toastProps.type}
         message={toastProps.message}
-        onClose={() => setToastOpen(false)}
+        onClose={handleClose}
       />
     </Container>
   );

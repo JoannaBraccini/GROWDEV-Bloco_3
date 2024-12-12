@@ -15,7 +15,7 @@ import { rootReducer } from "./module/rootReducer";
 const persistConfig = {
   key: "mui-app-sign",
   storage,
-  whitelist: ["userLogged"], // OS ESTADOS QUE EU QUERO PERSISTIR
+  whitelist: ["userLogged", "auth"], // OS ESTADOS QUE EU QUERO PERSISTIR
 
   // blacklist: ["userLogged"], // OS ESTADOS QUE EU NÃO QUERO
 };

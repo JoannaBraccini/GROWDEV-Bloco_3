@@ -1,16 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { LoginRequest, User } from "../../../utils/types/user";
+import { LoginRequest } from "../../../utils/types/user";
 interface UserState {
-  users: User[];
   id: string;
   email: string;
-  errors: string;
+  message: string;
+  success: boolean;
 }
 const initialState: UserState = {
-  users: [],
   id: "",
   email: "",
-  errors: "",
+  message: "",
+  success: false,
 };
 const userLoggedSlice = createSlice({
   name: "userLogged",
@@ -20,17 +20,22 @@ const userLoggedSlice = createSlice({
       if (action.payload.id) {
         state.id = action.payload.id;
         state.email = action.payload.email;
-        state.errors = "";
+        state.message = "Usuário logado com sucesso";
+        state.success = true;
       }
-
       return state;
     },
     // Logout
     logout() {
       return initialState;
     },
+
+    clearUserMessage(state) {
+      state.message = "";
+      state.success = false;
+    },
   },
 });
 
-export const { login, logout } = userLoggedSlice.actions;
+export const { login, logout, clearUserMessage } = userLoggedSlice.actions;
 export const userLoggedReducer = userLoggedSlice.reducer;

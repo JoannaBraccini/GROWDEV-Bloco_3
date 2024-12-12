@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Alert, Container, Snackbar, SnackbarCloseReason } from "@mui/material";
+import { Alert, Snackbar, SnackbarCloseReason } from "@mui/material";
 
 interface SnackbarToastProps {
   open: boolean;
@@ -26,22 +26,20 @@ export function SnackbarToast({
   };
 
   return (
-    <Container>
-      <Snackbar
-        open={open}
-        autoHideDuration={5000}
+    <Snackbar
+      open={open}
+      autoHideDuration={3000}
+      onClose={handleClose}
+      message={message}
+    >
+      <Alert
         onClose={handleClose}
-        message={message}
+        variant="filled"
+        sx={{ width: "100%" }}
+        severity={type}
       >
-        <Alert
-          onClose={handleClose}
-          variant="filled"
-          sx={{ width: "100%" }}
-          severity={type}
-        >
-          {message}
-        </Alert>
-      </Snackbar>
-    </Container>
+        {message}
+      </Alert>
+    </Snackbar>
   );
 }

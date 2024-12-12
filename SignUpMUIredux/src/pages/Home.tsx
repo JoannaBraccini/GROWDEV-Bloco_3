@@ -1,8 +1,9 @@
-import { Box, Button, Link } from "@mui/material";
+import { Box } from "@mui/material";
 import welcome from "../assets/welcome.png";
 import { useAppSelector } from "../store/hooks";
-import { useNavigate } from "react-router";
 import { useEffect } from "react";
+import { useNavigate } from "react-router";
+import { WelcomeBar } from "../components/WelcomeBar";
 
 export function Home() {
   const userLoggedRedux = useAppSelector((state) => state.userLogged);
@@ -22,14 +23,9 @@ export function Home() {
         height: "100vh",
         display: "flex",
         justifyContent: "center",
-        alignItems: "center",
       }}
     >
-      <Link href="/">
-        <Button variant="contained" color="secondary">
-          Back to Sign Page
-        </Button>
-      </Link>
+      <WelcomeBar user={userLoggedRedux.email} />
     </Box>
   );
 }
