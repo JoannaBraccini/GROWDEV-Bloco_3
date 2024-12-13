@@ -30,6 +30,7 @@ export function LeftContainer({ onMethodChange }: LeftContainerProps) {
   return (
     <>
       <Box
+        display={{ xs: "none", md: "block" }}
         sx={{
           background: `url(${img}) no-repeat center`,
           backgroundSize: "cover",
@@ -50,7 +51,7 @@ export function LeftContainer({ onMethodChange }: LeftContainerProps) {
             flexDirection: "column",
             justifyContent: "center",
             fontSize: "17px",
-            padding: "28px 20px",
+            padding: { xs: "10px", md: "28px 20px" },
             position: "relative",
             width: "189px",
             zIndex: 100,
@@ -75,7 +76,7 @@ export function LeftContainer({ onMethodChange }: LeftContainerProps) {
             }}
           />
           <Typography variant="caption" sx={{ fontWeight: "bold" }}>
-            Login
+            Entrar
           </Typography>
         </ToggleButton>
         <ToggleButton value="register" aria-label="Registrar">
@@ -86,7 +87,7 @@ export function LeftContainer({ onMethodChange }: LeftContainerProps) {
             }}
           />
           <Typography variant="caption" sx={{ fontWeight: "bold" }}>
-            Register
+            Registrar
           </Typography>
         </ToggleButton>
         <ToggleButton value="forgot" aria-label="Esqueci a Senha">
@@ -97,7 +98,7 @@ export function LeftContainer({ onMethodChange }: LeftContainerProps) {
             }}
           />
           <Typography variant="caption" sx={{ fontWeight: "bold" }}>
-            Forgot Password?
+            Esqueci a Senha
           </Typography>
         </ToggleButton>
       </ToggleButtonGroup>

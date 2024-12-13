@@ -10,7 +10,7 @@ export function RightContainer({ method }: RightContainerProps) {
     <Box
       sx={{
         position: "relative",
-        right: "25%",
+        right: { xs: "57%", sm: "35%", md: "25%" },
         zIndex: 100,
         cursor: "pointer",
         fontSize: "17px",

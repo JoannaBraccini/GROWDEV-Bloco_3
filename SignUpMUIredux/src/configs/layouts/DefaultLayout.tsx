@@ -11,15 +11,17 @@ export function DefaultLayout({ children }: DefaultLayoutProps) {
       sx={{
         display: "flex",
         flexDirection: "column",
+        alignItems: "center",
         height: "100vh",
       }}
     >
       <Header />
       <Container
         sx={{
-          margin: "5rem auto",
+          margin: { xs: "0", sm: "3rem auto", lg: "5rem auto" },
           maxWidth: "1067px",
           display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
         }}
       >
         {children}

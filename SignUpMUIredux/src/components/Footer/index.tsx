@@ -2,7 +2,7 @@ import { Box, Typography, Link } from "@mui/material";
 
 export function Footer() {
   return (
-    <Box display={"flex"} justifyContent={"center"}>
+    <Box display="flex" justifyContent="center" alignItems="center">
       <Typography
         variant="button"
         sx={{
@@ -10,7 +10,7 @@ export function Footer() {
           fontSize: "15px",
           letterSpacing: "1px",
           lineHeight: 1.8,
-          marginTop: "3rem",
+          marginTop: { xs: "90%", sm: "50%", md: "20%", lg: "3rem" },
         }}
       >
         © 2024 Joanna Braccini - Desenvolvido na{" "}
