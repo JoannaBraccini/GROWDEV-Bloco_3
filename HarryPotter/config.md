@@ -55,3 +55,7 @@ import storage from "redux-persist/lib/storage";
 npm install axios
 -axios instance > config/services>api.service.ts
 -.env config
+
+## Async Thunk
+
+-config nos modules
