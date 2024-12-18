@@ -15,7 +15,7 @@ import storage from "redux-persist/lib/storage";
 const persistConfig = {
   key: "hogwarts-compendium",
   storage,
-  // whitelist: ["userLogged"],// OS ESTADOS QUE EU QUERO PERSISTIR
+  whitelist: ["characters"], // OS ESTADOS QUE EU QUERO PERSISTIR
   // blacklist: ["userLogged"],// OS ESTADOS QUE EU NÃO QUERO
 };
 

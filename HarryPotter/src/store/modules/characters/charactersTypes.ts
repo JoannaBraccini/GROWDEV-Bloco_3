@@ -1,13 +1,11 @@
 //characters
 //character/:id
-//characters/staff
-//characters/students
 //characters/house/gryffindor | /hufflepuff | /slytherin | /ravenclaw
 
 export interface Character {
   id: string;
   name: string;
-  alternate_names: string[];
+  alternateNames: string[];
   species: string;
   gender: string;
   house: string;
@@ -16,8 +14,4 @@ export interface Character {
   hogwartsStaff: boolean;
   alive: boolean;
   image: string;
-}
-
-export interface ResponseCharAPI {
-  data: Character[];
 }

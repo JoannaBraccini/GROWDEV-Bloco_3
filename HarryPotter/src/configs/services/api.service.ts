@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export interface ResponseAPI<T> {
-  success: boolean;
+  ok: boolean;
   message: string;
   data?: T;
 }

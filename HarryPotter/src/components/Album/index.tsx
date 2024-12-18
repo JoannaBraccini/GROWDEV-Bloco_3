@@ -1,87 +1,134 @@
+import { Info } from "@mui/icons-material";
+import {
+  CircularProgress,
+  IconButton,
+  ListSubheader,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import Box from "@mui/material/Box";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { Character } from "../../store/modules/characters/charactersTypes";
+import { fetchCharactersThunk } from "../../store/modules/characters/charactersThunk";
+import { characters } from "../../mock/characters";
 
 export function Album() {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [selectedChar, setSelectedChar] = useState<Character | null>(null);
+  const dispatch = useAppDispatch();
+  const loading = useAppSelector((state) => state.characters.loading);
+  // const characters = useAppSelector((state) => state.characters.data);
+
+  const handleOpenMenu = (
+    event: React.MouseEvent<HTMLElement>,
+    char: Character
+  ) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedChar(char);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+    setSelectedChar(null);
+  };
+
+  useEffect(() => {
+    if (!loading && characters.length === 0) {
+      dispatch(fetchCharactersThunk);
+    }
+  }, [characters, loading, dispatch]);
+
   return (
-    <Box sx={{ width: 500, height: 450, overflowY: "scroll" }}>
-      <ImageList variant="masonry" cols={3} gap={8}>
-        {itemData.map((item) => (
-          <ImageListItem key={item.img}>
-            <img
-              srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-              src={`${item.img}?w=248&fit=crop&auto=format`}
-              alt={item.title}
-              loading="lazy"
-            />
-            <ImageListItemBar position="below" title={item.author} />
+    <Box sx={{ width: "100%", height: "90vh", overflowY: "scroll" }}>
+      {loading ? (
+        <Box sx={{ display: "flex" }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <ImageList variant="masonry" cols={3} gap={8}>
+          <ImageListItem key="Subheader" cols={2}>
+            <ListSubheader
+              sx={{
+                backgroundColor: "transparent",
+                color: "white",
+                fontWeight: 700,
+                fontSize: 40,
+              }}
+              component="div"
+            >
+              PERSONAGENS
+            </ListSubheader>
           </ImageListItem>
-        ))}
-      </ImageList>
+          {characters.map((char) => (
+            <ImageListItem key={char.id}>
+              <img
+                srcSet={`${char.image}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                src={`${char.image}?w=248&fit=crop&auto=format`}
+                alt={char.name}
+                loading="lazy"
+              />
+              <ImageListItemBar
+                title={char.name}
+                subtitle={char.alternateNames.join(", ")}
+                actionIcon={
+                  <IconButton
+                    sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+                    aria-label={`info about ${char.name}`}
+                    onClick={(event) => handleOpenMenu(event, char)}
+                  >
+                    <Info />
+                  </IconButton>
+                }
+              />
+            </ImageListItem>
+          ))}
+        </ImageList>
+      )}
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleCloseMenu}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+        transformOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        sx={{
+          "& .MuiPaper-root": {
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            color: "white",
+            padding: 1,
+            borderRadius: 1,
+          },
+        }}
+      >
+        {selectedChar && (
+          <>
+            <MenuItem disabled>
+              {selectedChar.alive ? "Vivo" : "Morto"}
+            </MenuItem>
+            <MenuItem disabled>
+              {selectedChar.wizard ? "Bruxo" : "Trouxa"}
+            </MenuItem>
+            {selectedChar.hogwartsStaff && (
+              <MenuItem disabled>Funcionário(a)</MenuItem>
+            )}
+            {selectedChar.hogwartsStudent && (
+              <MenuItem disabled>Estudante</MenuItem>
+            )}
+            <MenuItem disabled>Espécie: {selectedChar.species}</MenuItem>
+            <MenuItem disabled>Gênero: {selectedChar.gender}</MenuItem>
+            <MenuItem disabled>Casa: {selectedChar.house}</MenuItem>
+          </>
+        )}
+      </Menu>
     </Box>
   );
 }
-
-const itemData = [
-  {
-    img: "https://images.unsplash.com/photo-1549388604-817d15aa0110",
-    title: "Bed",
-    author: "swabdesign",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1525097487452-6278ff080c31",
-    title: "Books",
-    author: "Pavel Nekoranec",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1523413651479-597eb2da0ad6",
-    title: "Sink",
-    author: "Charles Deluvio",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1563298723-dcfebaa392e3",
-    title: "Kitchen",
-    author: "Christian Mackie",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1588436706487-9d55d73a39e3",
-    title: "Blinds",
-    author: "Darren Richardson",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1574180045827-681f8a1a9622",
-    title: "Chairs",
-    author: "Taylor Simpson",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1530731141654-5993c3016c77",
-    title: "Laptop",
-    author: "Ben Kolde",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1481277542470-605612bd2d61",
-    title: "Doors",
-    author: "Philipp Berndt",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1517487881594-2787fef5ebf7",
-    title: "Coffee",
-    author: "Jen P.",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1516455207990-7a41ce80f7ee",
-    title: "Storage",
-    author: "Douglas Sheppard",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1597262975002-c5c3b14bbd62",
-    title: "Candle",
-    author: "Fi Bell",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1519710164239-da123dc03ef4",
-    title: "Coffee table",
-    author: "Hutomo Abrianto",
-  },
-];

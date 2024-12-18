@@ -1,3 +1,5 @@
+import { Album } from "../components/Album";
+
 export function Home() {
-  return <h1>Home</h1>;
+  return <Album />;
 }
