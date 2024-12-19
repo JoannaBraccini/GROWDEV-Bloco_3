@@ -14,14 +14,15 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { Character } from "../../store/modules/characters/charactersTypes";
 import { fetchCharactersThunk } from "../../store/modules/characters/charactersThunk";
-import { characters } from "../../mock/characters";
+// import { characters } from "../../mock/characters";
 
 export function Album() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedChar, setSelectedChar] = useState<Character | null>(null);
   const dispatch = useAppDispatch();
-  const loading = useAppSelector((state) => state.characters.loading);
-  // const characters = useAppSelector((state) => state.characters.data);
+  const { loading, characters, message } = useAppSelector(
+    (state) => state.characters
+  );
 
   const handleOpenMenu = (
     event: React.MouseEvent<HTMLElement>,
@@ -37,10 +38,13 @@ export function Album() {
   };
 
   useEffect(() => {
-    if (!loading && characters.length === 0) {
+    console.log("effect", characters);
+    if (!loading && !characters) {
+      console.log("erro fetch array");
+
       dispatch(fetchCharactersThunk);
     }
-  }, [characters, loading, dispatch]);
+  }, [characters, loading, dispatch, message]);
 
   return (
     <Box sx={{ width: "100%", height: "90vh", overflowY: "scroll" }}>

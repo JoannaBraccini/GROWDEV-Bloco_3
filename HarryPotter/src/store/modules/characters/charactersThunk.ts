@@ -1,15 +1,18 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchCharactersService } from "../../../configs/services/character.service";
+import { api } from "../../../configs/services/api.service";
 
 export const fetchCharactersThunk = createAsyncThunk(
   "characters/fetchAll",
-  async () => {
-    const response = await fetchCharactersService();
+  async (_, thunkAPI) => {
+    try {
+      const response = await api.get("/characters");
+      console.log("thunk", response);
+      return response.data;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.log("thunk", error);
 
-    if (!response.ok) {
-      console.log(response);
+      return thunkAPI.rejectWithValue(error.message);
     }
-
-    return response;
   }
 );
