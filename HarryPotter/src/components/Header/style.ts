@@ -1,6 +1,6 @@
-import { styled, alpha, InputBase } from "@mui/material";
+import { styled, alpha } from "@mui/material";
 
-export const Search = styled("div")(({ theme }) => ({
+export const Search = styled("form")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.white, 0.15),
@@ -25,19 +25,19 @@ export const SearchIconWrapper = styled("div")(({ theme }) => ({
   justifyContent: "center",
 }));
 
-export const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  width: "100%",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    [theme.breakpoints.up("sm")]: {
-      width: "12ch",
-      "&:focus": {
-        width: "20ch",
-      },
+export const StyledTextField = styled("div")(({ theme }) => ({
+  marginLeft: "3rem",
+  flexGrow: 1,
+  "& .MuiOutlinedInput-root": {
+    color: "white",
+    "& fieldset": {
+      borderColor: "transparent",
+    },
+    "&:hover fieldset": {
+      borderColor: alpha(theme.palette.common.white, 0.25),
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "transparent",
     },
   },
 }));

@@ -6,7 +6,6 @@ export async function fetchCharactersService(): Promise<
 > {
   try {
     const response = await api.get("/characters");
-    console.log("service", response);
 
     return {
       ok: response.data.ok,
@@ -15,11 +14,9 @@ export async function fetchCharactersService(): Promise<
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    console.log("service", error);
     return {
       ok: error.response.data.ok,
       message: error.response.data.message,
-      data: [],
     };
   }
 }

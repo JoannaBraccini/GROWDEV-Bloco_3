@@ -1,7 +1,4 @@
 import {
-  styled,
-  alpha,
-  InputBase,
   Box,
   AppBar,
   Toolbar,
@@ -9,27 +6,47 @@ import {
   Menu,
   MenuItem,
   Typography,
+  Autocomplete,
+  TextField,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
-import { Search } from "@mui/icons-material";
-import { SearchIconWrapper, StyledInputBase } from "./style";
+import { Search, SearchIconWrapper, StyledTextField } from "./style";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { setSearchField } from "../../store/modules/characters/charactersSlice";
 
 export function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [search, setSearch] = useState<string>("");
+  const dispatch = useAppDispatch();
+  const characters = useAppSelector((state) => state.characters.characters);
+
+  const filteredCharacters = characters.filter((char) => {
+    return (
+      char.name.toLowerCase().includes(search.toLowerCase()) ||
+      char.house?.toLowerCase().includes(search.toLowerCase())
+    );
+  });
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+    if (!anchorEl) {
+      setAnchorEl(event.currentTarget);
+    } else {
+      setAnchorEl(null); //pra conseguir fechar o menu desobediente
+    }
   };
 
   const handleClose = () => {
     setAnchorEl(null);
   };
 
-  function handleSearch(event: React.FormEvent) {
-    event.preventDefault();
-  }
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    dispatch(setSearchField(search));
+    setSearch("");
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -51,7 +68,7 @@ export function Header() {
               id="menu-appbar"
               anchorEl={anchorEl}
               anchorOrigin={{
-                vertical: "top",
+                vertical: "bottom",
                 horizontal: "right",
               }}
               keepMounted
@@ -59,7 +76,7 @@ export function Header() {
                 vertical: "top",
                 horizontal: "right",
               }}
-              open={Boolean(anchorEl)}
+              open={!!anchorEl}
               onClose={handleClose}
             >
               <MenuItem
@@ -103,16 +120,27 @@ export function Header() {
           >
             NOTÍCIAS
           </Typography>
-          <Search component={"form"} onSubmit={handleSearch}>
+          <Search onSubmit={handleSearch} sx={{ flexGrow: 0.5 }}>
             <SearchIconWrapper>
               <SearchIcon sx={{ color: "white" }} />
             </SearchIconWrapper>
-            <StyledInputBase
-              sx={{ color: "white" }}
-              placeholder="Pesquisar..."
-              inputProps={{ "aria-label": "pesquisar" }}
-              // value={searchChar}
-              // onChange={(e) => setSearchChar(e.target.value)}
+            <Autocomplete
+              freeSolo
+              value={search}
+              options={filteredCharacters.map(
+                (char) => char.name || char.house
+              )}
+              onInputChange={(_e, newInputValue) => setSearch(newInputValue)}
+              renderInput={(params) => (
+                <StyledTextField>
+                  <TextField
+                    {...params}
+                    placeholder="Pesquisar..."
+                    variant="outlined"
+                    size="small"
+                  />
+                </StyledTextField>
+              )}
             />
           </Search>
         </Toolbar>
