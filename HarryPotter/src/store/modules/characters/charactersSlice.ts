@@ -30,25 +30,13 @@ const charactersSlice = createSlice({
       })
       .addCase(fetchCharactersThunk.fulfilled, (state, action) => {
         state.loading = false;
-        console.log("state", state);
-        if (!state.success) {
-          state.success = false;
-          state.message = "Erro, Fulfilled";
-        } else {
-          state.characters = action.payload || [];
-          if (state.characters.length < 1) {
-            state.success = false;
-            state.message = "Erro. Array vazio";
-          } else {
-            state.success = true;
-            state.message = "Sucesso";
-          }
-        }
+        state.success = true;
+        state.characters = action.payload || [];
       })
-      .addCase(fetchCharactersThunk.rejected, (state) => {
+      .addCase(fetchCharactersThunk.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
-        state.message = "Erro, Rejected";
+        state.message = action.error.message || "Failed to fetch characters";
       });
   },
 });

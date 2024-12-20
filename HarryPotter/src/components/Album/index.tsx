@@ -20,9 +20,7 @@ export function Album() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedChar, setSelectedChar] = useState<Character | null>(null);
   const dispatch = useAppDispatch();
-  const { loading, characters, message } = useAppSelector(
-    (state) => state.characters
-  );
+  const { loading, characters } = useAppSelector((state) => state.characters);
 
   const handleOpenMenu = (
     event: React.MouseEvent<HTMLElement>,
@@ -38,13 +36,8 @@ export function Album() {
   };
 
   useEffect(() => {
-    console.log("effect", characters);
-    if (!loading && !characters) {
-      console.log("erro fetch array");
-
-      dispatch(fetchCharactersThunk);
-    }
-  }, [characters, loading, dispatch, message]);
+    dispatch(fetchCharactersThunk());
+  }, [dispatch]);
 
   return (
     <Box sx={{ width: "100%", height: "90vh", overflowY: "scroll" }}>
@@ -67,7 +60,7 @@ export function Album() {
               PERSONAGENS
             </ListSubheader>
           </ImageListItem>
-          {characters.map((char) => (
+          {characters?.map((char) => (
             <ImageListItem key={char.id}>
               <img
                 srcSet={`${char.image}?w=248&fit=crop&auto=format&dpr=2 2x`}
@@ -77,7 +70,7 @@ export function Album() {
               />
               <ImageListItemBar
                 title={char.name}
-                subtitle={char.alternateNames.join(", ")}
+                subtitle={char.alternate_names?.join(", ")}
                 actionIcon={
                   <IconButton
                     sx={{ color: "rgba(255, 255, 255, 0.54)" }}

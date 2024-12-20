@@ -5,7 +5,7 @@
 export interface Character {
   id: string;
   name: string;
-  alternateNames: string[];
+  alternate_names: string[];
   species: string;
   gender: string;
   house: string;

@@ -1,13 +1,13 @@
 import axios from "axios";
-import { Character } from "../../store/modules/characters/charactersTypes";
 
-export interface ResponseAPI {
+export interface ResponseAPI<T> {
   ok: boolean;
   message: string;
-  data: Character[];
+  data?: T;
 }
 
-const baseURL = import.meta.env.VITE_API_BASE_URL;
+const baseURL = import.meta.env.VITE_BASE_API_URL;
+
 export const api = axios.create({
   baseURL,
 });
