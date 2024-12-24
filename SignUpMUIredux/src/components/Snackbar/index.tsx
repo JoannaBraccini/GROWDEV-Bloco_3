@@ -1,14 +1,10 @@
-import * as React from "react";
-import { Alert, Snackbar, SnackbarCloseReason } from "@mui/material";
+import { Alert, Snackbar } from "@mui/material";
 
 interface SnackbarToastProps {
   open: boolean;
   message: string;
   type: "success" | "error";
-  onClose: (
-    event: React.SyntheticEvent | Event,
-    reason: SnackbarCloseReason
-  ) => void;
+  onClose: () => void;
 }
 
 export function SnackbarToast({
@@ -17,26 +13,15 @@ export function SnackbarToast({
   type,
   onClose,
 }: SnackbarToastProps) {
-  const handleClose = (
-    _event: React.SyntheticEvent | Event,
-    reason: SnackbarCloseReason
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    onClose(_event, reason);
-  };
-
   return (
     <Snackbar
       open={open}
       autoHideDuration={3000}
-      onClose={handleClose}
+      onClose={onClose}
       message={message}
     >
       <Alert
-        onClose={handleClose}
+        onClose={onClose}
         variant="filled"
         sx={{ width: "100%" }}
         severity={type}
