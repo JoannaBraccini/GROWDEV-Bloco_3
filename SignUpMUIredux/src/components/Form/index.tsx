@@ -122,7 +122,7 @@ export function Form({ method }: FormProps) {
 
   function handleClose(
     _event: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason
+    reason: SnackbarCloseReason
   ) {
     if (reason === "clickaway") {
       return;
