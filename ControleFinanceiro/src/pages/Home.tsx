@@ -16,7 +16,6 @@ import {
 } from "../config/store/modules/transactionsSlice";
 
 export function Home() {
-  // const [transactions, setTransactions] = useState<Transaction[]>(rows);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalType, setModalType] = useState<"add" | "edit" | "delete">("add");
   const [selectedTransaction, setSelectedTransaction] = useState<
@@ -33,7 +32,6 @@ export function Home() {
   const transactions = useAppSelector(
     (state) => state.transactions.transactions
   );
-  const balance = useAppSelector((state) => state.transactions.balance);
 
   useEffect(() => {
     if (!userLoggedRedux.id) {
@@ -100,7 +98,6 @@ export function Home() {
   function handleAddTransaction(newTransaction: Transaction) {
     //Validação
     if (!validate(newTransaction)) return;
-    //   setTransactions((prev) => [...prev, newTransaction]);
     dispatch(addTransaction(newTransaction));
     setToastProps({
       message: "Transação adicionada com sucesso",
@@ -111,9 +108,6 @@ export function Home() {
   }
 
   function handleEditTransaction(updatedTransaction: Transaction) {
-    // setTransactions((prev) =>
-    //   prev.map((t) => (t.id === updatedTransaction.id ? updatedTransaction : t))
-    // );
     dispatch(editTransaction(updatedTransaction));
     setToastProps({
       message: "Transação alterada com sucesso",
@@ -135,16 +129,6 @@ export function Home() {
     setToastOpen(true);
     handleModalClose();
   }
-
-  // const balance = useMemo(() => {
-  //   return transactions.reduce((acc, transaction) => {
-  //     if (transaction.type === "Entrada") {
-  //       return acc + transaction.amount;
-  //     } else {
-  //       return acc - transaction.amount;
-  //     }
-  //   }, 0);
-  // }, [transactions]);
 
   function handleOpenAddModal() {
     setModalType("add");
@@ -179,7 +163,7 @@ export function Home() {
 
   return (
     <DefaultLayout>
-      <BalanceCard balance={balance} />
+      <BalanceCard />
       <PanelTable
         transactions={transactions}
         onEdit={handleOpenEditModal}
