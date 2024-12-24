@@ -24,7 +24,7 @@ export function NavMenu() {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
-        color="white"
+        sx={{ color: "white" }}
       >
         <MenuIcon />
       </Button>
