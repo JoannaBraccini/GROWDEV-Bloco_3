@@ -9,7 +9,6 @@ import {
   Link,
   InputAdornment,
   IconButton,
-  SnackbarCloseReason,
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useEffect, useState } from "react";
@@ -120,13 +119,7 @@ export function Form({ method }: FormProps) {
     showToast("success", `Recuperar senha para: ${email}`);
   }
 
-  function handleClose(
-    _event: React.SyntheticEvent | Event,
-    reason: SnackbarCloseReason
-  ) {
-    if (reason === "clickaway") {
-      return;
-    }
+  function handleClose() {
     setToastOpen(false);
     dispatch(clearMessage());
     dispatch(clearUserMessage());
