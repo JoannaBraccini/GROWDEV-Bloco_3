@@ -5,7 +5,10 @@ interface SnackbarToastProps {
   open: boolean;
   message: string;
   type: "success" | "error";
-  onClose: () => void;
+  onClose: (
+    event: React.SyntheticEvent | Event,
+    reason: SnackbarCloseReason
+  ) => void;
 }
 
 export function SnackbarToast({
@@ -22,7 +25,7 @@ export function SnackbarToast({
       return;
     }
 
-    onClose();
+    onClose(_event, reason);
   };
 
   return (
