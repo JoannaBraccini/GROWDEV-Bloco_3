@@ -16,7 +16,7 @@ export function SnackbarToast({
 }: SnackbarToastProps) {
   const handleClose = (
     _event: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason
+    reason: SnackbarCloseReason
   ) => {
     if (reason === "clickaway") {
       return;
