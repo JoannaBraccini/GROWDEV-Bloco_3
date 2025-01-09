@@ -13,7 +13,7 @@ export class AssessmentRoutes {
     router.post(
       "/assessments",
       [
-        AuthMiddleware.validate,
+        AuthMiddleware.validate, //valida se tem o token
         CreateAssessmentMiddleware.validateRequired,
         CreateAssessmentMiddleware.validateTypes,
         CreateAssessmentMiddleware.validateData,

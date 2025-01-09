@@ -1,4 +1,4 @@
-import { Assessment } from "@prisma/client";
+import { Assessment, Prisma, StudentType } from "@prisma/client";
 import { prisma } from "../database/prisma.database";
 import {
   AssessmentDto,
@@ -11,7 +11,8 @@ export class AssessmentService {
   public async create(
     createAssessment: CreateAssessmentDto
   ): Promise<ResponseApi> {
-    const { title, description, grade, studentId } = createAssessment;
+    const { title, description, grade, studentId, studentType } =
+      createAssessment;
 
     // studentId = Existe no banco
     const student = await prisma.student.findUnique({
@@ -26,12 +27,24 @@ export class AssessmentService {
       };
     }
 
+    if (
+      (studentType !== "M" && studentType !== "T") ||
+      (studentType !== "T" && student.id !== studentId)
+    ) {
+      return {
+        ok: false,
+        code: 401,
+        message: "Estudante não autorizado!",
+      };
+    }
+
     const assessmentCreated = await prisma.assessment.create({
       data: {
         title: title,
         description: description,
         grade: grade,
-        studentId: studentId,
+        //caso seja TechHelper, pega o Id fornecido na requisição, senão busca do registro do aluno
+        studentId: studentType === "T" ? studentId : student.id,
       },
     });
 
@@ -45,19 +58,17 @@ export class AssessmentService {
 
   public async findAll(
     id: string,
+    type: StudentType,
     query?: { page?: number; take?: number }
   ): Promise<ResponseApi> {
-    // [0, 1, 2, 3]
-    // 1 - 2 - 3
-
-    // 1 => 0
-    // 2 => 1
-
+    let where: Prisma.AssessmentWhereInput = {};
+    if (type !== "T") {
+      where = { studentId: id };
+    }
     const assessmentList = await prisma.assessment.findMany({
       skip: query?.page, // 1 page
       take: query?.take, // quantidade
-      where: { studentId: id },
-      orderBy: { createdAt: "asc" },
+      where: where,
     });
 
     if (!assessmentList) {
@@ -76,7 +87,11 @@ export class AssessmentService {
     };
   }
 
-  public async findOneById(id: string): Promise<ResponseApi> {
+  public async findOneById(
+    id: string,
+    studentId: string,
+    type: StudentType
+  ): Promise<ResponseApi> {
     const assessment = await prisma.assessment.findUnique({
       where: { id },
     });
@@ -86,6 +101,14 @@ export class AssessmentService {
         ok: false,
         code: 404, // Not Found
         message: "Avaliaçao não encontrado!",
+      };
+    }
+
+    if (type !== "T" && studentId !== assessment.studentId) {
+      return {
+        ok: false,
+        code: 401,
+        message: "Usuário não autorizado!",
       };
     }
 
@@ -99,6 +122,8 @@ export class AssessmentService {
 
   public async update(
     id: string,
+    studentId: string,
+    type: StudentType,
     updateAssessments: UpdateAssessmentDto
   ): Promise<ResponseApi> {
     const assessment = await prisma.assessment.findUnique({
@@ -110,6 +135,14 @@ export class AssessmentService {
         ok: false,
         code: 404,
         message: "Avaliação não encontrada!",
+      };
+    }
+
+    if (type !== "T" && studentId !== assessment.studentId) {
+      return {
+        ok: false,
+        code: 401,
+        message: "Estudante não autorizado!",
       };
     }
 
@@ -126,7 +159,11 @@ export class AssessmentService {
     };
   }
 
-  public async remove(id: string): Promise<ResponseApi> {
+  public async remove(
+    id: string,
+    studentId: string,
+    type: StudentType
+  ): Promise<ResponseApi> {
     const assessment = await prisma.assessment.findUnique({
       where: { id },
     });
@@ -139,6 +176,13 @@ export class AssessmentService {
       };
     }
 
+    if (type !== "T" && studentId !== assessment.studentId) {
+      return {
+        ok: false,
+        code: 401,
+        message: "Estudante não autorizado!",
+      };
+    }
     const removeAssessment = await prisma.assessment.delete({
       where: { id },
     });

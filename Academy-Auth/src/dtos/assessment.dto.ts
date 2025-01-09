@@ -1,8 +1,11 @@
+import { StudentType } from "@prisma/client";
+
 export interface CreateAssessmentDto {
   title: string;
   description?: string;
   grade: number;
   studentId: string;
+  studentType: StudentType;
 }
 
 export interface UpdateAssessmentDto {

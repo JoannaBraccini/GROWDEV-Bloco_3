@@ -55,6 +55,7 @@ export class StudentService {
         cpf: cpf,
         email: email,
         password: passwordHash,
+        type: type,
         age: age,
       },
     });
@@ -80,13 +81,6 @@ export class StudentService {
       where.cpf = { contains: cpf };
     }
 
-    // OU => OR ||
-    // ILIKE LIKE
-
-    // contains = conter
-    // endsWith = terminar
-    // startWith = começar
-    // in = []
     const students = await prisma.student.findMany({
       where,
     });
