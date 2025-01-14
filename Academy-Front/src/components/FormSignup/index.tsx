@@ -1,9 +1,7 @@
 import { VisibilityOff, Visibility } from "@mui/icons-material";
 import {
   Button,
-  Checkbox,
   FormControl,
-  FormControlLabel,
   Grid2,
   IconButton,
   InputAdornment,
@@ -14,7 +12,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useNavigate } from "react-router-dom";
 import { signupAsyncThunk } from "../../store/modules/userRegister/userRegisterSlice";
-import { StudentType } from "../../utils/types/auth";
+import { StudentType } from "../../utils/types";
 
 interface ErrorFields {
   name?: string;
@@ -296,15 +294,6 @@ export function FormSignup() {
           </TextField>
         </FormControl>
       </Grid2>
-
-      <Grid2 size={12}>
-        <FormControlLabel
-          name="remember"
-          control={<Checkbox />}
-          label="Remember me"
-        />
-      </Grid2>
-
       <Grid2 size={12}>
         <Button
           variant="contained"

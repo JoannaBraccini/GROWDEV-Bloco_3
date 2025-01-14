@@ -6,6 +6,7 @@ import { Assessment } from "../../../utils/types/assessment";
 // Ações
 
 const initialState: Assessment = {
+  studentId: "",
   id: "",
   title: "",
   description: "",

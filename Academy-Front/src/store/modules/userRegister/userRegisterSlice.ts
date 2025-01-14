@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ResponseAPI } from "../../../configs/services/api.service";
-import { SignupRequest } from "../../../utils/types/auth";
-import { signupService } from "../../../configs/services/auth.service";
+import { SignupRequest } from "../../../utils/types";
+import { signupService } from "../../../configs/services/student.service";
 import { showAlert } from "../alert/alertSlice";
 
 export const signupAsyncThunk = createAsyncThunk(
