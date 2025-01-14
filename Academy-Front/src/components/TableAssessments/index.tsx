@@ -41,8 +41,6 @@ export function TableAssessments() {
   }
 
   function handleDelete(id: string) {
-    // Disparar uma ação para remover da minha lista (estado global)
-    // dispatch(deleteAssessment(id));
     dispatch(deleteAssessmentAsyncThunk({ id }));
   }
 

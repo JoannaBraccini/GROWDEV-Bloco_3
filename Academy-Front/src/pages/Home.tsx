@@ -19,13 +19,11 @@ export function Home() {
 
   useEffect(() => {
     if (!userLoggedRedux.token) {
-      // navego para login
       navigate("/login");
     }
   }, [userLoggedRedux, navigate]);
 
   useEffect(() => {
-    // "" => false | "aisdjmasijd" => true
     setOpenModal(!!assessmentDetailRedux.id); //  {} = undefined undefined.id
   }, [assessmentDetailRedux]);
 
@@ -33,7 +31,7 @@ export function Home() {
     <Grid2 container spacing={2}>
       <Grid2 size={12}>
         <Typography variant="h6">
-          Wellcome,{" "}
+          Welcome,{" "}
           <Typography component="span" variant="h6" sx={{ fontWeight: "bold" }}>
             {userLoggedRedux.student.name}
           </Typography>

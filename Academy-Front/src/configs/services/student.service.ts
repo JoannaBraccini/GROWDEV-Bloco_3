@@ -1,11 +1,9 @@
-import { LoginRequest } from "../../utils/types";
+import { SignupRequest } from "../../utils/types";
 import { api, ResponseAPI } from "./api.service";
 
-export async function loginService(
-  data: Omit<LoginRequest, "remember">
-): Promise<ResponseAPI> {
+export async function signupService(data: SignupRequest): Promise<ResponseAPI> {
   try {
-    const response = await api.post("/login", data);
+    const response = await api.post("/signup", data);
 
     return {
       ok: response.data.ok,

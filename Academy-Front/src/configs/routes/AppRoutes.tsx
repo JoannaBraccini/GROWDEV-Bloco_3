@@ -4,12 +4,17 @@ import { RouterProvider } from "react-router-dom";
 import { Home } from "../../pages/Home";
 import { DefaultLayout } from "../layout/DefaultLayout";
 import { Detail } from "../../pages/Detail";
+import { Signup } from "../../pages/Signup";
 
 // Definição das rotas
 const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/signup",
+    element: <Signup />,
   },
   {
     path: "/home",

@@ -14,7 +14,7 @@ export async function createAssessmentService(
 
     const response = await api.post("/assessments", restData, {
       headers: {
-        Authorization: token,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -49,9 +49,35 @@ export async function findAllAssessmentsService(
   try {
     const response = await api.get("/assessments", {
       headers: {
-        Authorization: token,
+        Authorization: `Bearer ${token}`,
       },
       params,
+    });
+
+    return {
+      ok: response.data.ok,
+      message: response.data.message,
+      data: response.data.data,
+    };
+  } catch (error: any) {
+    return {
+      ok: error.response.data.ok,
+      message: error.response.data.message,
+    };
+  }
+}
+
+export async function findOneAssessmentService(data: {
+  id: string;
+  token: string;
+}): Promise<ResponseAPI> {
+  const { id, token } = data;
+
+  try {
+    const response = await api.get(`/assessments/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     return {
@@ -75,7 +101,7 @@ export async function updateAssessmentService(
 
     const response = await api.put(`/assessments/${id}`, restData, {
       headers: {
-        Authorization: token,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -100,7 +126,7 @@ export async function deleteAssessmentService(
   try {
     const response = await api.delete(`/assessments/${id}`, {
       headers: {
-        Authorization: token,
+        Authorization: `Bearer ${token}`,
       },
     });
 

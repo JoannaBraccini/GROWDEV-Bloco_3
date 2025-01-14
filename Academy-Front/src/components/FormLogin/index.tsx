@@ -56,7 +56,6 @@ export function FormLogin() {
     validate(email, password);
 
     dispatch(loginAsyncThunk({ email, password, remember }));
-    // dispatch(login({ email, password, remember }));
   }
 
   useEffect(() => {

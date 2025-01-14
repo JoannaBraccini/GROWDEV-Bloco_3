@@ -86,10 +86,7 @@ export function Login() {
 
             <Grid2 size={12} textAlign="center">
               <Typography>
-                Don't have an account?{" "}
-                <Link to="#" onClick={handleImplements}>
-                  Sign up
-                </Link>
+                Don't have an account? <Link to="/signup">Sign up</Link>
               </Typography>
             </Grid2>
           </Grid2>

@@ -21,17 +21,6 @@ import {
   updateAssessmentAsyncThunk,
 } from "../../store/modules/assessments/assessments.action";
 
-// UP => Update
-// SERT => Insert
-
-/**
- *  id: string (gerado pelo sistema) lista.length
- *  title: string
- *  description: string
- *  grade: number (nota)
- *  createdAt: Date (gerado pelos sistema) new Date()
- */
-
 interface UpsertModalProps {
   open: boolean;
   onClose: () => void;
