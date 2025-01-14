@@ -138,7 +138,7 @@ export class AssessmentService {
       };
     }
 
-    if (type !== "T" && studentId !== assessment.studentId) {
+    if (type !== "T") {
       return {
         ok: false,
         code: 401,
@@ -176,7 +176,7 @@ export class AssessmentService {
       };
     }
 
-    if (type !== "T" && studentId !== assessment.studentId) {
+    if (type !== "T") {
       return {
         ok: false,
         code: 401,
