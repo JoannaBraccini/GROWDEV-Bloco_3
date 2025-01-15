@@ -3,7 +3,7 @@ import { api, ResponseAPI } from "./api.service";
 
 export async function signupService(data: SignupRequest): Promise<ResponseAPI> {
   try {
-    const response = await api.post("/signup", data);
+    const response = await api.post("/students", data);
 
     return {
       ok: response.data.ok,

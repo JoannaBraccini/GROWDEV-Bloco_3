@@ -1,29 +1,24 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Assessment } from "../../../utils/types/assessment";
 
-// Nome
-// Valor inicial
-// Ações
-
 const initialState: Assessment = {
   studentId: "",
   id: "",
   title: "",
   description: "",
   grade: 0,
-  createdAt: new Date(),
+  createdAt: "",
 };
 
 const assessmentDetailSlice = createSlice({
   name: "assessmentDetail",
   initialState,
   reducers: {
-    // Set
     setAssessentDetail(state, action: PayloadAction<Assessment>) {
-      // state.id = action.payload.id;
       return {
         ...state, // {}
         ...action.payload, // {}
+        createdAt: new Date(action.payload.createdAt).toISOString(), // Converte para string ISO
       };
     },
     // Reset

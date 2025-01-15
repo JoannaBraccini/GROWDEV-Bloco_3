@@ -10,22 +10,20 @@ import SnackbarAlert from "../components/SnackbarAlert";
 export function Home() {
   const navigate = useNavigate();
 
-  const userLoggedRedux = useAppSelector((state) => state.userLogged);
-  const assessmentDetailRedux = useAppSelector(
-    (state) => state.assessmentDetail
-  );
+  const userLogged = useAppSelector((state) => state.userLogged);
+  const assessmentDetail = useAppSelector((state) => state.assessmentDetail);
 
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
-    if (!userLoggedRedux.token) {
+    if (!userLogged.token) {
       navigate("/login");
     }
-  }, [userLoggedRedux, navigate]);
+  }, [userLogged, navigate]);
 
   useEffect(() => {
-    setOpenModal(!!assessmentDetailRedux.id); //  {} = undefined undefined.id
-  }, [assessmentDetailRedux]);
+    setOpenModal(!!assessmentDetail.id); //  {} = undefined undefined.id
+  }, [assessmentDetail]);
 
   return (
     <Grid2 container spacing={2}>
@@ -33,7 +31,7 @@ export function Home() {
         <Typography variant="h6">
           Welcome,{" "}
           <Typography component="span" variant="h6" sx={{ fontWeight: "bold" }}>
-            {userLoggedRedux.student.name}
+            {userLogged.student.name}
           </Typography>
         </Typography>
       </Grid2>

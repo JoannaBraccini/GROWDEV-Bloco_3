@@ -10,7 +10,7 @@ export async function loginService(
     return {
       ok: response.data.ok,
       message: response.data.message,
-      data: response.data.data,
+      data: response.data.data, //student, token
     };
   } catch (error: any) {
     return {

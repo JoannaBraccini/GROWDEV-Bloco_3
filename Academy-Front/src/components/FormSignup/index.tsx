@@ -11,7 +11,7 @@ import {
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useNavigate } from "react-router-dom";
-import { signupAsyncThunk } from "../../store/modules/userRegister/userRegisterSlice";
+import { signupAsyncThunk } from "../../store/modules/student/userCreateSlice";
 import { StudentType } from "../../utils/types";
 
 interface ErrorFields {
@@ -26,7 +26,8 @@ interface ErrorFields {
 export function FormSignup() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const userLoggedRedux = useAppSelector((state) => state.userLogged);
+  const userLogged = useAppSelector((state) => state.userLogged);
+  const userCreated = useAppSelector((state) => state.userCreated);
 
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<ErrorFields>({
@@ -86,25 +87,29 @@ export function FormSignup() {
 
     const name = event.currentTarget["student-name"].value;
     const cpf = event.currentTarget.cpf.value;
-    const age = event.currentTarget.age.value;
+    const age = Number(event.currentTarget.age.value);
     const email = event.currentTarget.email.value;
     const password = event.currentTarget.password.value;
     const repeatPassword = event.currentTarget["repeat-password"].value;
     const type = event.currentTarget.type.value;
 
     validate(name, cpf, email, password, repeatPassword, type);
-
     dispatch(signupAsyncThunk({ name, email, password, type, cpf, age }));
+    if (userCreated) {
+      setTimeout(() => {
+        navigate("/login");
+      }, 1000);
+    }
   }
 
   useEffect(() => {
     // Se existir as infos do userLogged eu navego
-    if (userLoggedRedux.ok && userLoggedRedux.token) {
+    if (userLogged.ok && userLogged.token) {
       setTimeout(() => {
         navigate("/home");
       }, 1000);
     }
-  }, [userLoggedRedux, navigate]);
+  }, [userLogged, navigate]);
 
   return (
     <Grid2

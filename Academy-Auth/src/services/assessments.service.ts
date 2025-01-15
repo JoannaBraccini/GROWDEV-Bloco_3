@@ -45,6 +45,7 @@ export class AssessmentService {
         grade: grade,
         //caso seja TechHelper, pega o Id fornecido na requisição, senão busca do registro do aluno
         studentId: studentType === "T" ? studentId : student.id,
+        createdBy: student.id,
       },
     });
 

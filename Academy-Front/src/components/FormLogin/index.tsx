@@ -24,7 +24,7 @@ interface ErrorFields {
 export function FormLogin() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const userLoggedRedux = useAppSelector((state) => state.userLogged);
+  const userLogged = useAppSelector((state) => state.userLogged);
 
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<ErrorFields>({
@@ -59,13 +59,12 @@ export function FormLogin() {
   }
 
   useEffect(() => {
-    // Se existir as infos do userLogged eu navego
-    if (userLoggedRedux.ok && userLoggedRedux.token) {
+    if (userLogged.ok && userLogged.token) {
       setTimeout(() => {
         navigate("/home");
       }, 1000);
     }
-  }, [userLoggedRedux, navigate]);
+  }, [userLogged, navigate]);
 
   return (
     <Grid2

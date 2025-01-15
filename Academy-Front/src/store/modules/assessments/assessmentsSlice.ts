@@ -28,79 +28,7 @@ const initialState: InitialState = {
 const assessmentsSlice = createSlice({
   name: "assessments",
   initialState,
-  reducers: {
-    createAssessment() {
-      // state.errors = "";
-      // state.success = false;
-      // // criar a nova avaliação
-      // const newAssessment: Assessment = {
-      //   id: crypto.randomUUID(),
-      //   title: action.payload.title,
-      //   description: action.payload.description,
-      //   grade: action.payload.grade,
-      //   createdAt: new Date(),
-      // };
-      // // jogar para lista (data)
-      // state.data.push(newAssessment);
-      // // state.data = [...state.data, newAssessment]
-      // state.errors = "";
-      // state.success = true;
-      // return state;
-    },
-    updateAssessment() {
-      // state.errors = "";
-      // state.success = false;
-      // const index = state.data.findIndex((ass) => ass.id === action.payload.id);
-      // if (index === -1) {
-      //   state.errors = "Assessment not found!";
-      //   return state;
-      // }
-      // // state.data[index].title = title || state.data[index].title;
-      // // state.data[index].description =
-      // //   description || state.data[index].description;
-      // // state.data[index].grade = grade || state.data[index].grade;
-      // state.data[index] = {
-      //   ...state.data[index],
-      //   ...action.payload,
-      // };
-      // state.errors = "";
-      // state.success = true;
-      // return state;
-    },
-    deleteAssessment() {
-      // // Acha index => splice
-      // // filter !=
-      // state.errors = "";
-      // state.success = false;
-      // const index = state.data.findIndex((ass) => ass.id === action.payload); // "120asmdioasmdias1-023S"
-      // if (index === -1) {
-      //   state.errors = "Not found";
-      //   state.success = false;
-      //   return state;
-      // }
-      // state.data.splice(index, 1);
-      // // state.data.filter((ass) => ass.id !== action.payload);
-      // /**
-      //  *  [1, 2, 3, 4]
-      //  *
-      //  *  filtrar(ass => ass != 3)
-      //  *
-      //  *  [1, 2, 4]
-      //  *
-      //  *
-      //  * [1, 2, 3, 4]
-      //  *
-      //  * procurar(ass => ass = 3)
-      //  *
-      //  * splice(2, 1)
-      //  *
-      //  * [1, 2, 4]
-      //  */
-      // state.errors = "";
-      // state.success = true;
-      // return state;
-    },
-  },
+  reducers: {},
 
   // Ciclos = pending , fullfiled, rejected
   extraReducers(builder) {
@@ -136,7 +64,11 @@ const assessmentsSlice = createSlice({
         if (action.payload.ok) {
           // data => { count, assessments }
           state.assessments = action.payload.data.assessments;
-          state.count = action.payload.data.count;
+          if (action.payload.data.count > 0) {
+            state.count = action.payload.data.count;
+          } else {
+            state.count = 0;
+          }
         }
       })
       .addCase(findAllAssessmentsAsyncThunk.rejected, (state) => {
@@ -165,8 +97,6 @@ const assessmentsSlice = createSlice({
               ...state.assessments[index],
               ...action.payload.data,
             };
-
-            console.log(action.payload.data); // { ... }
           }
         }
       })
@@ -203,9 +133,4 @@ const assessmentsSlice = createSlice({
   },
 });
 
-// setListAssessments({ ...listAssessments, data: [] });
-// setListAssessments({ ...listAssessments, errors: "meu aeurnauin" });
-
-export const { createAssessment, updateAssessment, deleteAssessment } =
-  assessmentsSlice.actions;
 export const assessmentsReduce = assessmentsSlice.reducer;

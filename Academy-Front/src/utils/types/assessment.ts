@@ -3,7 +3,7 @@ export interface Assessment {
   title: string;
   description: string;
   grade: number;
-  createdAt: Date;
+  createdAt: string;
   studentId: string;
 }
 

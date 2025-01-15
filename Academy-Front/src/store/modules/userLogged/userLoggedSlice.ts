@@ -10,7 +10,6 @@ export const loginAsyncThunk = createAsyncThunk(
     const { email, password, remember } = data;
 
     const response = await loginService({ email, password });
-
     if (!response.ok) {
       dispatch(
         showAlert({
@@ -23,7 +22,7 @@ export const loginAsyncThunk = createAsyncThunk(
     const responseWithRemenber = {
       ...response, // { ok, message }
       data: {
-        ...response.data.token, //  { token }
+        token: response.data.token, //  { token }
         student: {
           ...response.data.student, // { id, name....}
           remember,
@@ -78,15 +77,10 @@ const userLoggedSlice = createSlice({
   extraReducers(builder) {
     // LOGIN USER
     builder
-      .addCase(loginAsyncThunk.pending, () => {
-        console.log("Estou em estado de pending na função loginAsyncThunk");
-      })
+      .addCase(loginAsyncThunk.pending, () => {})
       .addCase(
         loginAsyncThunk.fulfilled,
         (state, action: PayloadAction<ResponseAPI>) => {
-          console.log("Estou em estado de fulfilled na função loginAsyncThunk");
-          console.log({ state, payload: action.payload });
-
           state.ok = action.payload.ok;
           state.message = action.payload.message;
 

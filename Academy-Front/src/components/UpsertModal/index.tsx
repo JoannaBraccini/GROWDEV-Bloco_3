@@ -29,7 +29,7 @@ interface UpsertModalProps {
 export function UpsertModal({ open, onClose }: UpsertModalProps) {
   const dispatch = useAppDispatch();
 
-  const userLoggedRedux = useAppSelector((state) => state.userLogged);
+  const userLogged = useAppSelector((state) => state.userLogged);
   const assessmentsRedux = useAppSelector((state) => state.assessments);
   const assessmentDetailRedux = useAppSelector(
     ({ assessmentDetail }) => assessmentDetail
@@ -64,7 +64,7 @@ export function UpsertModal({ open, onClose }: UpsertModalProps) {
       title,
       grade,
       description,
-      studentId: userLoggedRedux.student.id,
+      studentId: userLogged.student.id,
     };
 
     if (assessmentDetailRedux.id) {
@@ -86,7 +86,6 @@ export function UpsertModal({ open, onClose }: UpsertModalProps) {
   }
 
   function handleClose() {
-    console.log("Closed");
     dispatch(resetAssessmentDetail());
     onClose();
   }

@@ -20,7 +20,8 @@ model Student {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   // 1 - N (um estudante possui 0..N avaliações) 
-  assessments Assessment[]
+  assessments        Assessment[] @relation("StudentAssessment")
+  createdAssessments Assessment[] @relation("CreatedBy")
 
   @@map("students")
 }
@@ -39,7 +40,11 @@ model Assessment {
 
   // 1 -1 (uma avaliação pertence a 1 estudante) 
   studentId String  @map("student_id") @db.Uuid
-  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  student   Student @relation("StudentAssessment", fields: [studentId], references: [id], onDelete: Cascade)
+
+  // Referência ao criador da avaliação
+  createdBy   String  @map("created_by") @db.Uuid
+  createdById Student @relation("CreatedBy", fields: [createdBy], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp()
   updatedAt DateTime @updatedAt @map("updated_at")

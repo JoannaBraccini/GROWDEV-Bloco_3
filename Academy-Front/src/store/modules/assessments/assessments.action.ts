@@ -17,16 +17,12 @@ import { showAlert } from "../alert/alertSlice";
 export const createAssessmentAsyncThunk = createAsyncThunk(
   "assessments/create",
   async (data: CreateAssessmentRequest, { getState, dispatch }) => {
-    // receber dos dados OK
     const { userLogged } = getState() as RootState;
 
-    // chamar a api (service)
     const response = await createAssessmentService({
       ...data,
       token: userLogged.token,
     });
-
-    // validar se erro/exibir um alert
     if (!response.ok) {
       dispatch(
         showAlert({
@@ -44,9 +40,6 @@ export const createAssessmentAsyncThunk = createAsyncThunk(
         type: "success",
       })
     );
-
-    // dispatch(findAllAssessmentsAsyncThunk({}));
-    // retornar os dados (payload)
     return response;
   }
 );

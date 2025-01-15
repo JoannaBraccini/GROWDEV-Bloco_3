@@ -27,7 +27,14 @@ export const signupAsyncThunk = createAsyncThunk(
       );
     }
 
-    return response.data;
+    dispatch(
+      showAlert({
+        message: response.message,
+        type: "success",
+      })
+    );
+
+    return response;
   }
 );
 
@@ -57,8 +64,8 @@ const initialState: InitialState = {
   },
 };
 
-const userRegisterSlice = createSlice({
-  name: "userRegister",
+const userCreateSlice = createSlice({
+  name: "userCreate",
   initialState: initialState,
   reducers: {
     logout() {
@@ -86,4 +93,4 @@ const userRegisterSlice = createSlice({
   },
 });
 
-export const userRegisterReducer = userRegisterSlice.reducer;
+export const userCreateReducer = userCreateSlice.reducer;
