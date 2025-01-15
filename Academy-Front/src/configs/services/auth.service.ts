@@ -22,7 +22,7 @@ export async function loginService(
 
 export async function signupService(data: SignupRequest): Promise<ResponseAPI> {
   try {
-    const response = await api.post("/students", data);
+    const response = await api.post("/signup", data);
 
     return {
       ok: response.data.ok,

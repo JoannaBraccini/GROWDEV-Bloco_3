@@ -4,12 +4,15 @@ import {
   Student as StudentPrisma,
 } from "@prisma/client";
 import { prisma } from "../database/prisma.database";
-import { QueryFilterDto, StudentDto, UpdateStudentDto } from "../dtos";
+import {
+  IdStudentDto,
+  QueryFilterDto,
+  StudentDto,
+  UpdateStudentDto,
+} from "../dtos";
 import { ResponseApi } from "../types";
 
 export class StudentService {
-  // ?id=
-  // /:id
   public async findAll({ name, cpf }: QueryFilterDto): Promise<ResponseApi> {
     const where: Prisma.StudentWhereInput = {};
 
@@ -33,7 +36,20 @@ export class StudentService {
     };
   }
 
-  public async findOneById(id: string): Promise<ResponseApi> {
+  public async findOneById(
+    id: string,
+    studentId: string,
+    type: string
+  ): Promise<ResponseApi> {
+    if (type !== "T" && id !== studentId) {
+      return {
+        ok: false,
+        code: 403, // Forbidden
+        message:
+          "Não autorizado! Somente Tech-Helpers podem acessar os dados de outros alunos.",
+      };
+    }
+
     // 1 - Buscar => id é pk, id é unico
     const student = await prisma.student.findUnique({
       where: { id },
@@ -155,6 +171,7 @@ export class StudentService {
         title: assessment.title,
         grade: Number(assessment.grade), // Decima(4, 2) => number (Number())
         description: assessment?.description,
+        createdBy: assessment.createdBy,
         createdAt: assessment.createdAt,
         studentId: assessment.studentId,
       })),

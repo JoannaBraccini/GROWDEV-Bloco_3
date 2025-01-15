@@ -13,3 +13,5 @@ export interface SignupDto {
   cpf: string;
   age?: number;
 }
+
+export type IdStudentDto = Pick<SignupDto, "type"> & { studentId: string };

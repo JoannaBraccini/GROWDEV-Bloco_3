@@ -12,9 +12,6 @@ export interface StudentDto {
   assessments?: Array<AssessmentDto>;
 }
 
-// NULL
-// ? ou undefined
-
 export interface QueryFilterDto {
   name?: string;
   cpf?: string;

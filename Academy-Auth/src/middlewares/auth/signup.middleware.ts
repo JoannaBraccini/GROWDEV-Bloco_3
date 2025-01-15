@@ -1,7 +1,7 @@
 import { StudentType } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 
-export class CreateStudentMiddleware {
+export class SignupMiddleware {
   public static validateRequired(
     req: Request,
     res: Response,

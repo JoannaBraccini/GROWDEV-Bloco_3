@@ -27,10 +27,7 @@ export class AssessmentService {
       };
     }
 
-    if (
-      (studentType !== "M" && studentType !== "T") ||
-      (studentType !== "T" && student.id !== studentId)
-    ) {
+    if (studentType !== "T" && student.id !== studentId) {
       return {
         ok: false,
         code: 401,
@@ -123,8 +120,6 @@ export class AssessmentService {
 
   public async update(
     id: string,
-    studentId: string,
-    type: StudentType,
     updateAssessments: UpdateAssessmentDto
   ): Promise<ResponseApi> {
     const assessment = await prisma.assessment.findUnique({
@@ -136,14 +131,6 @@ export class AssessmentService {
         ok: false,
         code: 404,
         message: "Avaliação não encontrada!",
-      };
-    }
-
-    if (type !== "T") {
-      return {
-        ok: false,
-        code: 401,
-        message: "Estudante não autorizado!",
       };
     }
 
@@ -160,11 +147,7 @@ export class AssessmentService {
     };
   }
 
-  public async remove(
-    id: string,
-    studentId: string,
-    type: StudentType
-  ): Promise<ResponseApi> {
+  public async remove(id: string): Promise<ResponseApi> {
     const assessment = await prisma.assessment.findUnique({
       where: { id },
     });
@@ -177,13 +160,6 @@ export class AssessmentService {
       };
     }
 
-    if (type !== "T") {
-      return {
-        ok: false,
-        code: 401,
-        message: "Estudante não autorizado!",
-      };
-    }
     const removeAssessment = await prisma.assessment.delete({
       where: { id },
     });
@@ -202,6 +178,7 @@ export class AssessmentService {
       description: assessment.description,
       grade: Number(assessment.grade),
       studentId: assessment.studentId,
+      createdBy: assessment.createdBy,
       createdAt: assessment.createdAt,
     };
   }

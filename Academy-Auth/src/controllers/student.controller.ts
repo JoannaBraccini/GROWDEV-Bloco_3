@@ -28,12 +28,16 @@ export class StudentController {
   public static async findOneById(req: Request, res: Response): Promise<void> {
     try {
       // 1- Pegar o identificador
-      // /student/:id
+      const studentLogged = req.authStudent;
       const { id } = req.params;
 
       // 2 - Chamar o responsável
       const service = new StudentService();
-      const result = await service.findOneById(id);
+      const result = await service.findOneById(
+        id,
+        studentLogged.id,
+        studentLogged.type
+      );
 
       // 3 - Responder ao cliente
       const { code, ...response } = result;

@@ -20,5 +20,6 @@ export interface AssessmentDto {
   description?: string | null;
   grade: number;
   studentId: string;
+  createdBy: string;
   createdAt: Date;
 }
