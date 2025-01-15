@@ -3,17 +3,18 @@ export interface Assessment {
   title: string;
   description: string;
   grade: number;
-  createdAt: string;
   studentId: string;
+  createdBy: string;
+  createdAt: string;
 }
 
 export type CreateAssessmentRequest = Pick<
   Assessment,
-  "title" | "description" | "grade" | "studentId"
+  "title" | "description" | "grade" | "studentId" | "createdBy"
 >;
 
 export type UpdateAssessmentRequest = Partial<
-  Omit<CreateAssessmentRequest, "studentId">
+  Omit<CreateAssessmentRequest, "studentId" | "createdBy">
 > & {
   id: string;
 };

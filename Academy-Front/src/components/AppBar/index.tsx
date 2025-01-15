@@ -18,7 +18,7 @@ import {
   LightMode,
 } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { logout } from "../../store/modules/userLogged/userLoggedSlice";
+import { logout } from "../../store/modules/auth/userLoggedSlice";
 import { toggleTheme } from "../../store/modules/settings/settingsSlice";
 
 export default function AppBar() {

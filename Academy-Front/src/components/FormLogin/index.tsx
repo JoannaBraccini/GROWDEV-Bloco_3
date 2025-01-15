@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { loginAsyncThunk } from "../../store/modules/userLogged/userLoggedSlice";
+import { loginAsyncThunk } from "../../store/modules/auth/userLoggedSlice";
 import { useNavigate } from "react-router-dom";
 
 interface ErrorFields {

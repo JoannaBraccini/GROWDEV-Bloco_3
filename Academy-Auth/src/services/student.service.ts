@@ -1,73 +1,13 @@
 import {
   Assessment as AssessmentPrisma,
   Prisma,
-  PrismaClient,
   Student as StudentPrisma,
 } from "@prisma/client";
 import { prisma } from "../database/prisma.database";
-import {
-  CreateStudentDto,
-  QueryFilterDto,
-  StudentDto,
-  UpdateStudentDto,
-} from "../dtos";
+import { QueryFilterDto, StudentDto, UpdateStudentDto } from "../dtos";
 import { ResponseApi } from "../types";
-import { Bcrypt } from "../utils/bcrypt";
 
 export class StudentService {
-  public async create(createStudent: CreateStudentDto): Promise<ResponseApi> {
-    const { name, email, password, type, age, cpf } = createStudent;
-
-    // 2 - Verificarmos as colunas unicas
-    const student = await prisma.student.findFirst({
-      where: {
-        OR: [{ email: email }, { cpf: cpf }], // = // EMAIL OU CPF
-      },
-    });
-
-    // Valida E-mail e CPF unicos
-    if (student) {
-      if (student.email === email) {
-        return {
-          ok: false,
-          code: 409,
-          message: "E-mail já está em uso.",
-        };
-      }
-
-      if (student.cpf === cpf) {
-        return {
-          ok: false,
-          code: 409,
-          message: "CPF já está em uso.",
-        };
-      }
-    }
-
-    // 3 - Criação do nosso hash (password)
-    const bcrypt = new Bcrypt();
-    const passwordHash = await bcrypt.generateHash(password);
-
-    // 4 - Criação do nosso estudante no banco de dados
-    const studentCreated = await prisma.student.create({
-      data: {
-        name: name,
-        cpf: cpf,
-        email: email,
-        password: passwordHash,
-        type: type,
-        age: age,
-      },
-    });
-
-    return {
-      ok: true,
-      code: 201,
-      message: "Estudante cadastrado com sucesso!",
-      data: this.mapToDto(studentCreated),
-    };
-  }
-
   // ?id=
   // /:id
   public async findAll({ name, cpf }: QueryFilterDto): Promise<ResponseApi> {

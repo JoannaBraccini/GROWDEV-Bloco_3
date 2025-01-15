@@ -1,10 +1,10 @@
-export interface SignupRequest {
+export interface Student {
+  id: string;
   name: string;
   cpf: string;
-  age?: number;
+  age: number | null;
   email: string;
-  password: string;
-  type: "M" | "F" | "T";
+  type: StudentType;
 }
 
-export type StudentType = Pick<SignupRequest, "type">;
+export type StudentType = "M" | "F" | "T";

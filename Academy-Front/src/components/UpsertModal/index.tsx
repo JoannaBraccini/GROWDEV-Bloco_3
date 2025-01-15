@@ -30,6 +30,7 @@ export function UpsertModal({ open, onClose }: UpsertModalProps) {
   const dispatch = useAppDispatch();
 
   const userLogged = useAppSelector((state) => state.userLogged);
+  const students = useAppSelector((state) => state.students);
   const assessmentsRedux = useAppSelector((state) => state.assessments);
   const assessmentDetailRedux = useAppSelector(
     ({ assessmentDetail }) => assessmentDetail
@@ -39,6 +40,7 @@ export function UpsertModal({ open, onClose }: UpsertModalProps) {
     title: "",
     description: "",
     grade: "",
+    studentId: "",
   });
 
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -47,8 +49,9 @@ export function UpsertModal({ open, onClose }: UpsertModalProps) {
     const title = event.currentTarget["title-assessment"].value;
     const grade = Number(event.currentTarget["grade-assessment"].value);
     const description = event.currentTarget["desc-assessment"].value;
+    const studentId = event.currentTarget["student"].value;
 
-    const errors = validateFormAssessment(title, description, grade);
+    const errors = validateFormAssessment(title, description, grade, studentId);
     // Converter um objeto em array
     const hasError = Object.keys(errors);
     if (hasError.length) {
@@ -64,12 +67,12 @@ export function UpsertModal({ open, onClose }: UpsertModalProps) {
       title,
       grade,
       description,
-      studentId: userLogged.student.id,
+      studentId,
+      createdBy: userLogged.student.id,
     };
 
     if (assessmentDetailRedux.id) {
       // MODO EDIT
-      // dispatch(updateAssessment({ id: assessmentDetaiLRedux.id, ...data }));
       dispatch(
         updateAssessmentAsyncThunk({
           id: assessmentDetailRedux.id,
@@ -80,7 +83,6 @@ export function UpsertModal({ open, onClose }: UpsertModalProps) {
       );
     } else {
       // MODO CREATE
-      // dispatch(createAssessment(data));
       dispatch(createAssessmentAsyncThunk(data));
     }
   }
@@ -129,14 +131,6 @@ export function UpsertModal({ open, onClose }: UpsertModalProps) {
                   error={!!fieldsErrors.title}
                   helperText={fieldsErrors.title}
                   defaultValue={assessmentDetailRedux.title}
-                  // value={"Olá Mundo"}
-                  // value={assessment.title} //
-                  // onChange={(e) =>
-                  //   setAssessment((prev) => ({
-                  //     ...prev,
-                  //     title: e.target.value,
-                  //   }))
-                  // }
                 />
               </FormControl>
             </Grid2>
@@ -156,13 +150,6 @@ export function UpsertModal({ open, onClose }: UpsertModalProps) {
                   error={!!fieldsErrors.grade}
                   helperText={fieldsErrors.grade}
                   defaultValue={assessmentDetailRedux.grade}
-                  // value={assessment.grade}
-                  // onChange={(e) =>
-                  //   setAssessment((prev) => ({
-                  //     ...prev,
-                  //     grade: Number(e.target.value),
-                  //   }))
-                  // }
                 />
               </FormControl>
             </Grid2>
@@ -184,14 +171,37 @@ export function UpsertModal({ open, onClose }: UpsertModalProps) {
                   error={!!fieldsErrors.description}
                   helperText={fieldsErrors.description}
                   defaultValue={assessmentDetailRedux.description}
-                  // value={assessment.description}
-                  // onChange={(e) =>
-                  //   setAssessment((prev) => ({
-                  //     ...prev,
-                  //     description: e.target.value,
-                  //   }))
-                  // }
                 />
+              </FormControl>
+            </Grid2>
+
+            {/** Estudante avaliado */}
+            <Grid2 size={12} mb={2}>
+              <FormControl fullWidth error={!!fieldsErrors.studentId}>
+                <FormLabel htmlFor="student">Student</FormLabel>
+                <TextField
+                  id="student"
+                  name="student"
+                  select
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                  required
+                  error={!!fieldsErrors.studentId}
+                  helperText={fieldsErrors.studentId}
+                  slotProps={{
+                    select: {
+                      native: true,
+                    },
+                  }}
+                >
+                  <option value="">Select Student</option>
+                  {students.map((student) => (
+                    <option key={student.id} value={student.id}>
+                      {student.name}
+                    </option>
+                  ))}
+                </TextField>
               </FormControl>
             </Grid2>
 

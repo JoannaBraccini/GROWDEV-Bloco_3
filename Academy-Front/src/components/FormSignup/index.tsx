@@ -11,7 +11,7 @@ import {
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useNavigate } from "react-router-dom";
-import { signupAsyncThunk } from "../../store/modules/student/userCreateSlice";
+import { signupAsyncThunk } from "../../store/modules/students/studentSlice";
 import { StudentType } from "../../utils/types";
 
 interface ErrorFields {

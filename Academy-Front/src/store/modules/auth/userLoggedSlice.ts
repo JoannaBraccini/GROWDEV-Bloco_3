@@ -5,7 +5,7 @@ import { loginService } from "../../../configs/services/auth.service";
 import { showAlert } from "../alert/alertSlice";
 
 export const loginAsyncThunk = createAsyncThunk(
-  "userLogged/loginAsyncThunk",
+  "userLogged/login",
   async (data: LoginRequest, { dispatch }) => {
     const { email, password, remember } = data;
 
@@ -45,6 +45,7 @@ export const loginAsyncThunk = createAsyncThunk(
 interface InitialState {
   ok: boolean;
   message: string;
+  loading: boolean;
   token: string;
   student: {
     id: string;
@@ -57,6 +58,7 @@ interface InitialState {
 const initialState: InitialState = {
   ok: false,
   message: "",
+  loading: false,
   token: "",
   student: {
     email: "",
@@ -77,14 +79,16 @@ const userLoggedSlice = createSlice({
   extraReducers(builder) {
     // LOGIN USER
     builder
-      .addCase(loginAsyncThunk.pending, () => {})
+      .addCase(loginAsyncThunk.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(
         loginAsyncThunk.fulfilled,
         (state, action: PayloadAction<ResponseAPI>) => {
+          state.loading = false;
           state.ok = action.payload.ok;
           state.message = action.payload.message;
 
-          // Só posso atribuir token e student quando o ok for true
           if (action.payload.ok) {
             state.token = action.payload.data.token;
             state.student = action.payload.data.student;
@@ -92,6 +96,7 @@ const userLoggedSlice = createSlice({
         }
       )
       .addCase(loginAsyncThunk.rejected, (state) => {
+        state.loading = false;
         state.ok = false;
         state.message = "Error login";
       });

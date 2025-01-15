@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ResponseAPI } from "../../../configs/services/api.service";
-import { SignupRequest } from "../../../utils/types";
-import { signupService } from "../../../configs/services/student.service";
+import { SignupRequest, Student } from "../../../utils/types";
+import { signupService } from "../../../configs/services/auth.service";
 import { showAlert } from "../alert/alertSlice";
 
 export const signupAsyncThunk = createAsyncThunk(
-  "userRegister/signupAsyncThunk",
+  "userCreated/signup",
   async (data: SignupRequest, { dispatch }) => {
     const { name, cpf, age, email, password, type } = data;
 
@@ -41,19 +41,14 @@ export const signupAsyncThunk = createAsyncThunk(
 interface InitialState {
   ok: boolean;
   message: string;
-  student: {
-    id: string;
-    name: string;
-    cpf: string;
-    age: number | null;
-    email: string;
-    type: "M" | "F" | "T";
-  };
+  loading: boolean;
+  student: Student;
 }
 
 const initialState: InitialState = {
   ok: false,
   message: "",
+  loading: false,
   student: {
     id: "",
     name: "",
@@ -64,20 +59,20 @@ const initialState: InitialState = {
   },
 };
 
-const userCreateSlice = createSlice({
-  name: "userCreate",
-  initialState: initialState,
-  reducers: {
-    logout() {
-      return initialState;
-    },
-  },
+const userCreatedSlice = createSlice({
+  name: "userSignup",
+  initialState,
+  reducers: {},
   extraReducers(builder) {
+    //SIGNUP/CREATE
     builder
-      .addCase(signupAsyncThunk.pending, () => {})
+      .addCase(signupAsyncThunk.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(
         signupAsyncThunk.fulfilled,
         (state, action: PayloadAction<ResponseAPI>) => {
+          state.loading = false;
           state.ok = action.payload.ok;
           state.message = action.payload.message;
 
@@ -87,10 +82,11 @@ const userCreateSlice = createSlice({
         }
       )
       .addCase(signupAsyncThunk.rejected, (state) => {
+        state.loading = false;
         state.ok = false;
         state.message = "Error Signup";
       });
   },
 });
 
-export const userCreateReducer = userCreateSlice.reducer;
+export const userCreatedReducer = userCreatedSlice.reducer;

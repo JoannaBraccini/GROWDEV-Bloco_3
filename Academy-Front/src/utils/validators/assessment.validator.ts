@@ -2,12 +2,14 @@ export interface FieldsErrors {
   title: string;
   grade: string;
   description: string;
+  studentId: string;
 }
 
 export function validateFormAssessment(
   title: string,
   description: string,
-  grade: number
+  grade: number,
+  studentId: string
 ) {
   const errors: FieldsErrors = {} as FieldsErrors;
 
@@ -21,6 +23,10 @@ export function validateFormAssessment(
 
   if (!grade || grade < 0 || grade > 10) {
     errors.grade = "Grade must be between 0 and 10";
+  }
+
+  if (!studentId) {
+    errors.grade = "Must provide a student identification";
   }
 
   return errors;

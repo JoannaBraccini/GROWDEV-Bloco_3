@@ -1,9 +1,8 @@
-import { SignupRequest } from "../../utils/types";
 import { api, ResponseAPI } from "./api.service";
 
-export async function signupService(data: SignupRequest): Promise<ResponseAPI> {
+export async function fetchStudentsService(): Promise<ResponseAPI> {
   try {
-    const response = await api.post("/students", data);
+    const response = await api.get("/students");
 
     return {
       ok: response.data.ok,

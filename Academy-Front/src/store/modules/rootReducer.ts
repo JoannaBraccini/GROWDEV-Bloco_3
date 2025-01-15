@@ -1,15 +1,17 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import { userLoggedReducer } from "./userLogged/userLoggedSlice";
+import { userLoggedReducer } from "./auth/userLoggedSlice";
 import { assessmentsReduce } from "./assessments/assessmentsSlice";
 import { assessmentDetailReducer } from "./assessmentDetail/assessmentDetailSlice";
 import { alertReducer } from "./alert/alertSlice";
 import { settingsReduce } from "./settings/settingsSlice";
-import { userCreateReducer } from "./student/userCreateSlice";
+import { studentsReducer } from "./students/studentsSlice";
+import { userCreatedReducer } from "./auth/signupSlice";
 
 export const rootReducer = combineReducers({
   // Todos os novos estados globais criado, devem ser chamados aqui...
   userLogged: userLoggedReducer,
-  userCreated: userCreateReducer,
+  userCreated: userCreatedReducer,
+  students: studentsReducer,
   assessments: assessmentsReduce,
   assessmentDetail: assessmentDetailReducer,
   alert: alertReducer,
