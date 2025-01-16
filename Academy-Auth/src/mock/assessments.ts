@@ -69,8 +69,10 @@ async function main() {
   // Obter todos os estudantes cadastrados
   const students = await prisma.student.findMany();
 
-  //Filtrar os estudantes matriculados
+  //Filtrar os estudantes
   const studentsM = students.filter((student) => student.type === "M");
+  const studentsT = students.filter((student) => student.type === "T");
+  const studentTIds = studentsT.map((student) => student.id);
 
   // Associar avaliações aos estudantes
   for (const student of studentsM) {
@@ -79,11 +81,16 @@ async function main() {
       0,
       Math.floor(Math.random() * 5) + 1
     ); // Aleatoriamente seleciona até 5 avaliações
+
+    // Selecionar aleatoriamente um ID de estudante do tipo "T" para o campo createdBy
+    const randomCreatedById =
+      studentTIds[Math.floor(Math.random() * studentTIds.length)];
+
     await prisma.assessment.createMany({
       data: randomAssessments.map((assessment) => ({
         ...assessment,
         studentId: student.id, // Associando a avaliação com o estudante
-        createdBy: student.id,
+        createdBy: randomCreatedById, // Usando um ID de estudante do tipo "T"
       })),
     });
   }
@@ -96,3 +103,5 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
+
+//comando para inserção: npx ts-node src/mock/assessments.ts

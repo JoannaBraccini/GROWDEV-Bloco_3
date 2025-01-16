@@ -1,6 +1,6 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import { userLoggedReducer } from "./auth/userLoggedSlice";
-import { assessmentsReduce } from "./assessments/assessmentsSlice";
+import { assessmentsReducer } from "./assessments/assessmentsSlice";
 import { assessmentDetailReducer } from "./assessmentDetail/assessmentDetailSlice";
 import { alertReducer } from "./alert/alertSlice";
 import { settingsReduce } from "./settings/settingsSlice";
@@ -12,7 +12,7 @@ export const rootReducer = combineReducers({
   userLogged: userLoggedReducer,
   userCreated: userCreatedReducer,
   students: studentsReducer,
-  assessments: assessmentsReduce,
+  assessments: assessmentsReducer,
   assessmentDetail: assessmentDetailReducer,
   alert: alertReducer,
   settings: settingsReduce,

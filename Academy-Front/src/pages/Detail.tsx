@@ -8,23 +8,36 @@ export function Detail() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  const { students } = useAppSelector((state) => state.students);
   const assessmentDetailRedux = useAppSelector(
     (state) => state.assessmentDetail
   );
 
+  const student = students.find(
+    (student) => student.id === assessmentDetailRedux.studentId
+  );
+
   function handleReturn() {
     dispatch(resetAssessmentDetail());
-    navigate("/home");
+    navigate("/assessments");
   }
 
   return (
     <Grid2 container spacing={2}>
       <Grid2 size={12}>
-        <Typography>Detalhes de uma avaliação</Typography>
+        <Typography>Detalhes da avaliação</Typography>
       </Grid2>
       <Grid2 size={12}>
-        <Typography>{assessmentDetailRedux.title}</Typography>
+        <Typography>Aluno: {student?.name}</Typography>
       </Grid2>
+      <Grid2 size={12} key={assessmentDetailRedux.id}>
+        <Typography>{assessmentDetailRedux.title}</Typography>
+        <Typography>{assessmentDetailRedux.description}</Typography>
+        <Typography>{assessmentDetailRedux.grade}</Typography>
+        <Typography>{assessmentDetailRedux.createdBy}</Typography>
+        <Typography>{assessmentDetailRedux.createdAt}</Typography>
+      </Grid2>
+
       <Grid2 size={12}>
         <Button onClick={handleReturn}>Voltar</Button>
       </Grid2>

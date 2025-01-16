@@ -3,6 +3,7 @@ import { ResponseAPI } from "../../../configs/services/api.service";
 import { LoginRequest } from "../../../utils/types/auth";
 import { loginService } from "../../../configs/services/auth.service";
 import { showAlert } from "../alert/alertSlice";
+import { StudentType } from "../../../utils/types";
 
 export const loginAsyncThunk = createAsyncThunk(
   "userLogged/login",
@@ -51,6 +52,7 @@ interface InitialState {
     id: string;
     name: string;
     email: string;
+    type: StudentType;
     remember: boolean;
   };
 }
@@ -61,9 +63,10 @@ const initialState: InitialState = {
   loading: false,
   token: "",
   student: {
-    email: "",
     id: "",
     name: "",
+    email: "",
+    type: "M",
     remember: false,
   },
 };

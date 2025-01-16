@@ -9,7 +9,7 @@ import {
 
 interface InitialState {
   count: number; // Total de registro (paginação)
-  assessments: Array<Assessment>;
+  assessments: Assessment[];
   message: string;
   ok: boolean;
   loading: boolean;
@@ -63,7 +63,8 @@ const assessmentsSlice = createSlice({
 
         if (action.payload.ok) {
           // data => { count, assessments }
-          state.assessments = action.payload.data.assessments;
+          state.assessments = action.payload.data;
+
           if (action.payload.data.count > 0) {
             state.count = action.payload.data.count;
           } else {
@@ -116,7 +117,6 @@ const assessmentsSlice = createSlice({
         state.message = action.payload.message;
 
         if (action.payload.ok) {
-          console.log(action.payload);
           const index = state.assessments.findIndex(
             (ass) => ass.id === action.payload.data.id
           );
@@ -133,4 +133,4 @@ const assessmentsSlice = createSlice({
   },
 });
 
-export const assessmentsReduce = assessmentsSlice.reducer;
+export const assessmentsReducer = assessmentsSlice.reducer;

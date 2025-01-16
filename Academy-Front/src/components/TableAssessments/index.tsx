@@ -1,4 +1,4 @@
-import { Delete, Edit } from "@mui/icons-material";
+import { Delete, Edit, Info } from "@mui/icons-material";
 import {
   Box,
   CircularProgress,
@@ -14,19 +14,18 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Assessment } from "../../utils/types/assessment";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import {
-  assessmentDetailReducer,
-  setAssessentDetail,
-} from "../../store/modules/assessmentDetail/assessmentDetailSlice";
+import { setAssessentDetail } from "../../store/modules/assessmentDetail/assessmentDetailSlice";
 import { useEffect, useMemo, useState } from "react";
 import {
   deleteAssessmentAsyncThunk,
   findAllAssessmentsAsyncThunk,
 } from "../../store/modules/assessments/assessments.action";
+import { useNavigate } from "react-router-dom";
 
-const LIMIT = 4; // Variavel de ambiente
+const LIMIT = 20; // Variavel de ambiente
 
 export function TableAssessments() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { assessments, count, loadingList, loading } = useAppSelector(
     (state) => state.assessments
@@ -43,14 +42,15 @@ export function TableAssessments() {
 
   function handleEdit(asssessment: Assessment) {
     dispatch(setAssessentDetail(asssessment));
-
-    // setTimeout(() => {
-    //   navigate("/detail");
-    // }, 500);
   }
 
   function handleDelete(id: string) {
     dispatch(deleteAssessmentAsyncThunk({ id }));
+  }
+
+  function handleInfor(id: string) {
+    // dispatch(getAssessmentDetail)
+    navigate(`/detail/${id}`);
   }
 
   // Toda vez que esse componente renderizar, preciso buscar as avaliações
@@ -60,8 +60,10 @@ export function TableAssessments() {
 
   return (
     <TableContainer>
-      {!assessments || !assessmentDetailReducer ? (
-        <Typography>No assessments to show. Create one!</Typography>
+      {!assessments || assessments.length < 1 ? (
+        <Typography variant="subtitle2" textAlign="center">
+          No assessments to show. Create one!
+        </Typography>
       ) : (
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -100,34 +102,39 @@ export function TableAssessments() {
                 </TableCell>
               </TableRow>
             ) : (
-              assessments.map((row) => (
-                <TableRow
-                  key={row.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {row.id}
-                  </TableCell>
-                  <TableCell align="right">{row.title}</TableCell>
-                  <TableCell align="right">{row.description}</TableCell>
-                  <TableCell align="right">{row.grade}</TableCell>
-                  <TableCell align="right">
-                    {new Date(row.createdAt).toLocaleDateString("pt-BR")}
-                  </TableCell>
-                  <TableCell align="right">
-                    <IconButton color="info" onClick={() => handleEdit(row)}>
-                      <Edit />
-                    </IconButton>
-                    <IconButton
-                      disabled={loading}
-                      onClick={() => handleDelete(row.id)}
-                      color="error"
-                    >
-                      <Delete />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))
+              assessments
+                .filter((row) => row?.id)
+                .map((row) => (
+                  <TableRow
+                    key={row.id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.id}
+                    </TableCell>
+                    <TableCell align="right">{row.title}</TableCell>
+                    <TableCell align="right">{row.description}</TableCell>
+                    <TableCell align="right">{row.grade}</TableCell>
+                    <TableCell align="right">
+                      {new Date(row.createdAt).toLocaleDateString("pt-BR")}
+                    </TableCell>
+                    <TableCell align="right">
+                      <IconButton onClick={() => handleInfo(row.id)}>
+                        <Info />
+                      </IconButton>
+                      {/* <IconButton color="info" onClick={() => handleEdit(row)}>
+                        <Edit />
+                      </IconButton>
+                      <IconButton
+                        disabled={loading}
+                        onClick={() => handleDelete(row.id)}
+                        color="error"
+                      >
+                        <Delete />
+                      </IconButton> */}
+                    </TableCell>
+                  </TableRow>
+                ))
             )}
           </TableBody>
         </Table>

@@ -30,7 +30,7 @@ export function UpsertModal({ open, onClose }: UpsertModalProps) {
   const dispatch = useAppDispatch();
 
   const userLogged = useAppSelector((state) => state.userLogged);
-  const students = useAppSelector((state) => state.students);
+  const { students } = useAppSelector((state) => state.students);
   const assessmentsRedux = useAppSelector((state) => state.assessments);
   const assessmentDetailRedux = useAppSelector(
     ({ assessmentDetail }) => assessmentDetail
@@ -196,11 +196,20 @@ export function UpsertModal({ open, onClose }: UpsertModalProps) {
                   }}
                 >
                   <option value="">Select Student</option>
-                  {students.map((student) => (
-                    <option key={student.id} value={student.id}>
-                      {student.name}
+                  {userLogged.student.type !== "T" ? (
+                    <option
+                      key={userLogged.student.id}
+                      value={userLogged.student.id}
+                    >
+                      {userLogged.student.name}
                     </option>
-                  ))}
+                  ) : (
+                    students.map((student) => (
+                      <option key={student.id} value={student.id}>
+                        {student.name}
+                      </option>
+                    ))
+                  )}
                 </TextField>
               </FormControl>
             </Grid2>

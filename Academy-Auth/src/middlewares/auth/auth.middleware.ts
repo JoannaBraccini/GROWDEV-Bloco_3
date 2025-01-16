@@ -38,7 +38,7 @@ export class AuthMiddleware {
     }
 
     // Repassa essa informação.
-    req.body.student = {
+    req.authStudent = {
       id: studentDecoded.id,
       name: studentDecoded.name,
       email: studentDecoded.email,

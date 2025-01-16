@@ -59,30 +59,39 @@ export class AssessmentService {
     type: StudentType,
     query?: { page?: number; take?: number }
   ): Promise<ResponseApi> {
-    let where: Prisma.AssessmentWhereInput = {};
-    if (type !== "T") {
-      where = { studentId: id };
-    }
-    const assessmentList = await prisma.assessment.findMany({
-      skip: query?.page, // 1 page
-      take: query?.take, // quantidade
-      where: where,
-    });
+    try {
+      let where: Prisma.AssessmentWhereInput = {};
+      if (type !== "T") {
+        where = { studentId: id };
+      }
 
-    if (!assessmentList) {
+      const assessmentList = await prisma.assessment.findMany({
+        skip: query?.page, // 1 page
+        take: query?.take, // quantidade
+        where: where,
+      });
+
+      if (!assessmentList) {
+        return {
+          ok: false,
+          code: 404,
+          message: "Avaliação do estudante não encontrada",
+        };
+      }
+
+      return {
+        ok: true,
+        code: 200,
+        message: "Avaliações buscadas com sucesso !!!",
+        data: assessmentList.map((ass) => this.mapToDto(ass)),
+      };
+    } catch (error) {
       return {
         ok: false,
-        code: 404,
-        message: "Avaliação do estudante não encontrada",
+        code: 500,
+        message: `Erro do servidor: ${error}`,
       };
     }
-
-    return {
-      ok: true,
-      code: 200,
-      message: "Avaliações buscadas com sucesso !!!",
-      data: assessmentList.map((ass) => this.mapToDto(ass)),
-    };
   }
 
   public async findOneById(

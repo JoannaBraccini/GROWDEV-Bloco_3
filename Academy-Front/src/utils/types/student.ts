@@ -8,3 +8,5 @@ export interface Student {
 }
 
 export type StudentType = "M" | "F" | "T";
+
+export type QueryStudentRequest = Partial<Pick<Student, "name" | "cpf">>;

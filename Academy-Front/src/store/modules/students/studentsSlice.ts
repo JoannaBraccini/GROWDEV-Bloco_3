@@ -1,6 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ResponseAPI } from "../../../configs/services/api.service";
-import { fetchStudentsAsyncThunk, signupAsyncThunk } from "./studentsActions";
+import { createSlice } from "@reduxjs/toolkit";
+import { fetchStudentsAsyncThunk } from "./studentsActions";
 import { Student } from "../../../utils/types";
 
 interface InitialState {
@@ -26,29 +25,6 @@ const studentsSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    //SIGNUP/CREATE
-    builder
-      .addCase(signupAsyncThunk.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(
-        signupAsyncThunk.fulfilled,
-        (state, action: PayloadAction<ResponseAPI>) => {
-          state.loading = false;
-          state.ok = action.payload.ok;
-          state.message = action.payload.message;
-
-          if (action.payload.ok) {
-            state.student = action.payload.data;
-          }
-        }
-      )
-      .addCase(signupAsyncThunk.rejected, (state) => {
-        state.loading = false;
-        state.ok = false;
-        state.message = "Error Signup";
-      });
-
     //FETCH ALL
     builder
       .addCase(fetchStudentsAsyncThunk.pending, (state) => {
@@ -56,12 +32,16 @@ const studentsSlice = createSlice({
       })
       .addCase(fetchStudentsAsyncThunk.fulfilled, (state, action) => {
         state.loading = false;
-        state.message = action.payload.message;
         state.ok = action.payload.ok;
+        state.message = action.payload.message;
 
         if (action.payload.ok) {
-          state.student;
+          state.students.push(action.payload.data);
         }
+      })
+      .addCase(fetchStudentsAsyncThunk.rejected, (state) => {
+        state.loading = false;
+        state.ok = false;
       });
   },
 });

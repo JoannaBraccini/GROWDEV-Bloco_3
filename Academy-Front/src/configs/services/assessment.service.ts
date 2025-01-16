@@ -44,7 +44,6 @@ export async function findAllAssessmentsService(
   if (query.take) {
     params.set("take", String(query.take));
   }
-
   // `/assessments?page=${query.page}&take=${query.take}
   try {
     const response = await api.get("/assessments", {

@@ -4,12 +4,7 @@ import {
   Student as StudentPrisma,
 } from "@prisma/client";
 import { prisma } from "../database/prisma.database";
-import {
-  IdStudentDto,
-  QueryFilterDto,
-  StudentDto,
-  UpdateStudentDto,
-} from "../dtos";
+import { QueryFilterDto, StudentDto, UpdateStudentDto } from "../dtos";
 import { ResponseApi } from "../types";
 
 export class StudentService {

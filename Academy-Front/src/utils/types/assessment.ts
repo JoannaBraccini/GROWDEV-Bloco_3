@@ -24,6 +24,6 @@ export type DeleteAssessmentRequest = {
 };
 
 export type QueryAssessmentRequest = {
-  page?: number;
-  take?: number;
+  page?: number | null;
+  take?: number | null;
 };

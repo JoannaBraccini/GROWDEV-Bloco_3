@@ -7,6 +7,7 @@ const initialState: Assessment = {
   title: "",
   description: "",
   grade: 0,
+  createdBy: "",
   createdAt: "",
 };
 
