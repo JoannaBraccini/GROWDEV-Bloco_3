@@ -3,15 +3,14 @@ import { useAppSelector } from "../store/hooks";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FloatButton } from "../components/FloatButton";
-import { UpsertModal } from "../components/UpsertModal";
+import { UpsertModal } from "../components/UpsertAssessmentModal";
 import SnackbarAlert from "../components/SnackbarAlert";
 import { TableStudents } from "../components/TableStudents";
 
 export function Students() {
   const navigate = useNavigate();
-
   const userLogged = useAppSelector((state) => state.userLogged);
-  const { students, loading } = useAppSelector((state) => state.students);
+  const studentDetail = useAppSelector((state) => state.studentDetail);
 
   const [openModal, setOpenModal] = useState(false);
 

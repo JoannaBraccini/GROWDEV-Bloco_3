@@ -3,7 +3,6 @@ import { Login } from "../../pages/Login";
 import { RouterProvider } from "react-router-dom";
 import { Assessments } from "../../pages/Assessments";
 import { DefaultLayout } from "../layout/DefaultLayout";
-import { Detail } from "../../pages/Detail";
 import { Signup } from "../../pages/Signup";
 import { Home } from "../../pages/Home";
 import { Students } from "../../pages/Students";
@@ -30,11 +29,6 @@ const router = createBrowserRouter([
     path: "/students",
     element: <DefaultLayout children={<Students />} />,
   },
-  {
-    path: "/detail/:id",
-    element: <DefaultLayout children={<Detail />} />,
-  },
-
   {
     path: "/",
     element: <Navigate to="/login" />,

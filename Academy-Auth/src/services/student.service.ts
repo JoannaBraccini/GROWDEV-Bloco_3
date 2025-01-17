@@ -6,6 +6,7 @@ import {
 import { prisma } from "../database/prisma.database";
 import { QueryFilterDto, StudentDto, UpdateStudentDto } from "../dtos";
 import { ResponseApi } from "../types";
+import { Bcrypt } from "../utils/bcrypt";
 
 export class StudentService {
   public async findAll({ name, cpf }: QueryFilterDto): Promise<ResponseApi> {
@@ -76,6 +77,7 @@ export class StudentService {
     updateStudent: UpdateStudentDto
   ): Promise<ResponseApi> {
     // 1 - Verificar se o id informado existe
+    const { passwordOld, passwordNew } = updateStudent;
     const student = await prisma.student.findUnique({
       where: { id },
     });
@@ -86,6 +88,24 @@ export class StudentService {
         code: 404,
         message: "Estudante não encontrado!",
       };
+    }
+
+    if (passwordOld && passwordNew) {
+      const bcrypt = new Bcrypt();
+      const passwordValid = bcrypt.verify(passwordOld, student.password);
+      if (!passwordValid) {
+        return {
+          ok: false,
+          code: 400,
+          message: "Senha incorreta!",
+        };
+      } else if (passwordNew === passwordOld) {
+        return {
+          ok: false,
+          code: 400,
+          message: "Nova senha não pode ser igual à senha anterior!",
+        };
+      }
     }
 
     /**
@@ -161,10 +181,11 @@ export class StudentService {
       cpf: student.cpf,
       type: student.type,
       age: student.age,
+      registeredAt: student.createdAt,
       assessments: student.assessments?.map((assessment) => ({
         id: assessment.id,
         title: assessment.title,
-        grade: Number(assessment.grade), // Decima(4, 2) => number (Number())
+        grade: Number(assessment.grade), // Decimal(4, 2) => number (Number())
         description: assessment?.description,
         createdBy: assessment.createdBy,
         createdAt: assessment.createdAt,

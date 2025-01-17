@@ -6,6 +6,7 @@ import { alertReducer } from "./alert/alertSlice";
 import { settingsReduce } from "./settings/settingsSlice";
 import { studentsReducer } from "./students/studentsSlice";
 import { userCreatedReducer } from "./auth/signupSlice";
+import { studentDetailReducer } from "./studentDetail/studentDetailSlice";
 
 export const rootReducer = combineReducers({
   // Todos os novos estados globais criado, devem ser chamados aqui...
@@ -13,6 +14,7 @@ export const rootReducer = combineReducers({
   userCreated: userCreatedReducer,
   students: studentsReducer,
   assessments: assessmentsReducer,
+  studentDetail: studentDetailReducer,
   assessmentDetail: assessmentDetailReducer,
   alert: alertReducer,
   settings: settingsReduce,

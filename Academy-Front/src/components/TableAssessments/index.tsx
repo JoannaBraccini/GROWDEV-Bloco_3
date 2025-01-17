@@ -1,9 +1,7 @@
-import { Delete, Edit, Info } from "@mui/icons-material";
+import { ArrowBack, Delete, Edit } from "@mui/icons-material";
 import {
   Box,
   CircularProgress,
-  Divider,
-  IconButton,
   MenuItem,
   Pagination,
   Typography,
@@ -23,13 +21,16 @@ import {
 import { setAssessentDetail } from "../../store/modules/assessmentDetail/assessmentDetailSlice";
 import { Assessment } from "../../utils/types";
 import { ActionsMenu } from "../ActionsMenu";
+import { useNavigate } from "react-router-dom";
 const LIMIT = 20; // Variavel de ambiente
 
 export function TableAssessments() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { assessments, count, loadingList } = useAppSelector(
     (state) => state.assessments
   );
+  const students = useAppSelector((state) => state.students.students);
   const [page, setPage] = useState(1); // URL
 
   const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
@@ -70,13 +71,26 @@ export function TableAssessments() {
                 Description
               </TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                Student
+              </TableCell>
+              <TableCell align="right" sx={{ fontWeight: "bold" }}>
                 Grade
               </TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
                 Created At
               </TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Actions
+              <TableCell
+                align="right"
+                onClick={() => navigate("/home")}
+                sx={{
+                  fontWeight: "bold",
+                  display: "flex",
+                  alignItems: "center",
+                  cursor: "pointer",
+                }}
+              >
+                Back
+                <ArrowBack sx={{ margin: 1 }} />
               </TableCell>
             </TableRow>
           </TableHead>
@@ -108,19 +122,22 @@ export function TableAssessments() {
                     </TableCell>
                     <TableCell align="right">{row.title}</TableCell>
                     <TableCell align="right">{row.description}</TableCell>
+                    <TableCell align="right">
+                      {students.find((stud) => stud.id === row.studentId)
+                        ?.name || "Unknown"}
+                    </TableCell>
                     <TableCell align="right">{row.grade}</TableCell>
                     <TableCell align="right">
                       {new Date(row.createdAt).toLocaleDateString("pt-BR")}
                     </TableCell>
                     <TableCell align="right">
                       <ActionsMenu>
-                        <MenuItem onClick={() => onEdit(item)} disableRipple>
+                        <MenuItem onClick={() => handleEdit(row)} disableRipple>
                           <Edit />
                           Edit
                         </MenuItem>
-                        <Divider sx={{ my: 0.5 }} />
                         <MenuItem
-                          onClick={() => onDelete(item.id)}
+                          onClick={() => handleDelete(row.id)}
                           disableRipple
                         >
                           <Delete />

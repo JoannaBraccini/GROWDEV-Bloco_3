@@ -54,11 +54,17 @@ export class StudentController {
     try {
       // 1 - Pegar os dados (params e do body)
       const { id } = req.params;
-      const { name, password, type, age } = req.body;
+      const { name, passwordOld, passwordNew, type, age } = req.body;
 
       // 2 - Chamar o responsável (service)
       const service = new StudentService();
-      const result = await service.update(id, { name, password, type, age });
+      const result = await service.update(id, {
+        name,
+        passwordOld,
+        passwordNew,
+        type,
+        age,
+      });
 
       // 3 - Retornar para o cliente
       const { code, ...response } = result;

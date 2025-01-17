@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import {
   FieldsErrors,
   validateFormAssessment,
-} from "../../utils/validators/assessment.validator";
+} from "../../utils/validators/student.validator";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { resetAssessmentDetail } from "../../store/modules/assessmentDetail/assessmentDetailSlice";
 import {
@@ -26,7 +26,7 @@ interface UpsertModalProps {
   onClose: () => void;
 }
 
-export function UpsertModal({ open, onClose }: UpsertModalProps) {
+export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
   const dispatch = useAppDispatch();
 
   const userLogged = useAppSelector((state) => state.userLogged);
@@ -195,25 +195,39 @@ export function UpsertModal({ open, onClose }: UpsertModalProps) {
                     },
                   }}
                 >
-                  <option value="">Select Student</option>
-                  {userLogged.student.type !== "T" ? (
+                  {assessmentDetailRedux.id ? (
                     <option
-                      key={userLogged.student.id}
-                      value={userLogged.student.id}
+                      key={assessmentDetailRedux.studentId}
+                      value={assessmentDetailRedux.studentId}
                     >
-                      {userLogged.student.name}
+                      {
+                        students.find(
+                          (stud) => stud.id === assessmentDetailRedux.studentId
+                        )?.name
+                      }
                     </option>
                   ) : (
-                    students.map((student) => (
-                      <option key={student.id} value={student.id}>
-                        {student.name}
-                      </option>
-                    ))
+                    <>
+                      <option value="">Select Student</option>
+                      {userLogged.student.type !== "T" ? (
+                        <option
+                          key={userLogged.student.id}
+                          value={userLogged.student.id}
+                        >
+                          {userLogged.student.name}
+                        </option>
+                      ) : (
+                        students.map((student) => (
+                          <option key={student.id} value={student.id}>
+                            {student.name}
+                          </option>
+                        ))
+                      )}
+                    </>
                   )}
                 </TextField>
               </FormControl>
             </Grid2>
-
             <Grid2 size={6}>
               <Button
                 variant="contained"

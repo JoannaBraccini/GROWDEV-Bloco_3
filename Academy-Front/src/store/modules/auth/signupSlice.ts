@@ -56,6 +56,7 @@ const initialState: InitialState = {
     age: null,
     email: "",
     type: "M",
+    registeredAt: "",
   },
 };
 

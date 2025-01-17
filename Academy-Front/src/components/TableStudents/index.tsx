@@ -1,4 +1,10 @@
-import { Box, CircularProgress, Pagination, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  MenuItem,
+  Pagination,
+  Typography,
+} from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -7,12 +13,20 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useEffect, useMemo, useState } from "react";
-import { fetchStudentsAsyncThunk } from "../../store/modules/students/studentsActions";
+import {
+  deleteStudentAsyncThunk,
+  fetchStudentsAsyncThunk,
+} from "../../store/modules/students/studentsActions";
 import { ActionsMenu } from "../ActionsMenu";
+import { ArrowBack, Delete, Edit } from "@mui/icons-material";
+import { Student } from "../../utils/types";
+import { setStudentDetail } from "../../store/modules/studentDetail/studentDetailSlice";
+import { useNavigate } from "react-router-dom";
 
 const LIMIT = 20; // Variavel de ambiente
 
 export function TableStudents() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { students, count, loadingList } = useAppSelector(
     (state) => state.students
@@ -26,6 +40,14 @@ export function TableStudents() {
   const numberPages = useMemo(() => {
     return Math.ceil(count / LIMIT);
   }, [count]);
+
+  function handleEdit(student: Student) {
+    dispatch(setStudentDetail(student));
+  }
+
+  function handleDelete(id: string) {
+    dispatch(deleteStudentAsyncThunk({ id }));
+  }
 
   // Toda vez que esse componente renderizar, preciso buscar as avaliações
   useEffect(() => {
@@ -59,7 +81,20 @@ export function TableStudents() {
                 Type
               </TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Registered at
+                Register
+              </TableCell>
+              <TableCell
+                align="right"
+                onClick={() => navigate("/home")}
+                sx={{
+                  fontWeight: "bold",
+                  display: "flex",
+                  alignItems: "center",
+                  cursor: "pointer",
+                }}
+              >
+                Back
+                <ArrowBack sx={{ margin: 1 }} />
               </TableCell>
             </TableRow>
           </TableHead>
@@ -97,14 +132,22 @@ export function TableStudents() {
                     <TableCell align="right">{row.email}</TableCell>
                     <TableCell align="right">{row.type}</TableCell>
                     <TableCell align="right">
-                      {new Date(row.createdAt).toLocaleDateString("pt-BR")}
+                      {new Date(row.registeredAt).toLocaleDateString("pt-BR")}
                     </TableCell>
                     <TableCell align="right">
-                      <ActionsMenu
-                        key={row.id}
-                        onDelete={row.id}
-                        onEdit={row}
-                      />
+                      <ActionsMenu>
+                        <MenuItem onClick={() => handleEdit(row)} disableRipple>
+                          <Edit />
+                          Edit
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => handleDelete(row.id)}
+                          disableRipple
+                        >
+                          <Delete />
+                          Delete
+                        </MenuItem>
+                      </ActionsMenu>
                     </TableCell>
                   </TableRow>
                 ))

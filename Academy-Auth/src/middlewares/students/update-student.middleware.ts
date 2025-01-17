@@ -42,7 +42,7 @@ export class UpdateStudentMiddleware {
   }
 
   public static validateData(req: Request, res: Response, next: NextFunction) {
-    const { name, password } = req.body;
+    const { name, passwordNew } = req.body;
 
     if (name && name.length < 3) {
       res.status(400).json({
@@ -51,7 +51,7 @@ export class UpdateStudentMiddleware {
       });
     }
 
-    if (password && password.length < 4) {
+    if (passwordNew && passwordNew.length < 4) {
       res.status(400).json({
         ok: false,
         message: "Senha deve conter no minimo 4 caracteres.",

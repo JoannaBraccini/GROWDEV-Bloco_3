@@ -9,6 +9,7 @@ export interface StudentDto {
   type: StudentType;
   cpf: string;
   age?: number | null;
+  registeredAt: Date;
   assessments?: Array<AssessmentDto>;
 }
 
@@ -19,7 +20,8 @@ export interface QueryFilterDto {
 
 export interface UpdateStudentDto {
   name?: string;
-  password?: string;
+  passwordOld?: string;
+  passwordNew?: string;
   type?: StudentType;
   age?: number;
 }

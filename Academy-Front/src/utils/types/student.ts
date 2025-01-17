@@ -5,7 +5,7 @@ export interface Student {
   age: number | null;
   email: string;
   type: StudentType;
-  createdAt: string;
+  registeredAt: string;
 }
 
 export type StudentType = "M" | "F" | "T";
