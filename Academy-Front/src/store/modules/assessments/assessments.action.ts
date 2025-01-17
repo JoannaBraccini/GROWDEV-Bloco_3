@@ -3,7 +3,7 @@ import { RootState } from "../..";
 import {
   createAssessmentService,
   deleteAssessmentService,
-  findAllAssessmentsService,
+  fetchAssessmentsService,
   updateAssessmentService,
 } from "../../../configs/services/assessment.service";
 import {
@@ -44,13 +44,13 @@ export const createAssessmentAsyncThunk = createAsyncThunk(
   }
 );
 
-export const findAllAssessmentsAsyncThunk = createAsyncThunk(
+export const fetchAssessmentsAsyncThunk = createAsyncThunk(
   "assessments/findAll",
   async (query: QueryAssessmentRequest, { dispatch, getState }) => {
     const { userLogged } = getState() as RootState;
     const { token } = userLogged;
 
-    const response = await findAllAssessmentsService({ ...query, token });
+    const response = await fetchAssessmentsService({ ...query, token });
 
     if (!response.ok) {
       dispatch(

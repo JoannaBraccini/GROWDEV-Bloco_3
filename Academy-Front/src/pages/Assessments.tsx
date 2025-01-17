@@ -9,7 +9,6 @@ import SnackbarAlert from "../components/SnackbarAlert";
 
 export function Assessments() {
   const navigate = useNavigate();
-
   const userLogged = useAppSelector((state) => state.userLogged);
   const assessmentDetail = useAppSelector((state) => state.assessmentDetail);
 
@@ -28,11 +27,8 @@ export function Assessments() {
   return (
     <Grid2 container spacing={2}>
       <Grid2 size={12}>
-        <Typography variant="h6">
-          Welcome,{" "}
-          <Typography component="span" variant="h6" sx={{ fontWeight: "bold" }}>
-            {userLogged.student.name}
-          </Typography>
+        <Typography component="span" variant="h6" sx={{ fontWeight: "bold" }}>
+          Assessments List
         </Typography>
       </Grid2>
       <Grid2 size={12}>

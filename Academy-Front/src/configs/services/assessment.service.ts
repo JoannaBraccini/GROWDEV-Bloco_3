@@ -31,7 +31,7 @@ export async function createAssessmentService(
   }
 }
 
-export async function findAllAssessmentsService(
+export async function fetchAssessmentsService(
   query: QueryAssessmentRequest & { token: string }
 ): Promise<ResponseAPI> {
   const { token } = query;

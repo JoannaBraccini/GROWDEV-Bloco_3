@@ -31,7 +31,7 @@ const router = createBrowserRouter([
     element: <DefaultLayout children={<Students />} />,
   },
   {
-    path: "/detail",
+    path: "/detail/:id",
     element: <DefaultLayout children={<Detail />} />,
   },
 

@@ -3,26 +3,26 @@ import { Assessment } from "../../../utils/types/assessment";
 import {
   createAssessmentAsyncThunk,
   deleteAssessmentAsyncThunk,
-  findAllAssessmentsAsyncThunk,
+  fetchAssessmentsAsyncThunk,
   updateAssessmentAsyncThunk,
 } from "./assessments.action";
 
 interface InitialState {
-  count: number; // Total de registro (paginação)
-  assessments: Assessment[];
-  message: string;
   ok: boolean;
+  message: string;
   loading: boolean;
   loadingList: boolean;
+  count: number; // Total de registro (paginação)
+  assessments: Assessment[];
 }
 
 const initialState: InitialState = {
-  assessments: [],
-  count: 0,
+  ok: false,
+  message: "",
   loading: false,
   loadingList: false,
-  message: "",
-  ok: false,
+  count: 0,
+  assessments: [],
 };
 
 const assessmentsSlice = createSlice({
@@ -53,13 +53,13 @@ const assessmentsSlice = createSlice({
 
     // FIND ALL
     builder
-      .addCase(findAllAssessmentsAsyncThunk.pending, (state) => {
+      .addCase(fetchAssessmentsAsyncThunk.pending, (state) => {
         state.loadingList = true;
       })
-      .addCase(findAllAssessmentsAsyncThunk.fulfilled, (state, action) => {
+      .addCase(fetchAssessmentsAsyncThunk.fulfilled, (state, action) => {
         state.loadingList = false;
-        state.message = action.payload.message;
         state.ok = action.payload.ok;
+        state.message = action.payload.message;
 
         if (action.payload.ok) {
           // data => { count, assessments }
@@ -72,7 +72,7 @@ const assessmentsSlice = createSlice({
           }
         }
       })
-      .addCase(findAllAssessmentsAsyncThunk.rejected, (state) => {
+      .addCase(fetchAssessmentsAsyncThunk.rejected, (state) => {
         state.loadingList = false;
         state.ok = false;
       });

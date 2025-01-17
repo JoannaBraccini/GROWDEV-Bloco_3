@@ -1,13 +1,4 @@
-import { Delete, Edit, Info } from "@mui/icons-material";
-import {
-  Box,
-  CircularProgress,
-  Divider,
-  IconButton,
-  MenuItem,
-  Pagination,
-  Typography,
-} from "@mui/material";
+import { Box, CircularProgress, Pagination, Typography } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -16,19 +7,15 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useEffect, useMemo, useState } from "react";
-import {
-  deleteAssessmentAsyncThunk,
-  fetchAssessmentsAsyncThunk,
-} from "../../store/modules/assessments/assessments.action";
-import { setAssessentDetail } from "../../store/modules/assessmentDetail/assessmentDetailSlice";
-import { Assessment } from "../../utils/types";
+import { fetchStudentsAsyncThunk } from "../../store/modules/students/studentsActions";
 import { ActionsMenu } from "../ActionsMenu";
+
 const LIMIT = 20; // Variavel de ambiente
 
-export function TableAssessments() {
+export function TableStudents() {
   const dispatch = useAppDispatch();
-  const { assessments, count, loadingList } = useAppSelector(
-    (state) => state.assessments
+  const { students, count, loadingList } = useAppSelector(
+    (state) => state.students
   );
   const [page, setPage] = useState(1); // URL
 
@@ -40,23 +27,16 @@ export function TableAssessments() {
     return Math.ceil(count / LIMIT);
   }, [count]);
 
-  function handleEdit(assessment: Assessment) {
-    dispatch(setAssessentDetail(assessment));
-  }
-
-  function handleDelete(id: string) {
-    dispatch(deleteAssessmentAsyncThunk({ id }));
-  }
-
+  // Toda vez que esse componente renderizar, preciso buscar as avaliações
   useEffect(() => {
-    dispatch(fetchAssessmentsAsyncThunk({ page: page, take: LIMIT }));
+    dispatch(fetchStudentsAsyncThunk({ page: page, take: LIMIT }));
   }, [page]);
 
   return (
     <TableContainer>
-      {!assessments || assessments.length < 1 ? (
+      {!students || students.length < 1 ? (
         <Typography variant="subtitle2" textAlign="center">
-          No assessments to show. Create one!
+          No students to show. Register one!
         </Typography>
       ) : (
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -64,19 +44,22 @@ export function TableAssessments() {
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Title
+                Name
               </TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Description
+                CPF
               </TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Grade
+                Age
               </TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Created At
+                Email
               </TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Actions
+                Type
+              </TableCell>
+              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                Registered at
               </TableCell>
             </TableRow>
           </TableHead>
@@ -96,7 +79,7 @@ export function TableAssessments() {
                 </TableCell>
               </TableRow>
             ) : (
-              assessments
+              students
                 .filter((row) => row?.id)
                 .map((row) => (
                   <TableRow
@@ -106,27 +89,22 @@ export function TableAssessments() {
                     <TableCell component="th" scope="row">
                       {row.id}
                     </TableCell>
-                    <TableCell align="right">{row.title}</TableCell>
-                    <TableCell align="right">{row.description}</TableCell>
-                    <TableCell align="right">{row.grade}</TableCell>
+                    <TableCell align="right">{row.name}</TableCell>
+                    <TableCell align="right">{row.cpf}</TableCell>
+                    <TableCell align="right">
+                      {row.age ? row.age : "Not informed"}
+                    </TableCell>
+                    <TableCell align="right">{row.email}</TableCell>
+                    <TableCell align="right">{row.type}</TableCell>
                     <TableCell align="right">
                       {new Date(row.createdAt).toLocaleDateString("pt-BR")}
                     </TableCell>
                     <TableCell align="right">
-                      <ActionsMenu>
-                        <MenuItem onClick={() => onEdit(item)} disableRipple>
-                          <Edit />
-                          Edit
-                        </MenuItem>
-                        <Divider sx={{ my: 0.5 }} />
-                        <MenuItem
-                          onClick={() => onDelete(item.id)}
-                          disableRipple
-                        >
-                          <Delete />
-                          Delete
-                        </MenuItem>
-                      </ActionsMenu>
+                      <ActionsMenu
+                        key={row.id}
+                        onDelete={row.id}
+                        onEdit={row}
+                      />
                     </TableCell>
                   </TableRow>
                 ))

@@ -20,8 +20,10 @@ import {
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { logout } from "../../store/modules/auth/userLoggedSlice";
 import { toggleTheme } from "../../store/modules/settings/settingsSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function AppBar() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { student } = useAppSelector((state) => state.userLogged);
   const { mode } = useAppSelector((state) => state.settings);
@@ -46,6 +48,7 @@ export default function AppBar() {
           <img
             src="https://www.growdev.com.br/assets/images/logo_growdev.svg"
             style={{ width: "8rem", height: "auto", borderRadius: 10 }}
+            onClick={() => navigate("/home")}
           />
 
           <Box>
