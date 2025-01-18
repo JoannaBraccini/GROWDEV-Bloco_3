@@ -4,7 +4,9 @@ import {
   FormControl,
   FormLabel,
   Grid2,
+  MenuItem,
   Modal,
+  Select,
   TextField,
   Typography,
 } from "@mui/material";
@@ -18,26 +20,29 @@ import {
   StudentFieldsErrors,
   validateFormStudent,
 } from "../../utils/validators/student.validator";
+import { StudentType } from "../../utils/types";
 
 interface UpsertModalProps {
   open: boolean;
   onClose: () => void;
 }
 
-export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
+export function UpdateStudentModal({ open, onClose }: UpsertModalProps) {
   const dispatch = useAppDispatch();
 
-  const userLogged = useAppSelector((state) => state.userLogged);
-  const { students, ok, message, loading } = useAppSelector(
-    (state) => state.students
-  );
+  const { ok, message, loading } = useAppSelector((state) => state.students);
   const studentDetail = useAppSelector(({ studentDetail }) => studentDetail);
-
   const [fieldsErrors, setFieldsErrors] = useState<StudentFieldsErrors>({
     name: "",
+    age: null,
     passwordOld: "",
     passwordNew: "",
+    type: "",
   });
+
+  const [type, setType] = useState<StudentType>(
+    studentDetail ? studentDetail.type : "M"
+  );
 
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -47,7 +52,6 @@ export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
     const passwordOld = event.currentTarget["password-old"].value;
     const passwordNew = event.currentTarget["password-new"].value;
     const type = event.currentTarget["type-student"].value;
-    const id = event.currentTarget["student"].value;
 
     const errors = validateFormStudent(name, passwordOld, passwordNew);
     // Converter um objeto em array
@@ -60,26 +64,16 @@ export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
     // Se passar, limpar os errors
     setFieldsErrors({} as StudentFieldsErrors);
 
-    if (studentDetail.id) {
-      // MODO EDIT
-      dispatch(
-        updateStudentAsyncThunk({
-          id: studentDetail.id,
-          name,
-          age,
-          password,
-          type,
-        })
-      );
-    } else {
-      // MODO CREATE
-      dispatch(
-        showAlert({
-          type: "warning",
-          message: "Student registration should be done on the signup screen.",
-        })
-      );
-    }
+    dispatch(
+      updateStudentAsyncThunk({
+        id: studentDetail ? studentDetail.id : "",
+        name,
+        age,
+        passwordOld,
+        passwordNew,
+        type,
+      })
+    );
   }
 
   function handleClose() {
@@ -88,19 +82,18 @@ export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
   }
 
   useEffect(() => {
-    if (ok && message) {
-      setTimeout(() => {
-        onClose();
-      }, 1000);
+    if (ok) {
+      dispatch(showAlert({ message: message, type: "success" }));
+      onClose();
     }
-  }, [students]);
+  }, [ok, message, dispatch]);
 
   return (
     <Modal
       open={open}
       onClose={handleClose}
-      aria-labelledby="modal-modal-name"
-      aria-describedby="modal-modal-password"
+      aria-labelledby="modal-update-student"
+      aria-describedby="update-student"
     >
       <Box sx={style}>
         <form onSubmit={onSubmit}>
@@ -109,7 +102,28 @@ export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
               <Typography variant="h6">Edit Student Data</Typography>
             </Grid2>
 
-            {/** Titulo */}
+            {/** Type */}
+            <Grid2 size={12}>
+              <FormControl fullWidth error={!!fieldsErrors.type}>
+                <FormLabel htmlFor="type-student">Type</FormLabel>
+                <Select
+                  id="type"
+                  name="type"
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                  error={!!fieldsErrors.type}
+                  value={type}
+                  onChange={(e) => setType(e.target.value as StudentType)}
+                >
+                  <MenuItem value="M">Matriculado</MenuItem>
+                  <MenuItem value="F">Formado</MenuItem>
+                  <MenuItem value="T">Tech-Helper</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid2>
+
+            {/** Name */}
             <Grid2 size={12}>
               <FormControl fullWidth error={!!fieldsErrors.name}>
                 <FormLabel htmlFor="name-student">Name</FormLabel>
@@ -123,34 +137,34 @@ export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
                   required
                   error={!!fieldsErrors.name}
                   helperText={fieldsErrors.name}
-                  defaultValue={studentDetail.name}
+                  defaultValue={studentDetail ? studentDetail.name : ""}
                 />
               </FormControl>
             </Grid2>
 
-            {/** Nota */}
+            {/** Idade */}
             <Grid2 size={12}>
               <FormControl fullWidth error={!!fieldsErrors.age}>
-                <FormLabel htmlFor="age-student">age</FormLabel>
+                <FormLabel htmlFor="age-student">Age</FormLabel>
                 <TextField
                   id="age-student"
                   name="age-student"
                   type="number"
-                  placeholder="10"
+                  placeholder="Age"
                   variant="outlined"
                   fullWidth
                   required
                   error={!!fieldsErrors.age}
                   helperText={fieldsErrors.age}
-                  defaultValue={studentDetail.age}
+                  defaultValue={studentDetail ? studentDetail.age : null}
                 />
               </FormControl>
             </Grid2>
 
             {/** Senha */}
             <Grid2 size={12} mb={2}>
-              <FormControl fullWidth error={!!fieldsErrors.password}>
-                <FormLabel htmlFor="password-old">Password</FormLabel>
+              <FormControl fullWidth error={!!fieldsErrors.passwordOld}>
+                <FormLabel htmlFor="password-old">Old Password</FormLabel>
                 <TextField
                   id="password-old"
                   name="password-old"
@@ -158,18 +172,16 @@ export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
                   placeholder="Old password"
                   variant="outlined"
                   fullWidth
-                  multiline
-                  rows={3}
                   required
-                  error={!!fieldsErrors.password}
-                  helperText={fieldsErrors.password}
-                  defaultValue={"*******"}
+                  error={!!fieldsErrors.passwordOld}
+                  helperText={fieldsErrors.passwordOld}
+                  defaultValue={"********"}
                 />
               </FormControl>
             </Grid2>
             <Grid2 size={12} mb={2}>
-              <FormControl fullWidth error={!!fieldsErrors.password}>
-                <FormLabel htmlFor="password-new">Password</FormLabel>
+              <FormControl fullWidth error={!!fieldsErrors.passwordNew}>
+                <FormLabel htmlFor="password-new">New Password</FormLabel>
                 <TextField
                   id="password-new"
                   name="password-new"
@@ -177,12 +189,9 @@ export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
                   placeholder="New password"
                   variant="outlined"
                   fullWidth
-                  multiline
-                  rows={3}
-                  required
-                  error={!!fieldsErrors.password}
-                  helperText={fieldsErrors.password}
-                  defaultValue={"*******"}
+                  error={!!fieldsErrors.passwordNew}
+                  helperText={fieldsErrors.passwordNew}
+                  defaultValue={""}
                 />
               </FormControl>
             </Grid2>

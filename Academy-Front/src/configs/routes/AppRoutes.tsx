@@ -6,6 +6,7 @@ import { DefaultLayout } from "../layout/DefaultLayout";
 import { Signup } from "../../pages/Signup";
 import { Home } from "../../pages/Home";
 import { Students } from "../../pages/Students";
+import { Profile } from "../../pages/Profile";
 
 // Definição das rotas
 const router = createBrowserRouter([
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: "/home",
     element: <DefaultLayout children={<Home />} />,
+  },
+  {
+    path: "/profile/:id",
+    element: <DefaultLayout children={<Profile />} />,
   },
   {
     path: "/assessments",

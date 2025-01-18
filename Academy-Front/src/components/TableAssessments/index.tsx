@@ -22,6 +22,7 @@ import { setAssessentDetail } from "../../store/modules/assessmentDetail/assessm
 import { Assessment } from "../../utils/types";
 import { ActionsMenu } from "../ActionsMenu";
 import { useNavigate } from "react-router-dom";
+import { fetchStudentsAsyncThunk } from "../../store/modules/students/studentsActions";
 const LIMIT = 20; // Variavel de ambiente
 
 export function TableAssessments() {
@@ -50,6 +51,7 @@ export function TableAssessments() {
   }
 
   useEffect(() => {
+    dispatch(fetchStudentsAsyncThunk({ page: page, take: LIMIT }));
     dispatch(fetchAssessmentsAsyncThunk({ page: page, take: LIMIT }));
   }, [page]);
 
@@ -78,6 +80,9 @@ export function TableAssessments() {
               </TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
                 Created At
+              </TableCell>
+              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                Created By
               </TableCell>
               <TableCell
                 align="right"
@@ -112,23 +117,25 @@ export function TableAssessments() {
             ) : (
               assessments
                 .filter((row) => row?.id)
-                .map((row) => (
+                .map((row, index) => (
                   <TableRow
                     key={row.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {row.id}
+                      {index + 1}
                     </TableCell>
                     <TableCell align="right">{row.title}</TableCell>
                     <TableCell align="right">{row.description}</TableCell>
-                    <TableCell align="right">
-                      {students.find((stud) => stud.id === row.studentId)
-                        ?.name || "Unknown"}
+                    <TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
+                      {students.find((stud) => stud.id === row.studentId)?.name}
                     </TableCell>
                     <TableCell align="right">{row.grade}</TableCell>
                     <TableCell align="right">
                       {new Date(row.createdAt).toLocaleDateString("pt-BR")}
+                    </TableCell>
+                    <TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
+                      {students.find((user) => user.id === row.createdBy)?.name}
                     </TableCell>
                     <TableCell align="right">
                       <ActionsMenu>

@@ -1,7 +1,11 @@
+import { StudentType } from "../types";
+
 export interface StudentFieldsErrors {
   name: string;
+  age: number | null;
   passwordOld: string;
   passwordNew: string;
+  type: StudentType | "";
 }
 
 export function validateFormStudent(

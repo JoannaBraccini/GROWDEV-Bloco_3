@@ -19,7 +19,8 @@ export type UpdateStudentRequest = Partial<
   Pick<Student, "name" | "age" | "type">
 > & {
   id: string;
-  password?: string;
+  passwordOld?: string;
+  passwordNew?: string;
 };
 
 export type DeleteStudentRequest = {

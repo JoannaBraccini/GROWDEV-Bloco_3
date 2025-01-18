@@ -104,8 +104,8 @@ export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
     <Modal
       open={open}
       onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
+      aria-labelledby="modal-upsert-assessment"
+      aria-describedby="create-update-assessment"
     >
       <Box sx={style}>
         <form onSubmit={onSubmit}>

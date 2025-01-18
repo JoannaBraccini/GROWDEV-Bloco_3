@@ -66,7 +66,7 @@ export async function fetchAssessmentsService(
   }
 }
 
-export async function findOneAssessmentService(data: {
+export async function findAssessmentService(data: {
   id: string;
   token: string;
 }): Promise<ResponseAPI> {

@@ -1,14 +1,28 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Student } from "../../../utils/types";
+import { ResponseAPI } from "../../../configs/services/api.service";
+import { findStudentAsyncThunk } from "../students/studentsActions";
 
-const initialState: Student = {
-  id: "",
-  name: "",
-  cpf: "",
-  age: null,
-  email: "",
-  type: "M",
-  registeredAt: "",
+interface InitialState {
+  ok: boolean;
+  message: string;
+  loading: boolean;
+  studentDetail: Student;
+}
+
+const initialState: InitialState = {
+  ok: false,
+  message: "",
+  loading: false,
+  studentDetail: {
+    id: "",
+    name: "",
+    cpf: "",
+    age: null,
+    email: "",
+    type: "M",
+    registeredAt: "",
+  },
 };
 
 const studentDetailSlice = createSlice({
@@ -26,6 +40,33 @@ const studentDetailSlice = createSlice({
     resetStudentDetail() {
       return initialState;
     },
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(findStudentAsyncThunk.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        findStudentAsyncThunk.fulfilled,
+        (state, action: PayloadAction<ResponseAPI>) => {
+          state.loading = false;
+          state.ok = action.payload.ok;
+          state.message = action.payload.message;
+          if (action.payload.ok) {
+            return {
+              ...state,
+              ...action.payload.data,
+              registeredAt: new Date(
+                action.payload.data.registeredAt
+              ).toISOString(),
+            };
+          }
+        }
+      )
+      .addCase(findStudentAsyncThunk.rejected, (state) => {
+        state.loading = false;
+        state.ok = false;
+      });
   },
 });
 

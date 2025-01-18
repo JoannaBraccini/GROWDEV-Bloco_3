@@ -1,8 +1,9 @@
 import { Grid2, Typography } from "@mui/material";
-import HomeList from "../components/HomeList";
+import HomeList from "../components/TechHelperHome";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../store/hooks";
+import StudentHome from "../components/StudentHome";
 
 export function Home() {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ export function Home() {
           </Typography>
         </Typography>
       </Grid2>
-      <HomeList />
+      {userLogged.student.type === "T" ? <HomeList /> : <StudentHome />}
     </Grid2>
   );
 }

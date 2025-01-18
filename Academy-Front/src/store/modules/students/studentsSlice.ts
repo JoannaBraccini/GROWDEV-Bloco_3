@@ -54,6 +54,8 @@ const studentsSlice = createSlice({
         state.ok = false;
       });
 
+    //FIND ONE -> StudentDetail
+
     // UPDATE
     builder
       .addCase(updateStudentAsyncThunk.pending, (state) => {
@@ -108,5 +110,7 @@ const studentsSlice = createSlice({
       });
   },
 });
+
+// export const { resetStudentDetail, setStudentDetail } = studentsSlice.actions;
 
 export const studentsReducer = studentsSlice.reducer;

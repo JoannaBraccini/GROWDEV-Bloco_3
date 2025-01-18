@@ -4,6 +4,7 @@ import {
   createAssessmentService,
   deleteAssessmentService,
   fetchAssessmentsService,
+  findAssessmentService,
   updateAssessmentService,
 } from "../../../configs/services/assessment.service";
 import {
@@ -62,6 +63,35 @@ export const fetchAssessmentsAsyncThunk = createAsyncThunk(
     }
 
     // Retornar (payload)
+    return response;
+  }
+);
+
+export const findAssessmentAsyncThunk = createAsyncThunk(
+  "assessments/findOne",
+  async (id: string, { dispatch, getState }) => {
+    const { userLogged } = getState() as RootState;
+    const { token } = userLogged;
+
+    const response = await findAssessmentService({ id, token });
+
+    if (!response.ok) {
+      dispatch(
+        showAlert({
+          type: "error",
+          message: response.message,
+        })
+      );
+      return response;
+    }
+
+    dispatch(
+      showAlert({
+        type: "success",
+        message: response.message,
+      })
+    );
+
     return response;
   }
 );

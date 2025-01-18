@@ -16,6 +16,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   deleteStudentAsyncThunk,
   fetchStudentsAsyncThunk,
+  findStudentAsyncThunk,
 } from "../../store/modules/students/studentsActions";
 import { ActionsMenu } from "../ActionsMenu";
 import { ArrowBack, Delete, Edit } from "@mui/icons-material";
@@ -31,6 +32,7 @@ export function TableStudents() {
   const { students, count, loadingList } = useAppSelector(
     (state) => state.students
   );
+  const studentDetail = useAppSelector(({ studentDetail }) => studentDetail);
   const [page, setPage] = useState(1); // URL
 
   const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
@@ -42,14 +44,19 @@ export function TableStudents() {
   }, [count]);
 
   function handleEdit(student: Student) {
-    dispatch(setStudentDetail(student));
+    if (!studentDetail || studentDetail.id !== student.id) {
+      dispatch(findStudentAsyncThunk(student.id)).then((response) => {
+        console.log("if", response.payload);
+
+        dispatch(setStudentDetail(response.payload as Student));
+      });
+    } else dispatch(setStudentDetail(student));
   }
 
   function handleDelete(id: string) {
     dispatch(deleteStudentAsyncThunk({ id }));
   }
 
-  // Toda vez que esse componente renderizar, preciso buscar as avaliações
   useEffect(() => {
     dispatch(fetchStudentsAsyncThunk({ page: page, take: LIMIT }));
   }, [page]);
@@ -116,13 +123,13 @@ export function TableStudents() {
             ) : (
               students
                 .filter((row) => row?.id)
-                .map((row) => (
+                .map((row, index) => (
                   <TableRow
                     key={row.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {row.id}
+                      {index + 1}
                     </TableCell>
                     <TableCell align="right">{row.name}</TableCell>
                     <TableCell align="right">{row.cpf}</TableCell>

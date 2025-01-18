@@ -15,7 +15,7 @@ export class TypeMiddleware {
 
         res.status(401).json({
           ok: false,
-          message: `Somente estudantes do(s) tipo(s) ${alloweds} pode acessar essa funcionalidade.`,
+          message: `Somente estudantes do(s) tipo(s) ${alloweds} podem acessar essa funcionalidade.`,
         });
       }
 

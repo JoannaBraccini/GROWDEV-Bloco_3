@@ -7,7 +7,7 @@ import { AccountBox, Ballot, CalendarMonth } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-export default function HomeList() {
+export default function TechHelperHome() {
   const navigate = useNavigate();
   return (
     <List

@@ -3,14 +3,14 @@ import { useAppSelector } from "../store/hooks";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FloatButton } from "../components/FloatButton";
-import { UpsertModal } from "../components/UpsertAssessmentModal";
 import SnackbarAlert from "../components/SnackbarAlert";
 import { TableStudents } from "../components/TableStudents";
+import { UpdateStudentModal } from "../components/UpdateStudentModal";
 
 export function Students() {
   const navigate = useNavigate();
   const userLogged = useAppSelector((state) => state.userLogged);
-  const studentDetail = useAppSelector((state) => state.studentDetail);
+  const { studentDetail } = useAppSelector((state) => state.students);
 
   const [openModal, setOpenModal] = useState(false);
 
@@ -21,7 +21,9 @@ export function Students() {
   }, [userLogged, navigate]);
 
   useEffect(() => {
-    setOpenModal(!!studentDetail.id); //  {} = undefined undefined.id
+    if (studentDetail && studentDetail.id) {
+      setOpenModal(true);
+    }
   }, [studentDetail]);
 
   return (
@@ -40,7 +42,10 @@ export function Students() {
 
       <FloatButton onClick={() => setOpenModal(true)} />
 
-      <UpsertModal open={openModal} onClose={() => setOpenModal(false)} />
+      <UpdateStudentModal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+      />
 
       <SnackbarAlert />
     </Grid2>

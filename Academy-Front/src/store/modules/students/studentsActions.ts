@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   deleteStudentService,
   fetchStudentsService,
+  findStudentService,
   updateStudentService,
 } from "../../../configs/services/student.service";
 import { showAlert } from "../alert/alertSlice";
@@ -21,6 +22,7 @@ export const fetchStudentsAsyncThunk = createAsyncThunk(
     const response = await fetchStudentsService({ ...query, token });
 
     if (!response.ok) {
+      console.log("erro");
       dispatch(
         showAlert({
           message: response.message,
@@ -28,6 +30,35 @@ export const fetchStudentsAsyncThunk = createAsyncThunk(
         })
       );
     }
+    return response;
+  }
+);
+
+export const findStudentAsyncThunk = createAsyncThunk(
+  "students/findOne",
+  async (id: string, { dispatch, getState }) => {
+    const { userLogged } = getState() as RootState;
+    const { token } = userLogged;
+
+    const response = await findStudentService({ id, token });
+
+    if (!response.ok) {
+      dispatch(
+        showAlert({
+          type: "error",
+          message: response.message,
+        })
+      );
+      return response;
+    }
+
+    dispatch(
+      showAlert({
+        type: "success",
+        message: response.message,
+      })
+    );
+
     return response;
   }
 );

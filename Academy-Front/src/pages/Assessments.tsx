@@ -3,7 +3,7 @@ import { useAppSelector } from "../store/hooks";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FloatButton } from "../components/FloatButton";
-import { UpsertModal } from "../components/UpsertAssessmentModal";
+import { UpsertAssessmentModal } from "../components/UpsertAssessmentModal";
 import { TableAssessments } from "../components/TableAssessments";
 import SnackbarAlert from "../components/SnackbarAlert";
 
@@ -40,7 +40,10 @@ export function Assessments() {
 
       <FloatButton onClick={() => setOpenModal(true)} />
 
-      <UpsertModal open={openModal} onClose={() => setOpenModal(false)} />
+      <UpsertAssessmentModal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+      />
 
       <SnackbarAlert />
     </Grid2>

@@ -21,13 +21,13 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { logout } from "../../store/modules/auth/userLoggedSlice";
 import { toggleTheme } from "../../store/modules/settings/settingsSlice";
 import { useNavigate } from "react-router-dom";
-
+import { findStudentAsyncThunk } from "../../store/modules/studentDetail/studentDetailSlice";
 export default function AppBar() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { student } = useAppSelector((state) => state.userLogged);
+  const studentDetail = useAppSelector((state) => state.studentDetail);
   const { mode } = useAppSelector((state) => state.settings);
-
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -36,6 +36,13 @@ export default function AppBar() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleProfile = () => {
+    if (!studentDetail || studentDetail.id !== student.id) {
+      dispatch(findStudentAsyncThunk(student.id));
+    }
+    navigate(`/profile/${studentDetail.id}`);
   };
 
   return (
@@ -85,7 +92,7 @@ export default function AppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem onClick={handleCloseUserMenu}>
+              <MenuItem onClick={handleProfile}>
                 <Typography
                   sx={{
                     display: "flex",

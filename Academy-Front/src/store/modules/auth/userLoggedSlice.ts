@@ -20,7 +20,7 @@ export const loginAsyncThunk = createAsyncThunk(
       );
     }
 
-    const responseWithRemenber = {
+    const responseWithRemember = {
       ...response, // { ok, message }
       data: {
         token: response.data.token, //  { token }
@@ -39,7 +39,7 @@ export const loginAsyncThunk = createAsyncThunk(
     );
 
     // Vai virar o paylod lá no builder
-    return responseWithRemenber; // Data da requisição { ok, message, data }
+    return responseWithRemember; // Data da requisição { ok, message, data }
   }
 );
 
@@ -73,7 +73,7 @@ const initialState: InitialState = {
 
 const userLoggedSlice = createSlice({
   name: "userLogged",
-  initialState: initialState,
+  initialState,
   reducers: {
     logout() {
       return initialState;

@@ -47,7 +47,7 @@ export async function fetchStudentsService(
   }
 }
 
-export async function findOneStudentService(data: {
+export async function findStudentService(data: {
   id: string;
   token: string;
 }): Promise<ResponseAPI> {
