@@ -31,7 +31,7 @@ export function TableAssessments() {
   const { assessments, count, loadingList } = useAppSelector(
     (state) => state.assessments
   );
-  const students = useAppSelector((state) => state.students.students);
+  const { students } = useAppSelector((state) => state.students);
   const [page, setPage] = useState(1); // URL
 
   const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
@@ -57,9 +57,9 @@ export function TableAssessments() {
 
   return (
     <TableContainer>
-      {!assessments || assessments.length < 1 ? (
+      {(!loadingList && !assessments) || assessments.length < 1 ? (
         <Typography variant="subtitle2" textAlign="center">
-          No assessments to show. Create one!
+          Nenhuma avaliação registrada. Crie uma!
         </Typography>
       ) : (
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -67,22 +67,22 @@ export function TableAssessments() {
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Title
+                Título
               </TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Description
+                Descrição
               </TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Student
+                Estudante
               </TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Grade
+                Nota
               </TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Created At
+                Criada Em
               </TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Created By
+                Criada Por
               </TableCell>
               <TableCell
                 align="right"
@@ -94,7 +94,7 @@ export function TableAssessments() {
                   cursor: "pointer",
                 }}
               >
-                Back
+                Voltar
                 <ArrowBack sx={{ margin: 1 }} />
               </TableCell>
             </TableRow>
@@ -141,14 +141,14 @@ export function TableAssessments() {
                       <ActionsMenu>
                         <MenuItem onClick={() => handleEdit(row)} disableRipple>
                           <Edit />
-                          Edit
+                          Editar
                         </MenuItem>
                         <MenuItem
                           onClick={() => handleDelete(row.id)}
                           disableRipple
                         >
                           <Delete />
-                          Delete
+                          Excluir
                         </MenuItem>
                       </ActionsMenu>
                     </TableCell>

@@ -71,7 +71,7 @@ export function ActionsMenu({ children }: ActionsMenuProps) {
         onClick={handleClick}
         endIcon={<KeyboardArrowDownIcon />}
       >
-        Options
+        Opções
       </Button>
       <StyledMenu
         id="demo-customized-menu"

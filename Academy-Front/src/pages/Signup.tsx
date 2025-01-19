@@ -43,7 +43,7 @@ export function Signup() {
 
             <Grid2 size={12} textAlign="center">
               <Typography>
-                Already have an account? <Link to="/login">Login</Link>
+                Já tem uma conta? <Link to="/login">Entre</Link>
               </Typography>
             </Grid2>
           </Grid2>

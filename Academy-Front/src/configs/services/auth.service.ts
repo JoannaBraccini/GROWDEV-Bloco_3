@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { LoginRequest, SignupRequest } from "../../utils/types";
 import { api, ResponseAPI } from "./api.service";
+import { useAppDispatch } from "../../store/hooks";
+import { logout } from "../../store/modules/auth/userLoggedSlice";
 
 export async function loginService(
   data: Omit<LoginRequest, "remember">
@@ -51,11 +53,8 @@ export default api.interceptors.response.use(
       error.response?.data?.message === "Não autenticado!" &&
       error.response?.data?.ok === false
     ) {
-      // Remove os dados do usuário do localStorage/sessionStorage
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("userData");
-
-      // Redirecione para a tela de login
+      const dispatch = useAppDispatch();
+      dispatch(logout());
       navigate("/login");
     }
 

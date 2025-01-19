@@ -101,7 +101,7 @@ const userLoggedSlice = createSlice({
       .addCase(loginAsyncThunk.rejected, (state) => {
         state.loading = false;
         state.ok = false;
-        state.message = "Error login";
+        state.message = "Erro no Login";
       });
   },
 });

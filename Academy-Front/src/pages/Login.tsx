@@ -20,7 +20,7 @@ export function Login() {
   function handleImplements() {
     dispatch(
       showAlert({
-        message: "Not implemented!",
+        message: "Não implementado!",
         type: "warning",
       })
     );
@@ -54,12 +54,12 @@ export function Login() {
 
             <Grid2 size={12} textAlign="center">
               <Link to="#" onClick={handleImplements}>
-                Forgot your password?
+                Esqueceu a senha?
               </Link>
             </Grid2>
 
             <Grid2 size={12}>
-              <Divider>or</Divider>
+              <Divider>ou</Divider>
             </Grid2>
 
             <Grid2 size={12}>
@@ -69,7 +69,7 @@ export function Login() {
                 startIcon={<Google />}
                 onClick={handleImplements}
               >
-                Sign in with google
+                Entre com o Google
               </Button>
             </Grid2>
 
@@ -80,13 +80,13 @@ export function Login() {
                 startIcon={<Facebook />}
                 onClick={handleImplements}
               >
-                Sign in with Facebook
+                Entre com o Facebook
               </Button>
             </Grid2>
 
             <Grid2 size={12} textAlign="center">
               <Typography>
-                Don't have an account? <Link to="/signup">Sign up</Link>
+                Não tem uma conta? <Link to="/signup">Cadastre-se</Link>
               </Typography>
             </Grid2>
           </Grid2>

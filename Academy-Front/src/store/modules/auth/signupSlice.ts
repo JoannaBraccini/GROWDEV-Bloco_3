@@ -85,7 +85,7 @@ const userCreatedSlice = createSlice({
       .addCase(signupAsyncThunk.rejected, (state) => {
         state.loading = false;
         state.ok = false;
-        state.message = "Error Signup";
+        state.message = "Erro no Registro";
       });
   },
 });

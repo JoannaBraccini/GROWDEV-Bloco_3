@@ -2,7 +2,7 @@ export interface Assessment {
   id: string;
   title: string;
   description: string;
-  grade: number;
+  grade: number | null;
   studentId: string;
   createdBy: string;
   createdAt: string;

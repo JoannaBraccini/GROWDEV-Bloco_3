@@ -10,7 +10,7 @@ import { UpdateStudentModal } from "../components/UpdateStudentModal";
 export function Students() {
   const navigate = useNavigate();
   const userLogged = useAppSelector((state) => state.userLogged);
-  const { studentDetail } = useAppSelector((state) => state.students);
+  const { studentDetail } = useAppSelector((state) => state.studentDetail);
 
   const [openModal, setOpenModal] = useState(false);
 
@@ -30,7 +30,7 @@ export function Students() {
     <Grid2 container spacing={2}>
       <Grid2 size={12}>
         <Typography component="span" variant="h6" sx={{ fontWeight: "bold" }}>
-          Students List
+          Lista de Estudantes
         </Typography>
       </Grid2>
       <Grid2 size={12}>
@@ -39,14 +39,11 @@ export function Students() {
       <Grid2 size={12}>
         <TableStudents />
       </Grid2>
-
       <FloatButton onClick={() => setOpenModal(true)} />
-
       <UpdateStudentModal
         open={openModal}
         onClose={() => setOpenModal(false)}
       />
-
       <SnackbarAlert />
     </Grid2>
   );

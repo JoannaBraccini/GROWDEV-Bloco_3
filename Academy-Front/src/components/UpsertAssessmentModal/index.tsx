@@ -31,8 +31,8 @@ export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
 
   const userLogged = useAppSelector((state) => state.userLogged);
   const { students } = useAppSelector((state) => state.students);
-  const assessmentsRedux = useAppSelector((state) => state.assessments);
-  const assessmentDetailRedux = useAppSelector(
+  const assessments = useAppSelector((state) => state.assessments);
+  const { assessmentDetail } = useAppSelector(
     ({ assessmentDetail }) => assessmentDetail
   );
 
@@ -71,11 +71,11 @@ export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
       createdBy: userLogged.student.id,
     };
 
-    if (assessmentDetailRedux.id) {
+    if (assessmentDetail.id) {
       // MODO EDIT
       dispatch(
         updateAssessmentAsyncThunk({
-          id: assessmentDetailRedux.id,
+          id: assessmentDetail.id,
           description,
           grade,
           title,
@@ -93,12 +93,12 @@ export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
   }
 
   useEffect(() => {
-    if (assessmentsRedux.ok && assessmentsRedux.message) {
+    if (assessments.ok && assessments.message) {
       setTimeout(() => {
         onClose();
       }, 1000);
     }
-  }, [assessmentsRedux]);
+  }, [assessments]);
 
   return (
     <Modal
@@ -112,25 +112,24 @@ export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
           <Grid2 container spacing={1}>
             <Grid2 size={12}>
               <Typography variant="h6">
-                {assessmentDetailRedux.id ? "Edit" : "New"} Assessment
+                {assessmentDetail.id ? "Editar" : "Nova"} Avaliação
               </Typography>
             </Grid2>
 
             {/** Titulo */}
             <Grid2 size={12}>
               <FormControl fullWidth error={!!fieldsErrors.title}>
-                <FormLabel htmlFor="title-assessment">Title</FormLabel>
+                <FormLabel htmlFor="title-assessment">Título</FormLabel>
                 <TextField
                   id="title-assessment"
                   name="title-assessment"
                   type="text"
-                  placeholder="My title..."
                   variant="outlined"
                   fullWidth
                   required
                   error={!!fieldsErrors.title}
                   helperText={fieldsErrors.title}
-                  defaultValue={assessmentDetailRedux.title}
+                  defaultValue={assessmentDetail.title}
                 />
               </FormControl>
             </Grid2>
@@ -138,18 +137,17 @@ export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
             {/** Nota */}
             <Grid2 size={12}>
               <FormControl fullWidth error={!!fieldsErrors.grade}>
-                <FormLabel htmlFor="grade-assessment">Grade</FormLabel>
+                <FormLabel htmlFor="grade-assessment">Nota</FormLabel>
                 <TextField
                   id="grade-assessment"
                   name="grade-assessment"
                   type="number"
-                  placeholder="10"
                   variant="outlined"
                   fullWidth
                   required
                   error={!!fieldsErrors.grade}
                   helperText={fieldsErrors.grade}
-                  defaultValue={assessmentDetailRedux.grade}
+                  defaultValue={assessmentDetail.grade}
                 />
               </FormControl>
             </Grid2>
@@ -157,12 +155,11 @@ export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
             {/** Descrição */}
             <Grid2 size={12} mb={2}>
               <FormControl fullWidth error={!!fieldsErrors.description}>
-                <FormLabel htmlFor="desc-assessment">Description</FormLabel>
+                <FormLabel htmlFor="desc-assessment">Descrição</FormLabel>
                 <TextField
                   id="desc-assessment"
                   name="desc-assessment"
                   type="text"
-                  placeholder="My description..."
                   variant="outlined"
                   fullWidth
                   multiline
@@ -170,7 +167,7 @@ export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
                   required
                   error={!!fieldsErrors.description}
                   helperText={fieldsErrors.description}
-                  defaultValue={assessmentDetailRedux.description}
+                  defaultValue={assessmentDetail.description}
                 />
               </FormControl>
             </Grid2>
@@ -178,7 +175,7 @@ export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
             {/** Estudante avaliado */}
             <Grid2 size={12} mb={2}>
               <FormControl fullWidth error={!!fieldsErrors.studentId}>
-                <FormLabel htmlFor="student">Student</FormLabel>
+                <FormLabel htmlFor="student">Estudante</FormLabel>
                 <TextField
                   id="student"
                   name="student"
@@ -195,20 +192,20 @@ export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
                     },
                   }}
                 >
-                  {assessmentDetailRedux.id ? (
+                  {assessmentDetail.id ? (
                     <option
-                      key={assessmentDetailRedux.studentId}
-                      value={assessmentDetailRedux.studentId}
+                      key={assessmentDetail.studentId}
+                      value={assessmentDetail.studentId}
                     >
                       {
                         students.find(
-                          (stud) => stud.id === assessmentDetailRedux.studentId
+                          (stud) => stud.id === assessmentDetail.studentId
                         )?.name
                       }
                     </option>
                   ) : (
                     <>
-                      <option value="">Select Student</option>
+                      <option value="">Selecionar Estudante</option>
                       {userLogged.student.type !== "T" ? (
                         <option
                           key={userLogged.student.id}
@@ -236,17 +233,17 @@ export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
                 type="reset"
                 onClick={handleClose}
               >
-                Cancel
+                Cancelar
               </Button>
             </Grid2>
             <Grid2 size={6}>
               <Button
                 variant="contained"
                 type="submit"
-                disabled={assessmentsRedux.loading}
+                disabled={assessments.loading}
                 fullWidth
               >
-                {assessmentsRedux.loading ? "Awaiting..." : "Submit"}
+                {assessments.loading ? "Aguarde..." : "Enviar"}
               </Button>
             </Grid2>
           </Grid2>

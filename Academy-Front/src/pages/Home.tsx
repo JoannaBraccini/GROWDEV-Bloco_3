@@ -19,7 +19,7 @@ export function Home() {
     <Grid2 container spacing={2}>
       <Grid2 size={12}>
         <Typography variant="h6">
-          Welcome,{" "}
+          Olá,{" "}
           <Typography component="span" variant="h6" sx={{ fontWeight: "bold" }}>
             {userLogged.student.name}
           </Typography>

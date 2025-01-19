@@ -4,17 +4,19 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import { AccountBox, Ballot, CalendarMonth } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+import { CircularProgress, IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useEffect } from "react";
-import { findStudentAsyncThunk } from "../../store/modules/studentDetail/studentDetailSlice";
+import { findStudentAsyncThunk } from "../../store/modules/students/studentsActions";
 
 export default function StudentHome() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { student } = useAppSelector((state) => state.userLogged);
-  const studentDetail = useAppSelector((state) => state.studentDetail);
+  const { studentDetail, loading } = useAppSelector(
+    (state) => state.studentDetail
+  );
 
   useEffect(() => {
     if (!studentDetail || studentDetail.id !== student.id)
@@ -38,17 +40,21 @@ export default function StudentHome() {
             </IconButton>
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary="Assessments" />
+        <ListItemText primary="Avaliações" />
       </ListItem>
       <ListItem>
         <ListItemAvatar>
           <Avatar>
-            <IconButton onClick={() => navigate(`/profile/${student.id}`)}>
-              <AccountBox />
-            </IconButton>
+            {loading ? (
+              <CircularProgress />
+            ) : (
+              <IconButton onClick={() => navigate(`/profile/${student.id}`)}>
+                <AccountBox />
+              </IconButton>
+            )}
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary="Student Profile" />
+        <ListItemText primary="Perfil do Estudante" />
       </ListItem>
       <ListItem>
         <ListItemAvatar>
@@ -58,7 +64,7 @@ export default function StudentHome() {
             </IconButton>
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary="Tasks" />
+        <ListItemText primary="Tarefas" />
       </ListItem>
     </List>
   );

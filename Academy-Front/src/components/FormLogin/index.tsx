@@ -34,12 +34,12 @@ export function FormLogin() {
 
   function validate(email: string, password: string) {
     if (!email) {
-      setErrors({ email: "Email is required!" });
+      setErrors({ email: "E-mail é obrigatório!" });
       return;
     }
 
     if (!password) {
-      setErrors({ password: "Password is required!" });
+      setErrors({ password: "Senha é obrigatória!" });
       return;
     }
 
@@ -74,7 +74,7 @@ export function FormLogin() {
       onSubmit={(e) => handleLogin(e)}
     >
       <Grid2 size={12}>
-        <Typography variant="h4">Sign in</Typography>
+        <Typography variant="h4">Entrar</Typography>
       </Grid2>
 
       <Grid2 size={12}>
@@ -84,7 +84,7 @@ export function FormLogin() {
             id="email"
             name="email"
             type="email"
-            placeholder="your@email.com"
+            placeholder="seu@email.com"
             variant="outlined"
             size="small"
             fullWidth
@@ -101,7 +101,7 @@ export function FormLogin() {
 
       <Grid2 size={12}>
         <FormControl fullWidth error={!!errors.password}>
-          <FormLabel id="password">Password</FormLabel>
+          <FormLabel id="password">Senha</FormLabel>
           <TextField
             id="password"
             name="password"
@@ -117,17 +117,19 @@ export function FormLogin() {
                 setErrors({ ...errors, password: "" });
               }
             }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => setShowPassword((prev) => !prev)}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              },
             }}
           />
         </FormControl>
@@ -137,7 +139,7 @@ export function FormLogin() {
         <FormControlLabel
           name="remember"
           control={<Checkbox />}
-          label="Remember me"
+          label="Lembre de mim"
         />
       </Grid2>
 
@@ -148,7 +150,7 @@ export function FormLogin() {
           sx={{ textTransform: "capitalize" }}
           fullWidth
         >
-          Sign in
+          Entrar
         </Button>
       </Grid2>
     </Grid2>

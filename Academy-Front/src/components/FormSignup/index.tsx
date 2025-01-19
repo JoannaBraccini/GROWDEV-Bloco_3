@@ -48,34 +48,34 @@ export function FormSignup() {
     type: StudentType
   ) {
     if (!name) {
-      setErrors({ name: "Name is required!" });
+      setErrors({ name: "Nome é obrigatório!" });
       return;
     }
 
     if (!cpf) {
-      setErrors({ cpf: "CPF is required!" });
+      setErrors({ cpf: "CPF é obrigatório!" });
       return;
     } else if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
-      setErrors({ cpf: "Invalid CPF!" });
+      setErrors({ cpf: "CPF Inválido!" });
       return;
     }
     if (!email) {
-      setErrors({ email: "Email is required!" });
+      setErrors({ email: "E-mail é obrigatório!!" });
       return;
     }
     if (!password) {
-      setErrors({ password: "Password is required!" });
+      setErrors({ password: "Senha é obrigatória!" });
       return;
     }
     if (!repeatPassword) {
-      setErrors({ repeatPassword: "Password must be confirmed!" });
+      setErrors({ repeatPassword: "Senha deve ser confirmada!" });
       return;
     } else if (repeatPassword !== password) {
-      setErrors({ password: "Passwords don't match!" });
+      setErrors({ password: "As senhas devem ser iguais!" });
       return;
     }
     if (!type) {
-      setErrors({ email: "Type is required!" });
+      setErrors({ email: "Tipo é obrigatório!" });
       return;
     }
 
@@ -119,7 +119,7 @@ export function FormSignup() {
       onSubmit={(e) => handleSignup(e)}
     >
       <Grid2 size={12}>
-        <Typography variant="h4">Sign up</Typography>
+        <Typography variant="h4">Cadastrar</Typography>
       </Grid2>
 
       <Grid2 size={12}>
@@ -128,7 +128,7 @@ export function FormSignup() {
             id="student-name"
             name="student-name"
             type="text"
-            placeholder="Name"
+            placeholder="Nome"
             variant="outlined"
             size="small"
             fullWidth
@@ -171,7 +171,7 @@ export function FormSignup() {
             id="age"
             name="age"
             type="number"
-            placeholder="Age"
+            placeholder="Idade"
             variant="outlined"
             size="small"
             fullWidth
@@ -186,7 +186,7 @@ export function FormSignup() {
             id="email"
             name="email"
             type="email"
-            placeholder="Email"
+            placeholder="E-mail"
             variant="outlined"
             size="small"
             fullWidth
@@ -207,7 +207,7 @@ export function FormSignup() {
             id="password"
             name="password"
             type={showPassword ? "text" : "password"}
-            placeholder="Password"
+            placeholder="Senha"
             variant="outlined"
             size="small"
             fullWidth
@@ -241,7 +241,7 @@ export function FormSignup() {
             id="repeat-password"
             name="repeat-password"
             type={showPassword ? "text" : "password"}
-            placeholder="Repeat Password"
+            placeholder="Repetir Senha"
             variant="outlined"
             size="small"
             fullWidth
@@ -292,9 +292,9 @@ export function FormSignup() {
               },
             }}
           >
-            <option value="">Select Student Type</option>
-            <option value="M">Enrolled (Matriculado)</option>
-            <option value="F">Graduated (Formado)</option>
+            <option value="">Selecione o Tipo de Estudante</option>
+            <option value="M">Matriculado</option>
+            <option value="F">Formado</option>
             <option value="T">Tech-Helper</option>
           </TextField>
         </FormControl>
@@ -306,7 +306,7 @@ export function FormSignup() {
           sx={{ textTransform: "capitalize" }}
           fullWidth
         >
-          Sign Up
+          Cadastrar
         </Button>
       </Grid2>
     </Grid2>

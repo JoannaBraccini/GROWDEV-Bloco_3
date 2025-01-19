@@ -10,7 +10,9 @@ import SnackbarAlert from "../components/SnackbarAlert";
 export function Assessments() {
   const navigate = useNavigate();
   const userLogged = useAppSelector((state) => state.userLogged);
-  const assessmentDetail = useAppSelector((state) => state.assessmentDetail);
+  const { assessmentDetail } = useAppSelector(
+    (state) => state.assessmentDetail
+  );
 
   const [openModal, setOpenModal] = useState(false);
 
@@ -28,7 +30,7 @@ export function Assessments() {
     <Grid2 container spacing={2}>
       <Grid2 size={12}>
         <Typography component="span" variant="h6" sx={{ fontWeight: "bold" }}>
-          Assessments List
+          Lista de Avaliações
         </Typography>
       </Grid2>
       <Grid2 size={12}>

@@ -53,31 +53,34 @@ export function Profile() {
           <Typography>Erro ao buscar dados do Usuário.</Typography>
         ) : (
           <>
-            <Typography variant="h6">Profile</Typography>
+            <Typography variant="h6">Perfil</Typography>
             <List>
               <ListItem>
-                <ListItemText primary="Name" secondary={studentDetail.name} />
+                <ListItemText primary="Nome" secondary={studentDetail.name} />
               </ListItem>
               <ListItem>
                 <ListItemText primary="CPF" secondary={studentDetail.cpf} />
               </ListItem>
               <ListItem>
                 <ListItemText
-                  primary="Age"
+                  primary="idade"
                   secondary={
                     studentDetail.age ? studentDetail.age : "Não informado"
                   }
                 />
               </ListItem>
               <ListItem>
-                <ListItemText primary="Email" secondary={studentDetail.email} />
+                <ListItemText
+                  primary="E-mail"
+                  secondary={studentDetail.email}
+                />
               </ListItem>
               <ListItem>
-                <ListItemText primary="Type" secondary={studentDetail.type} />
+                <ListItemText primary="Tipo" secondary={studentDetail.type} />
               </ListItem>
               <ListItem>
                 <ListItemText
-                  primary="Register Date"
+                  primary="Data de Registro"
                   secondary={new Date(
                     studentDetail.registeredAt
                   ).toLocaleDateString()}

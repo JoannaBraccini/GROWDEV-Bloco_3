@@ -21,12 +21,12 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { logout } from "../../store/modules/auth/userLoggedSlice";
 import { toggleTheme } from "../../store/modules/settings/settingsSlice";
 import { useNavigate } from "react-router-dom";
-import { findStudentAsyncThunk } from "../../store/modules/studentDetail/studentDetailSlice";
+import { findStudentAsyncThunk } from "../../store/modules/students/studentsActions";
 export default function AppBar() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { student } = useAppSelector((state) => state.userLogged);
-  const studentDetail = useAppSelector((state) => state.studentDetail);
+  const { studentDetail } = useAppSelector((state) => state.studentDetail);
   const { mode } = useAppSelector((state) => state.settings);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -101,7 +101,7 @@ export default function AppBar() {
                   }}
                 >
                   <AccountCircle />
-                  Profile
+                  Perfil
                 </Typography>
               </MenuItem>
               <MenuItem onClick={() => dispatch(toggleTheme())}>
@@ -125,7 +125,7 @@ export default function AppBar() {
                   }}
                 >
                   <Logout />
-                  Logout
+                  Sair
                 </Typography>
               </MenuItem>
             </Menu>

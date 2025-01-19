@@ -26,7 +26,7 @@ export default function TechHelperHome() {
             </IconButton>
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary="Assessments" />
+        <ListItemText primary="Avaliações" />
       </ListItem>
       <ListItem>
         <ListItemAvatar>
@@ -36,7 +36,7 @@ export default function TechHelperHome() {
             </IconButton>
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary="Students" />
+        <ListItemText primary="Estudantes" />
       </ListItem>
       <ListItem>
         <ListItemAvatar>
@@ -46,7 +46,7 @@ export default function TechHelperHome() {
             </IconButton>
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary="Tasks" />
+        <ListItemText primary="Tarefas" />
       </ListItem>
     </List>
   );

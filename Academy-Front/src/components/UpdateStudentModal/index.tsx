@@ -31,7 +31,9 @@ export function UpdateStudentModal({ open, onClose }: UpsertModalProps) {
   const dispatch = useAppDispatch();
 
   const { ok, message, loading } = useAppSelector((state) => state.students);
-  const studentDetail = useAppSelector(({ studentDetail }) => studentDetail);
+  const { studentDetail } = useAppSelector(
+    ({ studentDetail }) => studentDetail
+  );
   const [fieldsErrors, setFieldsErrors] = useState<StudentFieldsErrors>({
     name: "",
     age: null,
@@ -99,13 +101,15 @@ export function UpdateStudentModal({ open, onClose }: UpsertModalProps) {
         <form onSubmit={onSubmit}>
           <Grid2 container spacing={1}>
             <Grid2 size={12}>
-              <Typography variant="h6">Edit Student Data</Typography>
+              <Typography variant="h6">
+                Editar Informações do Estudante
+              </Typography>
             </Grid2>
 
             {/** Type */}
             <Grid2 size={12}>
               <FormControl fullWidth error={!!fieldsErrors.type}>
-                <FormLabel htmlFor="type-student">Type</FormLabel>
+                <FormLabel htmlFor="type-student">Tipo</FormLabel>
                 <Select
                   id="type"
                   name="type"
@@ -126,12 +130,11 @@ export function UpdateStudentModal({ open, onClose }: UpsertModalProps) {
             {/** Name */}
             <Grid2 size={12}>
               <FormControl fullWidth error={!!fieldsErrors.name}>
-                <FormLabel htmlFor="name-student">Name</FormLabel>
+                <FormLabel htmlFor="name-student">Nome</FormLabel>
                 <TextField
                   id="name-student"
                   name="name-student"
                   type="text"
-                  placeholder=""
                   variant="outlined"
                   fullWidth
                   required
@@ -145,12 +148,11 @@ export function UpdateStudentModal({ open, onClose }: UpsertModalProps) {
             {/** Idade */}
             <Grid2 size={12}>
               <FormControl fullWidth error={!!fieldsErrors.age}>
-                <FormLabel htmlFor="age-student">Age</FormLabel>
+                <FormLabel htmlFor="age-student">Idade</FormLabel>
                 <TextField
                   id="age-student"
                   name="age-student"
                   type="number"
-                  placeholder="Age"
                   variant="outlined"
                   fullWidth
                   required
@@ -164,12 +166,11 @@ export function UpdateStudentModal({ open, onClose }: UpsertModalProps) {
             {/** Senha */}
             <Grid2 size={12} mb={2}>
               <FormControl fullWidth error={!!fieldsErrors.passwordOld}>
-                <FormLabel htmlFor="password-old">Old Password</FormLabel>
+                <FormLabel htmlFor="password-old">Senha Antiga</FormLabel>
                 <TextField
                   id="password-old"
                   name="password-old"
                   type="password"
-                  placeholder="Old password"
                   variant="outlined"
                   fullWidth
                   required
@@ -181,12 +182,11 @@ export function UpdateStudentModal({ open, onClose }: UpsertModalProps) {
             </Grid2>
             <Grid2 size={12} mb={2}>
               <FormControl fullWidth error={!!fieldsErrors.passwordNew}>
-                <FormLabel htmlFor="password-new">New Password</FormLabel>
+                <FormLabel htmlFor="password-new">Senha Nova</FormLabel>
                 <TextField
                   id="password-new"
                   name="password-new"
                   type="password"
-                  placeholder="New password"
                   variant="outlined"
                   fullWidth
                   error={!!fieldsErrors.passwordNew}
@@ -204,7 +204,7 @@ export function UpdateStudentModal({ open, onClose }: UpsertModalProps) {
                 type="reset"
                 onClick={handleClose}
               >
-                Cancel
+                Cancelar
               </Button>
             </Grid2>
             <Grid2 size={6}>
@@ -214,7 +214,7 @@ export function UpdateStudentModal({ open, onClose }: UpsertModalProps) {
                 disabled={loading}
                 fullWidth
               >
-                {loading ? "Awaiting..." : "Submit"}
+                {loading ? "Aguarde..." : "Enviar"}
               </Button>
             </Grid2>
           </Grid2>

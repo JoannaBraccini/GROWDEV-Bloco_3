@@ -32,7 +32,10 @@ export function TableStudents() {
   const { students, count, loadingList } = useAppSelector(
     (state) => state.students
   );
-  const studentDetail = useAppSelector(({ studentDetail }) => studentDetail);
+  const { assessments } = useAppSelector((state) => state.assessments);
+  const { studentDetail } = useAppSelector(
+    ({ studentDetail }) => studentDetail
+  );
   const [page, setPage] = useState(1); // URL
 
   const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
@@ -63,9 +66,11 @@ export function TableStudents() {
 
   return (
     <TableContainer>
-      {!students || students.length < 1 ? (
+      {loadingList ? (
+        <CircularProgress />
+      ) : !students || students.length < 1 ? (
         <Typography variant="subtitle2" textAlign="center">
-          No students to show. Register one!
+          Nenhum estudante registrado.
         </Typography>
       ) : (
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -73,22 +78,25 @@ export function TableStudents() {
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Name
+                Nome
               </TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
                 CPF
               </TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Age
+                Idade
               </TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Email
+                E-mail
               </TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Type
+                Tipo
               </TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Register
+                Data de Registro
+              </TableCell>
+              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                Avaliações
               </TableCell>
               <TableCell
                 align="right"
@@ -100,7 +108,7 @@ export function TableStudents() {
                   cursor: "pointer",
                 }}
               >
-                Back
+                Voltar
                 <ArrowBack sx={{ margin: 1 }} />
               </TableCell>
             </TableRow>
@@ -142,17 +150,24 @@ export function TableStudents() {
                       {new Date(row.registeredAt).toLocaleDateString("pt-BR")}
                     </TableCell>
                     <TableCell align="right">
+                      {
+                        assessments.filter(
+                          (assessment) => assessment.studentId === row.id
+                        ).length
+                      }
+                    </TableCell>
+                    <TableCell align="right">
                       <ActionsMenu>
                         <MenuItem onClick={() => handleEdit(row)} disableRipple>
                           <Edit />
-                          Edit
+                          Editar
                         </MenuItem>
                         <MenuItem
                           onClick={() => handleDelete(row.id)}
                           disableRipple
                         >
                           <Delete />
-                          Delete
+                          Excluir
                         </MenuItem>
                       </ActionsMenu>
                     </TableCell>
