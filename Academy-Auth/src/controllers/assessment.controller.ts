@@ -13,7 +13,7 @@ export class AssessmentController {
         description,
         grade,
         studentId, //envia o valor preenchido na requisição e troca no service caso não seja TechHelper
-        studentType: studentLogged.type,
+        studentType: studentLogged.studentType,
       };
 
       const service = new AssessmentService();
@@ -37,7 +37,7 @@ export class AssessmentController {
       const service = new AssessmentService();
       const result = await service.findAll(
         studentLogged.id,
-        studentLogged.type,
+        studentLogged.studentType,
         {
           page: page ? Number(page) - 1 : undefined, // converter p/ number
           take: take ? Number(take) : undefined,
@@ -63,7 +63,7 @@ export class AssessmentController {
       const result = await service.findOneById(
         id,
         studentLogged.id,
-        studentLogged.type
+        studentLogged.studentType
       );
 
       const { code, ...response } = result;

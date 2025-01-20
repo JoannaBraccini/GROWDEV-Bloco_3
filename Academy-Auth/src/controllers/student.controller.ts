@@ -36,7 +36,7 @@ export class StudentController {
       const result = await service.findOneById(
         id,
         studentLogged.id,
-        studentLogged.type
+        studentLogged.studentType
       );
 
       // 3 - Responder ao cliente
@@ -54,7 +54,7 @@ export class StudentController {
     try {
       // 1 - Pegar os dados (params e do body)
       const { id } = req.params;
-      const { name, passwordOld, passwordNew, type, age } = req.body;
+      const { name, passwordOld, passwordNew, studentType, age } = req.body;
 
       // 2 - Chamar o responsável (service)
       const service = new StudentService();
@@ -62,7 +62,7 @@ export class StudentController {
         name,
         passwordOld,
         passwordNew,
-        type,
+        studentType,
         age,
       });
 

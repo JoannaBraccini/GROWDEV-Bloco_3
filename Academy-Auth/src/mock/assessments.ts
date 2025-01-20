@@ -70,8 +70,8 @@ async function main() {
   const students = await prisma.student.findMany();
 
   //Filtrar os estudantes
-  const studentsM = students.filter((student) => student.type === "M");
-  const studentsT = students.filter((student) => student.type === "T");
+  const studentsM = students.filter((student) => student.studentType === "M");
+  const studentsT = students.filter((student) => student.studentType === "T");
   const studentTIds = studentsT.map((student) => student.id);
 
   // Associar avaliações aos estudantes
@@ -95,7 +95,7 @@ async function main() {
     });
   }
 
-  console.log("Avaliações associadas com sucesso!");
+  console.log("Avaliações criadas com sucesso!");
 }
 
 main()

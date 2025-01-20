@@ -42,7 +42,7 @@ export class AuthMiddleware {
       id: studentDecoded.id,
       name: studentDecoded.name,
       email: studentDecoded.email,
-      type: studentDecoded.type,
+      studentType: studentDecoded.studentType,
     };
 
     next();

@@ -9,9 +9,11 @@ export interface SignupDto {
   name: string;
   email: string;
   password: string;
-  type: StudentType;
+  studentType: StudentType;
   cpf: string;
   age?: number;
 }
 
-export type IdStudentDto = Pick<SignupDto, "type"> & { studentId: string };
+export type IdStudentDto = Pick<SignupDto, "studentType"> & {
+  studentId: string;
+};

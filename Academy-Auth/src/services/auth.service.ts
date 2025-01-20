@@ -42,7 +42,7 @@ export class AuthService {
       id: student.id,
       name: student.name,
       email: student.email,
-      type: student.type,
+      studentType: student.studentType,
     };
 
     const token = jwt.generateToken(payload);
@@ -60,7 +60,7 @@ export class AuthService {
   }
 
   public async signup(data: SignupDto): Promise<ResponseApi> {
-    const { name, email, password, type, age, cpf } = data;
+    const { name, email, password, studentType, age, cpf } = data;
 
     // 2 - Verificarmos as colunas unicas
     const student = await prisma.student.findFirst({
@@ -99,7 +99,7 @@ export class AuthService {
         cpf: cpf,
         email: email,
         password: passwordHash,
-        type: type,
+        studentType: studentType,
         age: age,
       },
     });

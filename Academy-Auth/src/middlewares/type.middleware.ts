@@ -4,7 +4,7 @@ import { NextFunction, Request, Response } from "express";
 export class TypeMiddleware {
   public static validate(allowedTypes?: StudentType[]) {
     return (req: Request, res: Response, next: NextFunction) => {
-      const type = req.authStudent.type;
+      const type = req.authStudent.studentType;
 
       if (!allowedTypes) {
         return next();

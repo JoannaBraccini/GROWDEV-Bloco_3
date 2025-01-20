@@ -25,14 +25,14 @@ export class AuthController {
 
   public static async signup(req: Request, res: Response): Promise<void> {
     try {
-      const { name, email, password, type, age, cpf } = req.body;
+      const { name, email, password, studentType, age, cpf } = req.body;
 
       const data: SignupDto = {
         name,
         email,
         password,
         cpf,
-        type,
+        studentType,
         age,
       };
 

@@ -35,9 +35,9 @@ export class StudentService {
   public async findOneById(
     id: string,
     studentId: string,
-    type: string
+    studentType: string
   ): Promise<ResponseApi> {
-    if (type !== "T" && id !== studentId) {
+    if (studentType !== "T" && id !== studentId) {
       return {
         ok: false,
         code: 403, // Forbidden
@@ -179,7 +179,7 @@ export class StudentService {
       email: student.email,
       name: student.name,
       cpf: student.cpf,
-      type: student.type,
+      studentType: student.studentType,
       age: student.age,
       registeredAt: student.createdAt,
       assessments: student.assessments?.map((assessment) => ({

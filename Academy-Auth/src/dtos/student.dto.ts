@@ -6,7 +6,7 @@ export interface StudentDto {
   id: string;
   name: string;
   email: string;
-  type: StudentType;
+  studentType: StudentType;
   cpf: string;
   age?: number | null;
   registeredAt: Date;
@@ -22,6 +22,6 @@ export interface UpdateStudentDto {
   name?: string;
   passwordOld?: string;
   passwordNew?: string;
-  type?: StudentType;
+  studentType?: StudentType;
   age?: number;
 }

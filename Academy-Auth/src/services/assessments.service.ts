@@ -56,12 +56,12 @@ export class AssessmentService {
 
   public async findAll(
     id: string,
-    type: StudentType,
+    studentType: StudentType,
     query?: { page?: number; take?: number }
   ): Promise<ResponseApi> {
     try {
       let where: Prisma.AssessmentWhereInput = {};
-      if (type !== "T") {
+      if (studentType !== "T") {
         where = { studentId: id };
       }
 
@@ -97,7 +97,7 @@ export class AssessmentService {
   public async findOneById(
     id: string,
     studentId: string,
-    type: StudentType
+    studentType: StudentType
   ): Promise<ResponseApi> {
     const assessment = await prisma.assessment.findUnique({
       where: { id },
@@ -111,7 +111,7 @@ export class AssessmentService {
       };
     }
 
-    if (type !== "T" && studentId !== assessment.studentId) {
+    if (studentType !== "T" && studentId !== assessment.studentId) {
       return {
         ok: false,
         code: 401,

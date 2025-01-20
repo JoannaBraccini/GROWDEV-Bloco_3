@@ -4,5 +4,5 @@ export interface AuthStudent {
   id: string;
   name: string;
   email: string;
-  type: StudentType;
+  studentType: StudentType;
 }

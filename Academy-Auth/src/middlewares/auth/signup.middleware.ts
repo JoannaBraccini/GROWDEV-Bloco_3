@@ -48,7 +48,7 @@ export class SignupMiddleware {
   }
 
   public static validateTypes(req: Request, res: Response, next: NextFunction) {
-    const { name, email, password, type, age, cpf } = req.body;
+    const { name, email, password, studentType, age, cpf } = req.body;
 
     if (typeof name !== "string") {
       res.status(400).json({
@@ -79,9 +79,9 @@ export class SignupMiddleware {
     }
 
     if (
-      type !== StudentType.F &&
-      type !== StudentType.M &&
-      type !== StudentType.T
+      studentType !== StudentType.F &&
+      studentType !== StudentType.M &&
+      studentType !== StudentType.T
     ) {
       res.status(400).json({
         ok: false,
@@ -102,7 +102,7 @@ export class SignupMiddleware {
   }
 
   public static validateData(req: Request, res: Response, next: NextFunction) {
-    const { name, email, password, type, age, cpf } = req.body;
+    const { name, email, password, studentType, age, cpf } = req.body;
 
     if (name.length < 3) {
       res.status(400).json({
