@@ -11,16 +11,15 @@ import {
   Typography,
 } from "@mui/material";
 import { style } from "./styles";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { resetStudentDetail } from "../../store/modules/studentDetail/studentDetailSlice";
 import { updateStudentAsyncThunk } from "../../store/modules/students/studentsActions";
-import { showAlert } from "../../store/modules/alert/alertSlice";
 import {
   StudentFieldsErrors,
   validateFormStudent,
 } from "../../utils/validators/student.validator";
-import { StudentType } from "../../utils/types";
+import { StudentType, UpdateStudentRequest } from "../../utils/types";
 
 interface UpsertModalProps {
   open: boolean;
@@ -29,22 +28,17 @@ interface UpsertModalProps {
 
 export function UpdateStudentModal({ open, onClose }: UpsertModalProps) {
   const dispatch = useAppDispatch();
-
-  const { ok, message, loading } = useAppSelector((state) => state.students);
   const { studentDetail } = useAppSelector(
     ({ studentDetail }) => studentDetail
   );
+  const { ok, message, loading } = useAppSelector((state) => state.students);
   const [fieldsErrors, setFieldsErrors] = useState<StudentFieldsErrors>({
     name: "",
-    age: null,
+    age: "",
     passwordOld: "",
     passwordNew: "",
     type: "",
   });
-
-  const [type, setType] = useState<StudentType>(
-    studentDetail ? studentDetail.type : "M"
-  );
 
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -53,7 +47,7 @@ export function UpdateStudentModal({ open, onClose }: UpsertModalProps) {
     const age = Number(event.currentTarget["age-student"].value);
     const passwordOld = event.currentTarget["password-old"].value;
     const passwordNew = event.currentTarget["password-new"].value;
-    const type = event.currentTarget["type-student"].value;
+    const type = event.currentTarget["type"].value as StudentType;
 
     const errors = validateFormStudent(name, passwordOld, passwordNew);
     // Converter um objeto em array
@@ -62,33 +56,35 @@ export function UpdateStudentModal({ open, onClose }: UpsertModalProps) {
       setFieldsErrors(errors);
       return;
     }
-
     // Se passar, limpar os errors
     setFieldsErrors({} as StudentFieldsErrors);
 
+    // Criar um objeto contendo apenas os campos que foram modificados
+    const updatedFields: Partial<UpdateStudentRequest> = {};
+    if (name !== studentDetail.name) updatedFields.name = name;
+    if (age !== studentDetail.age) updatedFields.age = age;
+    if (passwordOld) updatedFields.passwordOld = passwordOld;
+    if (passwordNew) updatedFields.passwordNew = passwordNew;
+    if (type !== studentDetail.type) updatedFields.type = type;
+
     dispatch(
       updateStudentAsyncThunk({
-        id: studentDetail ? studentDetail.id : "",
-        name,
-        age,
-        passwordOld,
-        passwordNew,
-        type,
+        id: studentDetail.id,
+        ...updatedFields,
       })
     );
+
+    if (ok && message) {
+      setTimeout(() => {
+        handleClose();
+      }, 2000);
+    }
   }
 
   function handleClose() {
     dispatch(resetStudentDetail());
     onClose();
   }
-
-  useEffect(() => {
-    if (ok) {
-      dispatch(showAlert({ message: message, type: "success" }));
-      onClose();
-    }
-  }, [ok, message, dispatch]);
 
   return (
     <Modal
@@ -117,8 +113,8 @@ export function UpdateStudentModal({ open, onClose }: UpsertModalProps) {
                   size="small"
                   fullWidth
                   error={!!fieldsErrors.type}
-                  value={type}
-                  onChange={(e) => setType(e.target.value as StudentType)}
+                  defaultValue={studentDetail.type}
+                  onChange={(e) => e.target.value as StudentType}
                 >
                   <MenuItem value="M">Matriculado</MenuItem>
                   <MenuItem value="F">Formado</MenuItem>
@@ -137,10 +133,9 @@ export function UpdateStudentModal({ open, onClose }: UpsertModalProps) {
                   type="text"
                   variant="outlined"
                   fullWidth
-                  required
                   error={!!fieldsErrors.name}
                   helperText={fieldsErrors.name}
-                  defaultValue={studentDetail ? studentDetail.name : ""}
+                  defaultValue={studentDetail.name}
                 />
               </FormControl>
             </Grid2>
@@ -155,10 +150,9 @@ export function UpdateStudentModal({ open, onClose }: UpsertModalProps) {
                   type="number"
                   variant="outlined"
                   fullWidth
-                  required
                   error={!!fieldsErrors.age}
                   helperText={fieldsErrors.age}
-                  defaultValue={studentDetail ? studentDetail.age : null}
+                  defaultValue={studentDetail.age}
                 />
               </FormControl>
             </Grid2>
@@ -173,10 +167,8 @@ export function UpdateStudentModal({ open, onClose }: UpsertModalProps) {
                   type="password"
                   variant="outlined"
                   fullWidth
-                  required
                   error={!!fieldsErrors.passwordOld}
                   helperText={fieldsErrors.passwordOld}
-                  defaultValue={"********"}
                 />
               </FormControl>
             </Grid2>
@@ -191,7 +183,6 @@ export function UpdateStudentModal({ open, onClose }: UpsertModalProps) {
                   fullWidth
                   error={!!fieldsErrors.passwordNew}
                   helperText={fieldsErrors.passwordNew}
-                  defaultValue={""}
                 />
               </FormControl>
             </Grid2>
@@ -211,7 +202,7 @@ export function UpdateStudentModal({ open, onClose }: UpsertModalProps) {
               <Button
                 variant="contained"
                 type="submit"
-                disabled={loading}
+                disabled={!!loading}
                 fullWidth
               >
                 {loading ? "Aguarde..." : "Enviar"}

@@ -1,11 +1,12 @@
-import { Add } from "@mui/icons-material";
+import { Add, Edit } from "@mui/icons-material";
 import { Fab } from "@mui/material";
 
 interface FloatButtonProps {
   onClick: () => void;
+  iconType?: string;
 }
 
-export function FloatButton({ onClick }: FloatButtonProps) {
+export function FloatButton({ onClick, iconType }: FloatButtonProps) {
   return (
     <Fab
       sx={{ position: "fixed", bottom: 20, right: 20 }}
@@ -13,7 +14,7 @@ export function FloatButton({ onClick }: FloatButtonProps) {
       aria-label="add"
       onClick={onClick}
     >
-      <Add />
+      {iconType === "edit" ? <Edit /> : <Add />}
     </Fab>
   );
 }

@@ -305,8 +305,9 @@ export function FormSignup() {
           type="submit"
           sx={{ textTransform: "capitalize" }}
           fullWidth
+          disabled={userCreated.loading}
         >
-          Cadastrar
+          {userCreated.loading ? "Aguarde" : "Cadastrar"}
         </Button>
       </Grid2>
     </Grid2>

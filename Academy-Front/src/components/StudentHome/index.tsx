@@ -14,13 +14,10 @@ export default function StudentHome() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { student } = useAppSelector((state) => state.userLogged);
-  const { studentDetail, loading } = useAppSelector(
-    (state) => state.studentDetail
-  );
+  const { loading } = useAppSelector((state) => state.studentDetail);
 
   useEffect(() => {
-    if (!studentDetail || studentDetail.id !== student.id)
-      dispatch(findStudentAsyncThunk(student.id));
+    dispatch(findStudentAsyncThunk(student.id));
   }, [student]);
 
   return (

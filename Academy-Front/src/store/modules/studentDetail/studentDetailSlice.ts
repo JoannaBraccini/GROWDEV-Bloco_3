@@ -22,6 +22,7 @@ const initialState: InitialState = {
     email: "",
     type: "M",
     registeredAt: "",
+    assessments: [],
   },
 };
 
@@ -53,8 +54,7 @@ const studentDetailSlice = createSlice({
           state.ok = action.payload.ok;
           state.message = action.payload.message;
           if (action.payload.ok) {
-            return {
-              ...state,
+            state.studentDetail = {
               ...action.payload.data,
               registeredAt: new Date(
                 action.payload.data.registeredAt

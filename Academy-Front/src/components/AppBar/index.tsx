@@ -26,7 +26,6 @@ export default function AppBar() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { student } = useAppSelector((state) => state.userLogged);
-  const { studentDetail } = useAppSelector((state) => state.studentDetail);
   const { mode } = useAppSelector((state) => state.settings);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -39,10 +38,8 @@ export default function AppBar() {
   };
 
   const handleProfile = () => {
-    if (!studentDetail || studentDetail.id !== student.id) {
-      dispatch(findStudentAsyncThunk(student.id));
-    }
-    navigate(`/profile/${studentDetail.id}`);
+    dispatch(findStudentAsyncThunk(student.id));
+    navigate(`/profile/${student.id}`);
   };
 
   return (

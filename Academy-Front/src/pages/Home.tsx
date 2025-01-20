@@ -1,31 +1,46 @@
 import { Grid2, Typography } from "@mui/material";
-import HomeList from "../components/TechHelperHome";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../store/hooks";
 import StudentHome from "../components/StudentHome";
+import TechHelperHome from "../components/TechHelperHome";
+import { Loading } from "../components/Loading";
+import SnackbarAlert from "../components/SnackbarAlert";
 
 export function Home() {
   const navigate = useNavigate();
-  const userLogged = useAppSelector((state) => state.userLogged);
+  const { student, token, loading } = useAppSelector(
+    (state) => state.userLogged
+  );
 
   useEffect(() => {
-    if (!userLogged.token) {
+    if (!token) {
       navigate("/login");
     }
-  }, [userLogged, navigate]);
+  }, [token, navigate]);
 
   return (
     <Grid2 container spacing={2}>
-      <Grid2 size={12}>
-        <Typography variant="h6">
-          Olá,{" "}
-          <Typography component="span" variant="h6" sx={{ fontWeight: "bold" }}>
-            {userLogged.student.name}
-          </Typography>
-        </Typography>
-      </Grid2>
-      {userLogged.student.type === "T" ? <HomeList /> : <StudentHome />}
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <Grid2 size={12}>
+            <Typography variant="h6">
+              Olá,{" "}
+              <Typography
+                component="span"
+                variant="h6"
+                sx={{ fontWeight: "bold" }}
+              >
+                {student.name}
+              </Typography>
+            </Typography>
+          </Grid2>
+          {student.type === "T" ? <TechHelperHome /> : <StudentHome />}
+        </>
+      )}
+      <SnackbarAlert />
     </Grid2>
   );
 }

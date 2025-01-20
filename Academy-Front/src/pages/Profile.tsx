@@ -1,6 +1,6 @@
 import {
   Box,
-  CircularProgress,
+  Button,
   Grid2,
   List,
   ListItem,
@@ -12,9 +12,24 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { FloatButton } from "../components/FloatButton";
 import { setStudentDetail } from "../store/modules/studentDetail/studentDetailSlice";
-import { Student } from "../utils/types";
+import { Student, StudentType } from "../utils/types";
 import { UpdateStudentModal } from "../components/UpdateStudentModal";
 import { findStudentAsyncThunk } from "../store/modules/students/studentsActions";
+import SnackbarAlert from "../components/SnackbarAlert";
+import { Loading } from "../components/Loading";
+
+const typeText = (type: StudentType) => {
+  switch (type) {
+    case "T":
+      return "Tech-Helper";
+    case "M":
+      return "Aluno Matriculado";
+    case "F":
+      return "Aluno Formado";
+    default:
+      return "Tipo Desconhecido";
+  }
+};
 
 export function Profile() {
   const navigate = useNavigate();
@@ -32,23 +47,27 @@ export function Profile() {
     }
   }, [userLogged, navigate]);
 
+  useEffect(() => {
+    if (!studentDetail || studentDetail.id !== userLogged.student.id) {
+      dispatch(findStudentAsyncThunk(userLogged.student.id));
+    }
+  }, [studentDetail, dispatch, userLogged.student.id]);
+
   function handleEdit(studentDetail: Student) {
     dispatch(findStudentAsyncThunk(userLogged.student.id));
     dispatch(setStudentDetail(studentDetail));
     setOpenModal(true);
   }
-  useEffect(() => {
-    if (!studentDetail || studentDetail.id !== userLogged.student.id) {
-      dispatch(findStudentAsyncThunk(userLogged.student.id));
-    }
-    setOpenModal(!!studentDetail.id);
-  }, [studentDetail]);
+
+  function handleCloseModal() {
+    setOpenModal(false);
+  }
 
   return (
     <Grid2 container spacing={2}>
       <Box>
         {loading ? (
-          <CircularProgress />
+          <Loading />
         ) : !studentDetail ? (
           <Typography>Erro ao buscar dados do Usuário.</Typography>
         ) : (
@@ -76,7 +95,10 @@ export function Profile() {
                 />
               </ListItem>
               <ListItem>
-                <ListItemText primary="Tipo" secondary={studentDetail.type} />
+                <ListItemText
+                  primary="Tipo"
+                  secondary={typeText(studentDetail.type)}
+                />
               </ListItem>
               <ListItem>
                 <ListItemText
@@ -87,13 +109,21 @@ export function Profile() {
                 />
               </ListItem>
             </List>
-            <FloatButton onClick={() => handleEdit(studentDetail)} />
+            <Button
+              variant="contained"
+              color="info"
+              onClick={() => navigate("/home")}
+            >
+              Voltar
+            </Button>
+            <FloatButton
+              iconType="edit"
+              onClick={() => handleEdit(studentDetail)}
+            />
           </>
         )}
-        <UpdateStudentModal
-          open={openModal}
-          onClose={() => setOpenModal(false)}
-        />
+        <UpdateStudentModal open={openModal} onClose={handleCloseModal} />
+        <SnackbarAlert />
       </Box>
     </Grid2>
   );

@@ -147,10 +147,11 @@ export function FormLogin() {
         <Button
           variant="contained"
           type="submit"
+          disabled={userLogged.loading}
           sx={{ textTransform: "capitalize" }}
           fullWidth
         >
-          Entrar
+          {userLogged.loading ? "Aguarde" : "Entrar"}
         </Button>
       </Grid2>
     </Grid2>

@@ -16,13 +16,13 @@ import { useEffect, useMemo, useState } from "react";
 import {
   deleteStudentAsyncThunk,
   fetchStudentsAsyncThunk,
-  findStudentAsyncThunk,
 } from "../../store/modules/students/studentsActions";
 import { ActionsMenu } from "../ActionsMenu";
 import { ArrowBack, Delete, Edit } from "@mui/icons-material";
 import { Student } from "../../utils/types";
 import { setStudentDetail } from "../../store/modules/studentDetail/studentDetailSlice";
 import { useNavigate } from "react-router-dom";
+import { fetchAssessmentsAsyncThunk } from "../../store/modules/assessments/assessments.action";
 
 const LIMIT = 20; // Variavel de ambiente
 
@@ -33,9 +33,6 @@ export function TableStudents() {
     (state) => state.students
   );
   const { assessments } = useAppSelector((state) => state.assessments);
-  const { studentDetail } = useAppSelector(
-    ({ studentDetail }) => studentDetail
-  );
   const [page, setPage] = useState(1); // URL
 
   const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
@@ -47,21 +44,20 @@ export function TableStudents() {
   }, [count]);
 
   function handleEdit(student: Student) {
-    if (!studentDetail || studentDetail.id !== student.id) {
-      dispatch(findStudentAsyncThunk(student.id)).then((response) => {
-        console.log("if", response.payload);
-
-        dispatch(setStudentDetail(response.payload as Student));
-      });
-    } else dispatch(setStudentDetail(student));
+    dispatch(setStudentDetail(student));
   }
 
   function handleDelete(id: string) {
     dispatch(deleteStudentAsyncThunk({ id }));
   }
 
+  const handleRowClick = (id: string) => {
+    navigate(`/students/${id}`);
+  };
+
   useEffect(() => {
     dispatch(fetchStudentsAsyncThunk({ page: page, take: LIMIT }));
+    dispatch(fetchAssessmentsAsyncThunk({ page: page, take: LIMIT }));
   }, [page]);
 
   return (
@@ -134,7 +130,11 @@ export function TableStudents() {
                 .map((row, index) => (
                   <TableRow
                     key={row.id}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    sx={{
+                      "&:last-child td, &:last-child th": { border: 0 },
+                      cursor: "pointer",
+                    }}
+                    onClick={() => handleRowClick(row.id)}
                   >
                     <TableCell component="th" scope="row">
                       {index + 1}
@@ -149,7 +149,7 @@ export function TableStudents() {
                     <TableCell align="right">
                       {new Date(row.registeredAt).toLocaleDateString("pt-BR")}
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell align="right" sx={{ cursor: "pointer" }}>
                       {
                         assessments.filter(
                           (assessment) => assessment.studentId === row.id

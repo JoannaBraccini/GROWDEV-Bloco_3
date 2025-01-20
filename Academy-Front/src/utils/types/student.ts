@@ -1,3 +1,5 @@
+import { Assessment } from "./assessment";
+
 export interface Student {
   id: string;
   name: string;
@@ -6,6 +8,7 @@ export interface Student {
   email: string;
   type: StudentType;
   registeredAt: string;
+  assessments: Assessment[];
 }
 
 export type StudentType = "M" | "F" | "T";

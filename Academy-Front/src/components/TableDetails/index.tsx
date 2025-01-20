@@ -13,29 +13,22 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { useEffect, useMemo, useState } from "react";
-import {
-  deleteAssessmentAsyncThunk,
-  fetchAssessmentsAsyncThunk,
-} from "../../store/modules/assessments/assessments.action";
+import { useMemo, useState } from "react";
+import { deleteAssessmentAsyncThunk } from "../../store/modules/assessments/assessments.action";
 import { setAssessentDetail } from "../../store/modules/assessmentDetail/assessmentDetailSlice";
 import { Assessment } from "../../utils/types";
 import { ActionsMenu } from "../ActionsMenu";
 import { useNavigate } from "react-router-dom";
-import {
-  fetchStudentsAsyncThunk,
-  findStudentAsyncThunk,
-} from "../../store/modules/students/studentsActions";
 const LIMIT = 20; // Variavel de ambiente
 
-export function TableAssessments() {
+export function TableDetails() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { assessments, count, loadingList } = useAppSelector(
-    (state) => state.assessments
-  );
   const { students } = useAppSelector((state) => state.students);
-  const { student } = useAppSelector((state) => state.userLogged);
+  const { studentDetail, loading } = useAppSelector(
+    (state) => state.studentDetail
+  );
+  const userLogged = useAppSelector((state) => state.userLogged);
   const [page, setPage] = useState(1); // URL
 
   const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
@@ -43,31 +36,21 @@ export function TableAssessments() {
   };
 
   const numberPages = useMemo(() => {
-    return Math.ceil(count / LIMIT);
-  }, [count]);
+    return Math.ceil(studentDetail.assessments.length / LIMIT);
+  }, [studentDetail.assessments.length]);
 
-  const handleEdit = (assessment: Assessment) => {
+  function handleEdit(assessment: Assessment) {
     dispatch(setAssessentDetail(assessment));
-  };
+  }
 
-  const handleDelete = (id: string) => {
+  function handleDelete(id: string) {
     dispatch(deleteAssessmentAsyncThunk({ id }));
-  };
-
-  const handleRowClick = (id: string) => {
-    dispatch(findStudentAsyncThunk(id)).then(() => {
-      navigate(`/students/${id}`);
-    });
-  };
-
-  useEffect(() => {
-    dispatch(fetchStudentsAsyncThunk({ page: page, take: LIMIT }));
-    dispatch(fetchAssessmentsAsyncThunk({ page: page, take: LIMIT }));
-  }, [page]);
+  }
 
   return (
     <TableContainer>
-      {!assessments ? (
+      {(!loading && !studentDetail.assessments) ||
+      studentDetail.assessments.length < 1 ? (
         <Typography variant="subtitle2" textAlign="center">
           Nenhuma avaliação registrada. Crie uma!
         </Typography>
@@ -83,9 +66,6 @@ export function TableAssessments() {
                 Descrição
               </TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Estudante
-              </TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
                 Nota
               </TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
@@ -96,7 +76,7 @@ export function TableAssessments() {
               </TableCell>
               <TableCell
                 align="right"
-                onClick={() => navigate("/home")}
+                onClick={() => navigate(-1)} //Voltar para a página anterior
                 sx={{
                   fontWeight: "bold",
                   display: "flex",
@@ -110,7 +90,7 @@ export function TableAssessments() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {loadingList ? (
+            {loading ? (
               <TableRow
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
@@ -125,54 +105,42 @@ export function TableAssessments() {
                 </TableCell>
               </TableRow>
             ) : (
-              assessments
-                .filter((row) => row?.id)
-                .map((row, index) => (
-                  <TableRow
-                    key={row.id}
-                    sx={{
-                      "&:last-child td, &:last-child th": { border: 0 },
-                      cursor: "pointer",
-                    }}
-                    onClick={() => handleRowClick(row.studentId)}
-                  >
-                    <TableCell component="th" scope="row">
-                      {index + 1}
-                    </TableCell>
-                    <TableCell align="right">{row.title}</TableCell>
-                    <TableCell align="right">{row.description}</TableCell>
-                    <TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
-                      {students.find((stud) => stud.id === row.studentId)?.name}
-                    </TableCell>
-                    <TableCell align="right">{row.grade}</TableCell>
-                    <TableCell align="right">
-                      {new Date(row.createdAt).toLocaleDateString("pt-BR")}
-                    </TableCell>
-                    <TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
-                      {students.find((user) => user.id === row.createdBy)?.name}
-                    </TableCell>
-                    <TableCell align="right">
-                      {student.type === "T" && (
-                        <ActionsMenu>
-                          <MenuItem
-                            onClick={() => handleEdit(row)}
-                            disableRipple
-                          >
-                            <Edit />
-                            Editar
-                          </MenuItem>
-                          <MenuItem
-                            onClick={() => handleDelete(row.id)}
-                            disableRipple
-                          >
-                            <Delete />
-                            Excluir
-                          </MenuItem>
-                        </ActionsMenu>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))
+              studentDetail.assessments.map((row, index) => (
+                <TableRow
+                  key={row.id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {index + 1}
+                  </TableCell>
+                  <TableCell align="right">{row.title}</TableCell>
+                  <TableCell align="right">{row.description}</TableCell>
+                  <TableCell align="right">{row.grade}</TableCell>
+                  <TableCell align="right">
+                    {new Date(row.createdAt).toLocaleDateString("pt-BR")}
+                  </TableCell>
+                  <TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
+                    {students.find((user) => user.id === row.createdBy)?.name}
+                  </TableCell>
+                  <TableCell align="right">
+                    {userLogged.student.type === "T" && (
+                      <ActionsMenu>
+                        <MenuItem onClick={() => handleEdit(row)} disableRipple>
+                          <Edit />
+                          Editar
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => handleDelete(row.id)}
+                          disableRipple
+                        >
+                          <Delete />
+                          Excluir
+                        </MenuItem>
+                      </ActionsMenu>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))
             )}
           </TableBody>
         </Table>

@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { style } from "./styles";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   FieldsErrors,
   validateFormAssessment,
@@ -31,7 +31,7 @@ export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
 
   const userLogged = useAppSelector((state) => state.userLogged);
   const { students } = useAppSelector((state) => state.students);
-  const assessments = useAppSelector((state) => state.assessments);
+  const { ok, message, loading } = useAppSelector((state) => state.assessments);
   const { assessmentDetail } = useAppSelector(
     ({ assessmentDetail }) => assessmentDetail
   );
@@ -85,20 +85,18 @@ export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
       // MODO CREATE
       dispatch(createAssessmentAsyncThunk(data));
     }
+
+    if (ok && message) {
+      setTimeout(() => {
+        onClose();
+      }, 1000);
+    }
   }
 
   function handleClose() {
     dispatch(resetAssessmentDetail());
     onClose();
   }
-
-  useEffect(() => {
-    if (assessments.ok && assessments.message) {
-      setTimeout(() => {
-        onClose();
-      }, 1000);
-    }
-  }, [assessments]);
 
   return (
     <Modal
@@ -240,10 +238,10 @@ export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
               <Button
                 variant="contained"
                 type="submit"
-                disabled={assessments.loading}
+                disabled={loading}
                 fullWidth
               >
-                {assessments.loading ? "Aguarde..." : "Enviar"}
+                {loading ? "Aguarde..." : "Enviar"}
               </Button>
             </Grid2>
           </Grid2>
