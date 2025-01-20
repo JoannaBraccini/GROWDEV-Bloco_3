@@ -20,7 +20,7 @@ const initialState: InitialState = {
     cpf: "",
     age: null,
     email: "",
-    type: "M",
+    studentType: "M",
     registeredAt: "",
     assessments: [],
   },

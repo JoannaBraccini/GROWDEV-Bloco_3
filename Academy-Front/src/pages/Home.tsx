@@ -37,7 +37,7 @@ export function Home() {
               </Typography>
             </Typography>
           </Grid2>
-          {student.type === "T" ? <TechHelperHome /> : <StudentHome />}
+          {student.studentType === "T" ? <TechHelperHome /> : <StudentHome />}
         </>
       )}
       <SnackbarAlert />

@@ -12,5 +12,5 @@ export interface SignupRequest {
   age: number | null;
   email: string;
   password: string;
-  type: StudentType;
+  studentType: StudentType;
 }

@@ -19,7 +19,7 @@ interface ErrorFields {
   email?: string;
   password?: string;
   repeatPassword?: string;
-  type?: string;
+  studentType?: string;
   cpf?: string;
 }
 
@@ -35,7 +35,7 @@ export function FormSignup() {
     email: "",
     password: "",
     repeatPassword: "",
-    type: "",
+    studentType: "",
     cpf: "",
   });
 
@@ -45,7 +45,7 @@ export function FormSignup() {
     email: string,
     password: string,
     repeatPassword: string,
-    type: StudentType
+    studentType: StudentType
   ) {
     if (!name) {
       setErrors({ name: "Nome é obrigatório!" });
@@ -74,7 +74,7 @@ export function FormSignup() {
       setErrors({ password: "As senhas devem ser iguais!" });
       return;
     }
-    if (!type) {
+    if (!studentType) {
       setErrors({ email: "Tipo é obrigatório!" });
       return;
     }
@@ -91,10 +91,12 @@ export function FormSignup() {
     const email = event.currentTarget.email.value;
     const password = event.currentTarget.password.value;
     const repeatPassword = event.currentTarget["repeat-password"].value;
-    const type = event.currentTarget.type.value;
+    const studentType = event.currentTarget["student-type"].value;
 
-    validate(name, cpf, email, password, repeatPassword, type);
-    dispatch(signupAsyncThunk({ name, email, password, type, cpf, age }));
+    validate(name, cpf, email, password, repeatPassword, studentType);
+    dispatch(
+      signupAsyncThunk({ name, email, password, studentType, cpf, age })
+    );
     if (userCreated) {
       setTimeout(() => {
         navigate("/login");
@@ -271,19 +273,19 @@ export function FormSignup() {
       </Grid2>
 
       <Grid2 size={12}>
-        <FormControl fullWidth error={!!errors.type}>
+        <FormControl fullWidth error={!!errors.studentType}>
           <TextField
-            id="type"
-            name="type"
+            id="student-type"
+            name="student-type"
             select
             variant="outlined"
             size="small"
             fullWidth
-            error={!!errors.type}
-            helperText={errors.type}
+            error={!!errors.studentType}
+            helperText={errors.studentType}
             onChange={(e) => {
               if (e.target.value) {
-                setErrors({ ...errors, type: "" });
+                setErrors({ ...errors, studentType: "" });
               }
             }}
             slotProps={{

@@ -7,7 +7,7 @@ import { showAlert } from "../alert/alertSlice";
 export const signupAsyncThunk = createAsyncThunk(
   "userCreated/signup",
   async (data: SignupRequest, { dispatch }) => {
-    const { name, cpf, age, email, password, type } = data;
+    const { name, cpf, age, email, password, studentType } = data;
 
     const response = await signupService({
       name,
@@ -15,7 +15,7 @@ export const signupAsyncThunk = createAsyncThunk(
       age,
       email,
       password,
-      type,
+      studentType,
     });
 
     if (!response.ok) {
@@ -55,8 +55,9 @@ const initialState: InitialState = {
     cpf: "",
     age: null,
     email: "",
-    type: "M",
+    studentType: "M",
     registeredAt: "",
+    assessments: [],
   },
 };
 

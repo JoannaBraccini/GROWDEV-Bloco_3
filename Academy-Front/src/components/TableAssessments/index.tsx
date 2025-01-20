@@ -152,7 +152,7 @@ export function TableAssessments() {
                       {students.find((user) => user.id === row.createdBy)?.name}
                     </TableCell>
                     <TableCell align="right">
-                      {student.type === "T" && (
+                      {student.studentType === "T" && (
                         <ActionsMenu>
                           <MenuItem
                             onClick={() => handleEdit(row)}

@@ -123,7 +123,7 @@ export function TableDetails() {
                     {students.find((user) => user.id === row.createdBy)?.name}
                   </TableCell>
                   <TableCell align="right">
-                    {userLogged.student.type === "T" && (
+                    {userLogged.student.studentType === "T" && (
                       <ActionsMenu>
                         <MenuItem onClick={() => handleEdit(row)} disableRipple>
                           <Edit />

@@ -37,7 +37,7 @@ export function UpdateStudentModal({ open, onClose }: UpsertModalProps) {
     age: "",
     passwordOld: "",
     passwordNew: "",
-    type: "",
+    studentType: "",
   });
 
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -47,7 +47,8 @@ export function UpdateStudentModal({ open, onClose }: UpsertModalProps) {
     const age = Number(event.currentTarget["age-student"].value);
     const passwordOld = event.currentTarget["password-old"].value;
     const passwordNew = event.currentTarget["password-new"].value;
-    const type = event.currentTarget["type"].value as StudentType;
+    const studentType = event.currentTarget["student-type"]
+      .value as StudentType;
 
     const errors = validateFormStudent(name, passwordOld, passwordNew);
     // Converter um objeto em array
@@ -65,7 +66,8 @@ export function UpdateStudentModal({ open, onClose }: UpsertModalProps) {
     if (age !== studentDetail.age) updatedFields.age = age;
     if (passwordOld) updatedFields.passwordOld = passwordOld;
     if (passwordNew) updatedFields.passwordNew = passwordNew;
-    if (type !== studentDetail.type) updatedFields.type = type;
+    if (studentType !== studentDetail.studentType)
+      updatedFields.studentType = studentType;
 
     dispatch(
       updateStudentAsyncThunk({
@@ -104,16 +106,16 @@ export function UpdateStudentModal({ open, onClose }: UpsertModalProps) {
 
             {/** Type */}
             <Grid2 size={12}>
-              <FormControl fullWidth error={!!fieldsErrors.type}>
-                <FormLabel htmlFor="type-student">Tipo</FormLabel>
+              <FormControl fullWidth error={!!fieldsErrors.studentType}>
+                <FormLabel htmlFor="student-type">Tipo</FormLabel>
                 <Select
-                  id="type"
-                  name="type"
+                  id="student-type"
+                  name="student-type"
                   variant="outlined"
                   size="small"
                   fullWidth
-                  error={!!fieldsErrors.type}
-                  defaultValue={studentDetail.type}
+                  error={!!fieldsErrors.studentType}
+                  defaultValue={studentDetail.studentType}
                   onChange={(e) => e.target.value as StudentType}
                 >
                   <MenuItem value="M">Matriculado</MenuItem>

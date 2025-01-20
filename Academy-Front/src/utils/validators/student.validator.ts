@@ -5,7 +5,7 @@ export interface StudentFieldsErrors {
   age?: string;
   passwordOld?: string;
   passwordNew?: string;
-  type: StudentType | "";
+  studentType: StudentType | "";
 }
 
 export function validateFormStudent(

@@ -52,7 +52,7 @@ interface InitialState {
     id: string;
     name: string;
     email: string;
-    type: StudentType;
+    studentType: StudentType;
     remember: boolean;
   };
 }
@@ -66,7 +66,7 @@ const initialState: InitialState = {
     id: "",
     name: "",
     email: "",
-    type: "M",
+    studentType: "M",
     remember: false,
   },
 };

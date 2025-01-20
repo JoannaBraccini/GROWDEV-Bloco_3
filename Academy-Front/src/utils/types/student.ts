@@ -6,7 +6,7 @@ export interface Student {
   cpf: string;
   age: number | null;
   email: string;
-  type: StudentType;
+  studentType: StudentType;
   registeredAt: string;
   assessments: Assessment[];
 }
@@ -19,7 +19,7 @@ export type QueryStudentRequest = Partial<Pick<Student, "name" | "cpf">> & {
 };
 
 export type UpdateStudentRequest = Partial<
-  Pick<Student, "name" | "age" | "type">
+  Pick<Student, "name" | "age" | "studentType">
 > & {
   id: string;
   passwordOld?: string;

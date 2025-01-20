@@ -18,8 +18,8 @@ import { findStudentAsyncThunk } from "../store/modules/students/studentsActions
 import SnackbarAlert from "../components/SnackbarAlert";
 import { Loading } from "../components/Loading";
 
-const typeText = (type: StudentType) => {
-  switch (type) {
+const typeText = (studentType: StudentType) => {
+  switch (studentType) {
     case "T":
       return "Tech-Helper";
     case "M":
@@ -97,7 +97,7 @@ export function Profile() {
               <ListItem>
                 <ListItemText
                   primary="Tipo"
-                  secondary={typeText(studentDetail.type)}
+                  secondary={typeText(studentDetail.studentType)}
                 />
               </ListItem>
               <ListItem>

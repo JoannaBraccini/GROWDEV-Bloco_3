@@ -204,7 +204,7 @@ export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
                   ) : (
                     <>
                       <option value="">Selecionar Estudante</option>
-                      {userLogged.student.type !== "T" ? (
+                      {userLogged.student.studentType !== "T" ? (
                         <option
                           key={userLogged.student.id}
                           value={userLogged.student.id}
