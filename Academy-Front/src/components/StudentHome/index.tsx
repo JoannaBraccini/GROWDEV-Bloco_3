@@ -9,12 +9,22 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useEffect } from "react";
 import { findStudentAsyncThunk } from "../../store/modules/students/studentsActions";
+import { showAlert } from "../../store/modules/alert/alertSlice";
 
 export default function StudentHome() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { student } = useAppSelector((state) => state.userLogged);
   const { loading } = useAppSelector((state) => state.studentDetail);
+
+  const handleTasks = () => {
+    dispatch(
+      showAlert({
+        message: "Nenhuma atividade em aberto",
+        type: "warning",
+      })
+    );
+  };
 
   useEffect(() => {
     dispatch(findStudentAsyncThunk(student.id));
@@ -56,7 +66,7 @@ export default function StudentHome() {
       <ListItem>
         <ListItemAvatar>
           <Avatar>
-            <IconButton>
+            <IconButton onClick={handleTasks}>
               <CalendarMonth />
             </IconButton>
           </Avatar>

@@ -6,9 +6,21 @@ import Avatar from "@mui/material/Avatar";
 import { AccountBox, Ballot, CalendarMonth } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../store/hooks";
+import { showAlert } from "../../store/modules/alert/alertSlice";
 
 export default function TechHelperHome() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const handleTasks = () => {
+    dispatch(
+      showAlert({
+        message: "Nenhuma atividade em aberto",
+        type: "warning",
+      })
+    );
+  };
   return (
     <List
       sx={{
@@ -41,7 +53,7 @@ export default function TechHelperHome() {
       <ListItem>
         <ListItemAvatar>
           <Avatar>
-            <IconButton>
+            <IconButton onClick={handleTasks}>
               <CalendarMonth />
             </IconButton>
           </Avatar>
