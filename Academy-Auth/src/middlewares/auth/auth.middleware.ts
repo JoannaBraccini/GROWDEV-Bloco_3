@@ -22,9 +22,16 @@ export class AuthMiddleware {
       return;
     }
 
-    // Bearer aisjdmasopikdasokdp
-    const [_, token] = authorization.split(" "); // => ["Bearer", "aspodkasopkdasopk"]
-    // const token = authorization.split(" ")[1]
+    //const [_, token] = authorization.split(" "); => ["Bearer", "aspodkasopkdasopk"]
+    const token = authorization.split(" ")[1];
+
+    if (!authorization.startsWith("Bearer ") || !token) {
+      res.status(401).json({
+        ok: false,
+        message: "Token ausente ou inválido!",
+      });
+      return;
+    }
 
     const jwt = new JWT();
     const studentDecoded = jwt.verifyToken(token);
@@ -32,7 +39,7 @@ export class AuthMiddleware {
     if (!studentDecoded) {
       res.status(401).json({
         ok: false,
-        message: "Não autenticado!",
+        message: "Token inválido ou expirado!",
       });
       return;
     }
