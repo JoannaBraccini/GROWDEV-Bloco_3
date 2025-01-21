@@ -52,7 +52,7 @@
               "application/json": {
                 "schema": {
                   "allOf": [
-                    { "$ref": "#/components/schemas/ApiResponse" },
+                    { "$ref": "#/components/schemas/SuccessResponse" },
                     {
                       "type": "object",
                       "properties": {
@@ -69,7 +69,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                  "allOf": [{ "$ref": "#/components/schemas/ErrorResponse" }]
                 }
               }
             }
@@ -110,7 +110,7 @@
               "application/json": {
                 "schema": {
                   "allOf": [
-                    { "$ref": "#/components/schemas/ApiResponse" },
+                    { "$ref": "#/components/schemas/SuccessResponse" },
                     {
                       "type": "object",
                       "properties": {
@@ -127,7 +127,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                  "allOf": [{ "$ref": "#/components/schemas/ErrorResponse" }]
                 }
               }
             }
@@ -169,7 +169,7 @@
               "application/json": {
                 "schema": {
                   "allOf": [
-                    { "$ref": "#/components/schemas/ApiResponse" },
+                    { "$ref": "#/components/schemas/SuccessResponse" },
                     {
                       "type": "object",
                       "properties": {
@@ -191,7 +191,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                  "allOf": [{ "$ref": "#/components/schemas/ErrorResponse" }]
                 }
               }
             }
@@ -201,7 +201,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                  "allOf": [{ "$ref": "#/components/schemas/ErrorResponse" }]
                 }
               }
             }
@@ -238,7 +238,7 @@
               "application/json": {
                 "schema": {
                   "allOf": [
-                    { "$ref": "#/components/schemas/ApiResponse" },
+                    { "$ref": "#/components/schemas/SuccessResponse" },
                     {
                       "type": "object",
                       "properties": {
@@ -258,7 +258,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                  "allOf": [{ "$ref": "#/components/schemas/ErrorResponse" }]
                 }
               }
             }
@@ -268,7 +268,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                  "allOf": [{ "$ref": "#/components/schemas/ErrorResponse" }]
                 }
               }
             }
@@ -343,7 +343,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -353,7 +353,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -363,7 +363,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -398,7 +398,7 @@
               "application/json": {
                 "schema": {
                   "allOf": [
-                    { "$ref": "#/components/schemas/ApiResponse" },
+                    { "$ref": "#/components/schemas/SuccessResponse" },
                     {
                       "type": "object",
                       "properties": {
@@ -418,7 +418,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                  "allOf": [{ "$ref": "#/components/schemas/ErrorResponse" }]
                 }
               }
             }
@@ -428,7 +428,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                  "allOf": [{ "$ref": "#/components/schemas/ErrorResponse" }]
                 }
               }
             }
@@ -475,7 +475,7 @@
               "application/json": {
                 "schema": {
                   "allOf": [
-                    { "$ref": "#/components/schemas/ApiResponse" },
+                    { "$ref": "#/components/schemas/SuccessResponse" },
                     {
                       "type": "object",
                       "properties": {
@@ -497,7 +497,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                  "allOf": [{ "$ref": "#/components/schemas/ErrorResponse" }]
                 }
               }
             }
@@ -507,7 +507,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                  "allOf": [{ "$ref": "#/components/schemas/ErrorResponse" }]
                 }
               }
             }
@@ -544,7 +544,7 @@
               "application/json": {
                 "schema": {
                   "allOf": [
-                    { "$ref": "#/components/schemas/ApiResponse" },
+                    { "$ref": "#/components/schemas/SuccessResponse" },
                     {
                       "type": "object",
                       "properties": {
@@ -566,7 +566,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                  "allOf": [{ "$ref": "#/components/schemas/ErrorResponse" }]
                 }
               }
             }
@@ -576,7 +576,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                  "allOf": [{ "$ref": "#/components/schemas/ErrorResponse" }]
                 }
               }
             }
@@ -646,7 +646,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -656,7 +656,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -666,7 +666,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -701,7 +701,7 @@
               "application/json": {
                 "schema": {
                   "allOf": [
-                    { "$ref": "#/components/schemas/ApiResponse" },
+                    { "$ref": "#/components/schemas/SuccessResponse" },
                     {
                       "type": "object",
                       "properties": {
@@ -723,7 +723,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                  "allOf": [{ "$ref": "#/components/schemas/ErrorResponse" }]
                 }
               }
             }
@@ -733,7 +733,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                  "allOf": [{ "$ref": "#/components/schemas/ErrorResponse" }]
                 }
               }
             }
@@ -749,7 +749,7 @@
   },
   "components": {
     "schemas": {
-      "ApiResponse": {
+      "SuccessResponse": {
         "type": "object",
         "properties": {
           "ok": {
@@ -759,6 +759,19 @@
           "message": {
             "type": "string",
             "examples": ["Operação realizada com sucesso"]
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "examples": ["false"]
+          },
+          "message": {
+            "type": "string",
+            "examples": ["Erro ao realizar operação"]
           }
         }
       },
