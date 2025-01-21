@@ -56,7 +56,7 @@ export default function AppBar() {
           />
 
           <Box>
-            <Tooltip title="Open settings">
+            <Tooltip title="Configurações">
               <Button onClick={handleOpenUserMenu}>
                 <Typography
                   textTransform="capitalize"
@@ -68,7 +68,7 @@ export default function AppBar() {
                   {student.name}
                 </Typography>
                 <Avatar
-                  alt="Remy Sharp"
+                  alt={student.name}
                   src="https://img.freepik.com/premium-vector/avatar-icon002_750950-52.jpg"
                 />
               </Button>

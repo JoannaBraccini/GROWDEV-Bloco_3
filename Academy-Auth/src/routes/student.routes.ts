@@ -4,8 +4,6 @@ import { FindAllStudentMidlleware } from "../middlewares/students/find-all-stude
 import { ValidateUuidMiddleware } from "../middlewares/validate-uuid.middleware";
 import { UpdateStudentMiddleware } from "../middlewares/students/update-student.middleware";
 import { AuthMiddleware } from "../middlewares/auth/auth.middleware";
-import { TypeMiddleware } from "../middlewares/type.middleware";
-import { StudentType } from "@prisma/client";
 
 export class StudentRoutes {
   public static execute(): Router {
@@ -15,7 +13,7 @@ export class StudentRoutes {
       "/students",
       [
         AuthMiddleware.validate,
-        TypeMiddleware.validate([StudentType.T]), //somente tech-helpers podem visualizar a lista de estudantes
+        // TypeMiddleware.validate([StudentType.T]), //somente tech-helpers podem visualizar a lista de estudantes
         FindAllStudentMidlleware.validateTypes,
       ],
       StudentController.findAll

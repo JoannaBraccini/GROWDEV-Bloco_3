@@ -62,9 +62,6 @@ const assessmentsSlice = createSlice({
         state.message = action.payload.message;
 
         if (action.payload.ok) {
-          // data => { count, assessments }
-          console.log("assess");
-
           state.assessments = action.payload.data;
 
           if (action.payload.data.count > 0) {

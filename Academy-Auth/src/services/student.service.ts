@@ -12,8 +12,8 @@ export class StudentService {
   public async findAll({
     name,
     cpf,
-    page,
-    take,
+    id,
+    studentType,
   }: QueryFilterDto): Promise<ResponseApi> {
     const where: Prisma.StudentWhereInput = {};
 
@@ -25,11 +25,21 @@ export class StudentService {
       where.cpf = { contains: cpf };
     }
 
+    if (studentType !== "T") {
+      where.id = { equals: id };
+    }
+
     const students = await prisma.student.findMany({
-      skip: page,
-      take: take,
       where,
     });
+
+    if (!students) {
+      return {
+        ok: false,
+        code: 404,
+        message: "Dados não encontrados",
+      };
+    }
 
     return {
       ok: true,

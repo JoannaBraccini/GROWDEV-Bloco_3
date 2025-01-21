@@ -61,7 +61,7 @@ export function TableAssessments() {
   };
 
   useEffect(() => {
-    dispatch(fetchStudentsAsyncThunk({ page: page, take: LIMIT }));
+    dispatch(fetchStudentsAsyncThunk({}));
     dispatch(fetchAssessmentsAsyncThunk({ page: page, take: LIMIT }));
   }, [page]);
 
@@ -88,10 +88,16 @@ export function TableAssessments() {
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
                 Nota
               </TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+              <TableCell
+                align="right"
+                sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}
+              >
                 Criada Em
               </TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+              <TableCell
+                align="right"
+                sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}
+              >
                 Criada Por
               </TableCell>
               <TableCell

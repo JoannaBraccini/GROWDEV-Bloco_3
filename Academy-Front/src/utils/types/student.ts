@@ -13,10 +13,7 @@ export interface Student {
 
 export type StudentType = "M" | "F" | "T";
 
-export type QueryStudentRequest = Partial<Pick<Student, "name" | "cpf">> & {
-  page?: number | null;
-  take?: number | null;
-};
+export type QueryStudentRequest = Partial<Pick<Student, "name" | "cpf">>;
 
 export type UpdateStudentRequest = Partial<
   Pick<Student, "name" | "age" | "studentType">

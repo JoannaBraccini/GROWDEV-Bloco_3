@@ -11,14 +11,6 @@ export async function fetchStudentsService(
   const { token } = query;
   const params = new URLSearchParams();
 
-  if (query.page) {
-    params.set("page", String(query.page));
-  }
-
-  if (query.take) {
-    params.set("take", String(query.take));
-  }
-
   if (query.cpf) {
     params.set("cpf", String(query.cpf));
   }
