@@ -76,6 +76,7 @@ const userLoggedSlice = createSlice({
   initialState,
   reducers: {
     logout() {
+      localStorage.removeItem("userLogged");
       return initialState;
     },
   },

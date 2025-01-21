@@ -28,15 +28,15 @@ const router = createBrowserRouter([
     element: <DefaultLayout children={<Profile />} />,
   },
   {
-    path: "/assessments",
-    element: <DefaultLayout children={<Assessments />} />,
-  },
-  {
     path: "/students",
     element: <DefaultLayout children={<Students />} />,
   },
   {
-    path: "/students/:id",
+    path: "/assessments",
+    element: <DefaultLayout children={<Assessments />} />,
+  },
+  {
+    path: "/details/:id",
     element: <DefaultLayout children={<Details />} />,
   },
   {

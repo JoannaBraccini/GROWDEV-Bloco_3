@@ -25,9 +25,9 @@ export class StudentService {
       where.cpf = { contains: cpf };
     }
 
-    if (studentType !== "T") {
-      where.id = { equals: id };
-    }
+    // if (studentType !== "T") {
+    //   where.id = { equals: id };
+    // }
 
     const students = await prisma.student.findMany({
       where,

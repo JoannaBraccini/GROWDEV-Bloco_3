@@ -56,7 +56,7 @@ export function TableAssessments() {
 
   const handleRowClick = (id: string) => {
     dispatch(findStudentAsyncThunk(id)).then(() => {
-      navigate(`/students/${id}`);
+      navigate(`/details/${id}`);
     });
   };
 
@@ -67,7 +67,7 @@ export function TableAssessments() {
 
   return (
     <TableContainer>
-      {!assessments ? (
+      {!assessments || assessments.length < 1 ? (
         <Typography variant="subtitle2" textAlign="center">
           Nenhuma avaliação registrada. Crie uma!
         </Typography>
@@ -155,7 +155,8 @@ export function TableAssessments() {
                       {new Date(row.createdAt).toLocaleDateString("pt-BR")}
                     </TableCell>
                     <TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
-                      {students.find((user) => user.id === row.createdBy)?.name}
+                      {students.find((user) => user.id === row.createdBy)
+                        ?.name || "Desconhecido"}
                     </TableCell>
                     <TableCell align="right">
                       {student.studentType === "T" && (

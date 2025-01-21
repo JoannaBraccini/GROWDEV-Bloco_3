@@ -23,6 +23,8 @@ import { Student } from "../../utils/types";
 import { setStudentDetail } from "../../store/modules/studentDetail/studentDetailSlice";
 import { useNavigate } from "react-router-dom";
 import { fetchAssessmentsAsyncThunk } from "../../store/modules/assessments/assessments.action";
+import { showAlert } from "../../store/modules/alert/alertSlice";
+import { logout } from "../../store/modules/auth/userLoggedSlice";
 
 const LIMIT = 20; // Variavel de ambiente
 
@@ -33,6 +35,7 @@ export function TableStudents() {
     (state) => state.students
   );
   const { assessments } = useAppSelector((state) => state.assessments);
+  const { student } = useAppSelector(({ userLogged }) => userLogged);
   const [page, setPage] = useState(1); // URL
 
   const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
@@ -52,11 +55,27 @@ export function TableStudents() {
   }
 
   const handleRowClick = (id: string) => {
-    navigate(`/students/${id}`);
+    navigate(`/details/${id}`);
   };
 
   useEffect(() => {
-    dispatch(fetchStudentsAsyncThunk({ page: page, take: LIMIT }));
+    if (student.studentType !== "T") {
+      dispatch(
+        showAlert({
+          message: "Acesso não autorizado.",
+          type: "error",
+        })
+      );
+      dispatch(logout());
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
+    }
+  }, []);
+
+  useEffect(() => {
+    dispatch(fetchStudentsAsyncThunk({}));
     dispatch(fetchAssessmentsAsyncThunk({ page: page, take: LIMIT }));
   }, [page]);
 
@@ -145,7 +164,7 @@ export function TableStudents() {
                       {row.age ? row.age : "Not informed"}
                     </TableCell>
                     <TableCell align="right">{row.email}</TableCell>
-                    <TableCell align="right">{row.type}</TableCell>
+                    <TableCell align="right">{row.studentType}</TableCell>
                     <TableCell align="right">
                       {new Date(row.registeredAt).toLocaleDateString("pt-BR")}
                     </TableCell>

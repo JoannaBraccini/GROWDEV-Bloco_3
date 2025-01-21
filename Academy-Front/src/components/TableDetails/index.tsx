@@ -19,7 +19,6 @@ import { setAssessentDetail } from "../../store/modules/assessmentDetail/assessm
 import { Assessment } from "../../utils/types";
 import { ActionsMenu } from "../ActionsMenu";
 import { useNavigate } from "react-router-dom";
-const LIMIT = 20; // Variavel de ambiente
 
 export function TableDetails() {
   const navigate = useNavigate();
@@ -30,6 +29,7 @@ export function TableDetails() {
   );
   const userLogged = useAppSelector((state) => state.userLogged);
   const [page, setPage] = useState(1); // URL
+  const LIMIT = import.meta.env.LIMIT;
 
   const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
