@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 
 export class UpdateStudentMiddleware {
   public static validateTypes(req: Request, res: Response, next: NextFunction) {
-    const { name, password, type, age } = req.body;
+    const { name, password, studentType, age } = req.body;
 
     if (name && typeof name !== "string") {
       res.status(400).json({
@@ -20,10 +20,10 @@ export class UpdateStudentMiddleware {
     }
 
     if (
-      type &&
-      type !== StudentType.F &&
-      type !== StudentType.M &&
-      type !== StudentType.T
+      studentType &&
+      studentType !== StudentType.F &&
+      studentType !== StudentType.M &&
+      studentType !== StudentType.T
     ) {
       res.status(400).json({
         ok: false,

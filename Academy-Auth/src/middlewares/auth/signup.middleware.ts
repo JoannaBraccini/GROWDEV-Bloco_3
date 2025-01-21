@@ -7,7 +7,7 @@ export class SignupMiddleware {
     res: Response,
     next: NextFunction
   ) {
-    const { name, email, password, type, age, cpf } = req.body;
+    const { name, email, password, studentType, age, cpf } = req.body;
 
     if (!name) {
       res.status(400).json({
@@ -30,7 +30,7 @@ export class SignupMiddleware {
       });
     }
 
-    if (!type) {
+    if (!studentType) {
       res.status(400).json({
         ok: false,
         message: "Tipo é obrigatório.",
