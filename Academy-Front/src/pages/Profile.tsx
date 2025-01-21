@@ -17,6 +17,8 @@ import { UpdateStudentModal } from "../components/UpdateStudentModal";
 import { findStudentAsyncThunk } from "../store/modules/students/studentsActions";
 import SnackbarAlert from "../components/SnackbarAlert";
 import { Loading } from "../components/Loading";
+import { showAlert } from "../store/modules/alert/alertSlice";
+import { logout } from "../store/modules/auth/userLoggedSlice";
 
 const typeText = (studentType: StudentType) => {
   switch (studentType) {
@@ -49,7 +51,22 @@ export function Profile() {
 
   useEffect(() => {
     if (!studentDetail || studentDetail.id !== userLogged.student.id) {
-      dispatch(findStudentAsyncThunk(userLogged.student.id));
+      dispatch(findStudentAsyncThunk(userLogged.student.id)).then(
+        (response) => {
+          if (!response.payload) {
+            dispatch(
+              showAlert({
+                message: "Sessão expirada. Faça login novamente.",
+                type: "error",
+              })
+            );
+            setTimeout(() => {
+              dispatch(logout());
+              navigate("/login");
+            }, 2000);
+          }
+        }
+      );
     }
   }, [studentDetail, dispatch, userLogged.student.id]);
 

@@ -89,7 +89,7 @@ export function UpsertAssessmentModal({ open, onClose }: UpsertModalProps) {
     if (ok && message) {
       setTimeout(() => {
         onClose();
-      }, 1000);
+      }, 2000);
     }
   }
 

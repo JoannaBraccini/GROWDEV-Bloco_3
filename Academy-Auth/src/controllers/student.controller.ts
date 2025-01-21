@@ -5,13 +5,15 @@ export class StudentController {
   public static async findAll(req: Request, res: Response): Promise<void> {
     try {
       // 1- Pegar do query
-      const { name, cpf } = req.query;
+      const { name, cpf, page, take } = req.query;
 
       // 2 - Chamar o responsável
       const service = new StudentService();
       const result = await service.findAll({
         name: name as string,
         cpf: cpf as string,
+        page: page ? Number(page) - 1 : undefined,
+        take: take ? Number(take) : undefined,
       });
 
       // 3 - Reponder para o cliente

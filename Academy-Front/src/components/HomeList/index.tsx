@@ -6,12 +6,14 @@ import Avatar from "@mui/material/Avatar";
 import { AccountBox, Ballot, CalendarMonth } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { showAlert } from "../../store/modules/alert/alertSlice";
 
-export default function TechHelperHome() {
+export default function HomeList() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { student } = useAppSelector((state) => state.userLogged);
+  const { students } = useAppSelector((state) => state.students);
 
   const handleTasks = () => {
     dispatch(
@@ -38,18 +40,30 @@ export default function TechHelperHome() {
             </IconButton>
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary="Avaliações" />
+        <ListItemText
+          primary="Avaliações"
+          secondary={
+            student.studentType !== "T" &&
+            students.filter((user) => user.id === student.id)[0]?.assessments
+              ?.length > 0
+              ? students.filter((user) => user.id === student.id)[0].assessments
+                  .length
+              : null
+          }
+        />
       </ListItem>
-      <ListItem>
-        <ListItemAvatar>
-          <Avatar>
-            <IconButton onClick={() => navigate("/students")}>
-              <AccountBox />
-            </IconButton>
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText primary="Estudantes" />
-      </ListItem>
+      {student.studentType === "T" && (
+        <ListItem>
+          <ListItemAvatar>
+            <Avatar>
+              <IconButton onClick={() => navigate("/students")}>
+                <AccountBox />
+              </IconButton>
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText primary="Estudantes" secondary={students.length} />
+        </ListItem>
+      )}
       <ListItem>
         <ListItemAvatar>
           <Avatar>

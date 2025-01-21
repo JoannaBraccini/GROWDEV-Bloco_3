@@ -2,8 +2,7 @@ import { Grid2, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../store/hooks";
-import StudentHome from "../components/StudentHome";
-import TechHelperHome from "../components/TechHelperHome";
+import HomeList from "../components/HomeList";
 import { Loading } from "../components/Loading";
 import SnackbarAlert from "../components/SnackbarAlert";
 
@@ -37,7 +36,7 @@ export function Home() {
               </Typography>
             </Typography>
           </Grid2>
-          {student.studentType === "T" ? <TechHelperHome /> : <StudentHome />}
+          <HomeList />
         </>
       )}
       <SnackbarAlert />

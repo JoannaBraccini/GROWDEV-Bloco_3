@@ -9,7 +9,12 @@ import { ResponseApi } from "../types";
 import { Bcrypt } from "../utils/bcrypt";
 
 export class StudentService {
-  public async findAll({ name, cpf }: QueryFilterDto): Promise<ResponseApi> {
+  public async findAll({
+    name,
+    cpf,
+    page,
+    take,
+  }: QueryFilterDto): Promise<ResponseApi> {
     const where: Prisma.StudentWhereInput = {};
 
     if (name) {
@@ -21,6 +26,8 @@ export class StudentService {
     }
 
     const students = await prisma.student.findMany({
+      skip: page,
+      take: take,
       where,
     });
 
