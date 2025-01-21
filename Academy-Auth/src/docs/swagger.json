@@ -774,8 +774,9 @@
             "examples": ["João Silva"]
           },
           "cpf": {
+            "description": "CPF somente números",
             "type": "string",
-            "examples": ["148.050.320-73"]
+            "examples": ["14805032073"]
           },
           "age": {
             "description": "Idade do estudante",

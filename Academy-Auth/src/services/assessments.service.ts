@@ -129,7 +129,7 @@ export class AssessmentService {
 
   public async update(
     id: string,
-    updateAssessments: UpdateAssessmentDto
+    updateAssessment: UpdateAssessmentDto
   ): Promise<ResponseApi> {
     const assessment = await prisma.assessment.findUnique({
       where: { id },
@@ -143,16 +143,27 @@ export class AssessmentService {
       };
     }
 
-    const updateAssessment = await prisma.assessment.update({
+    // Filtrar campos vazios ou inválidos
+    const filteredAssessment = removeEmptyFields(updateAssessment);
+    // Verificar se restam campos para atualizar
+    if (Object.keys(filteredAssessment).length === 0) {
+      return {
+        ok: false,
+        code: 400,
+        message: "Nenhum campo válido para atualizar.",
+      };
+    }
+
+    const updatedAssessment = await prisma.assessment.update({
       where: { id },
-      data: { ...updateAssessments },
+      data: { ...filteredAssessment },
     });
 
     return {
       ok: true,
       code: 200,
       message: "Avaluação atualizada com sucesso!",
-      data: this.mapToDto(updateAssessment),
+      data: this.mapToDto(updatedAssessment),
     };
   }
 
@@ -191,4 +202,15 @@ export class AssessmentService {
       createdAt: assessment.createdAt,
     };
   }
+}
+
+//Função para remover campos vazios das requisições
+function removeEmptyFields<T extends object>(data: T): Partial<T> {
+  const result: Partial<T> = {};
+  for (const [key, value] of Object.entries(data)) {
+    if (value !== null && value !== undefined && value !== "") {
+      result[key as keyof T] = value;
+    }
+  }
+  return result;
 }

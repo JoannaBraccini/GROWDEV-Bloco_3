@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 
 export class UpdateStudentMiddleware {
   public static validateTypes(req: Request, res: Response, next: NextFunction) {
-    const { name, password, studentType, age } = req.body;
+    const { name, passwordOld, passwordNew, studentType, age } = req.body;
 
     if (name && typeof name !== "string") {
       res.status(400).json({
@@ -12,7 +12,7 @@ export class UpdateStudentMiddleware {
       });
     }
 
-    if (password && typeof password !== "string") {
+    if (passwordNew && typeof passwordNew !== "string") {
       res.status(400).json({
         ok: false,
         message: "Senha deve ser uma string.",

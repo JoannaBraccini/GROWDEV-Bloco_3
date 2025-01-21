@@ -78,6 +78,18 @@ export class StudentService {
   ): Promise<ResponseApi> {
     // 1 - Verificar se o id informado existe
     const { passwordOld, passwordNew } = updateStudent;
+
+    // Filtrar campos vazios ou inválidos
+    const filteredStudent = removeEmptyFields(updateStudent);
+    // Verificar se restam campos para atualizar
+    if (Object.keys(filteredStudent).length === 0) {
+      return {
+        ok: false,
+        code: 400,
+        message: "Nenhum campo válido para atualizar.",
+      };
+    }
+
     const student = await prisma.student.findUnique({
       where: { id },
     });
@@ -108,15 +120,10 @@ export class StudentService {
       }
     }
 
-    /**
-     *  update - atualiza um determinado => retorna um
-     *  udapteMany - Atualiza váriso e não retorna nada
-     *  upsert - Atualiza quando existir e cria quando não existir
-     */
     // 2 - Atualizar (prisma)
     const studentUpdated = await prisma.student.update({
       where: { id },
-      data: { ...updateStudent }, // Espalha as propriedades
+      data: { ...filteredStudent }, // Espalha as propriedades
     });
 
     // 3 - Retornar o dado att.
@@ -139,22 +146,6 @@ export class StudentService {
         message: "Estudante não encontrado!",
       };
     }
-
-    // DTL - TRANSAÇÃO
-    // const studentDeleted = await prisma.$transaction(async (transacao) => {
-    //   await transacao.assessment.deleteMany({
-    //     where: { studentId: id },
-    //   });
-
-    //   return await transacao.student.delete({
-    //     where: { id },
-    //   });
-    // });
-
-    // NÃO É NECESSÁRIO pois definimos uma exclusão em cascata
-    // await prisma.assessment.deleteMany({
-    //   where: { studentId: id },
-    // });
 
     // 2 - Remover o dado
     const studentDeleted = await prisma.student.delete({
@@ -193,4 +184,15 @@ export class StudentService {
       })),
     };
   }
+}
+
+//Função para remover campos vazios das requisições
+function removeEmptyFields<T extends object>(data: T): Partial<T> {
+  const result: Partial<T> = {};
+  for (const [key, value] of Object.entries(data)) {
+    if (value !== null && value !== undefined && value !== "") {
+      result[key as keyof T] = value;
+    }
+  }
+  return result;
 }
