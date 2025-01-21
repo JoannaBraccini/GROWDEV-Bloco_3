@@ -17,8 +17,8 @@ export class AuthService {
     if (!student) {
       return {
         ok: false,
-        code: 404,
-        message: "E-mail ou senha incorretos. (email)",
+        code: 400,
+        message: "E-mail ou senha incorretos.",
       };
     }
 
@@ -30,8 +30,8 @@ export class AuthService {
     if (!isValidPassword) {
       return {
         ok: false,
-        code: 404,
-        message: "E-mail ou senha incorretos. (password)",
+        code: 400,
+        message: "E-mail ou senha incorretos.",
       };
     }
 

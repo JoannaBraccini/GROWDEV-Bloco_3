@@ -1,0 +1,906 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Academy API",
+    "description": "API para controle de Estudantes e suas Avaliações.  \n\nLinks úteis:\n- [Academy API](https://github.com/joannabraccini/GROWDEV-Bloco_3/tree/main/Academy-Auth)\n- [Academy App](https://github.com/JoannaBraccini/GROWDEV-Bloco_3/tree/main/Academy-Front)\n- [Growdev](https://www.growdev.com.br)",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://localhost:3333",
+      "description": "LocalHost"
+    },
+    {
+      "url": "https://academy-api-we21.onrender.com",
+      "description": "Render"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Autenticação",
+      "description": "Registro e login de estudante"
+    },
+    {
+      "name": "Estudantes",
+      "description": "Ações de estudantes"
+    },
+    {
+      "name": "Avaliações",
+      "description": "Ações de avaliações"
+    }
+  ],
+  "paths": {
+    "/signup": {
+      "post": {
+        "tags": ["Autenticação"],
+        "summary": "Cadastrar estudante",
+        "description": "Registra um novo estudante",
+        "requestBody": {
+          "description": "Dados do estudante a ser registrado, incluindo senha que será criptografada",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Estudante registrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/ApiResponse" },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": { "$ref": "#/components/schemas/Student" }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Erro ao realizar o cadastro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": ["Autenticação"],
+        "summary": "Entrar no sistema com dados cadastrados",
+        "description": "Gera um token com expiração em 1 dia",
+        "requestBody": {
+          "description": "Objeto com dados para entrar no sistema",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "examples": ["us3rpassw0rd"]
+                  }
+                },
+                "required": ["email", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Estudante logado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/ApiResponse" },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": { "$ref": "#/components/schemas/LoggedUser" }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Informações incorretas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/students": {
+      "get": {
+        "tags": ["Estudantes"],
+        "summary": "Buscar a lista de estudantes",
+        "description": "Retorna uma lista de usuários a partir de uma busca com ou sem parâmetros",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Nome dos estudantes buscados",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          {
+            "name": "cpf",
+            "in": "query",
+            "description": "CPF dos estudantes buscados",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estudantes buscados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/ApiResponse" },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Student"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro ao buscar os dados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Erro de autenticação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authStudent": []
+          }
+        ]
+      }
+    },
+    "/students/{id}": {
+      "get": {
+        "tags": ["Estudantes"],
+        "summary": "Buscar estudante por ID",
+        "description": "Retorna os dados de um estudante",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do estudante buscado",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estudante encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/ApiResponse" },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "allOf": [{ "$ref": "#/components/schemas/Student" }]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Estudante não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Erro de autenticação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authStudent": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["Estudantes"],
+        "summary": "Atualizar um estudante cadastrado",
+        "description": "Atualizar os dados de um estudante por ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do estudante atualizado",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados atualizados do estudante",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "examples": ["João Souza"]
+                  },
+                  "age": {
+                    "type": "number",
+                    "examples": ["19"]
+                  },
+                  "oldPassword": {
+                    "description": "Senha antiga a ser substituída",
+                    "type": "string",
+                    "examples": ["us3rpassw0rd"]
+                  },
+                  "newPassword": {
+                    "description": "Nova senha",
+                    "type": "string",
+                    "examples": ["n3wus3rpassw0rd"]
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Estudando alterado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Student"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Erro ao buscar dados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Erro de autenticação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authStudent": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["Estudantes"],
+        "summary": "Excluir um estudante",
+        "description": "Excluir um estudante por ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do estudante a ser excluído",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estudante excluído com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/ApiResponse" },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "allOf": [{ "$ref": "#/components/schemas/Student" }]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Estudante não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Erro de autenticação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authStudent": []
+          }
+        ]
+      }
+    },
+    "assessments": {
+      "get": {
+        "tags": ["Avaliações"],
+        "summary": "Buscar a lista de avaliações",
+        "description": "Retorna uma lista de avaliações a partir de uma busca com ou sem parâmetros de paginação",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número da página a ser vista",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "examples": ["2"]
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "Quantidade de dados exibidos por página",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "examples": ["10"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Avaliações buscadas com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/ApiResponse" },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Assessment"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro ao buscar os dados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Erro de autenticação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authStudent": []
+          }
+        ]
+      }
+    },
+    "/assessments/{id}": {
+      "get": {
+        "tags": ["Avaliações"],
+        "summary": "Buscar avaliação por ID",
+        "description": "Retorna os dados de uma avaliação",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da avaliação buscada",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Avaliação encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/ApiResponse" },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "allOf": [
+                            { "$ref": "#/components/schemas/Assessment" }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Avaliação não encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Erro de autenticação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authStudent": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["Avaliações"],
+        "summary": "Atualizar uma avaliação cadastrada",
+        "description": "Atualizar os dados de uma avaliação por ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da avaliação atualizada",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dados atualizados da avaliação",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "examples": ["Avaliação Corrigida"]
+                  },
+                  "description": {
+                    "type": "string",
+                    "examples": ["Correção da avaliação"]
+                  },
+                  "grade": {
+                    "type": "number",
+                    "format": "float",
+                    "examples": ["10"]
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Avaliação alterada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Assessment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Erro ao buscar dados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Erro de autenticação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authStudent": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["Avaliações"],
+        "summary": "Excluir uma avaliação",
+        "description": "Excluir uma avaliação por ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da avaliação a ser excluíd",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Avaliação excluída com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/ApiResponse" },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "allOf": [
+                            { "$ref": "#/components/schemas/Assessment" }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Avaliação não encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Erro de autenticação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/ApiResponse" }]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authStudent": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ApiResponse": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "examples": ["true"]
+          },
+          "message": {
+            "type": "string",
+            "examples": ["Operação realizada com sucesso"]
+          }
+        }
+      },
+      "Student": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "examples": ["João Silva"]
+          },
+          "cpf": {
+            "type": "string",
+            "examples": ["148.050.320-73"]
+          },
+          "age": {
+            "description": "Idade do estudante",
+            "type": "number",
+            "format": "int64",
+            "examples": [18]
+          },
+          "email": {
+            "description": "Melhor email do estudante. Nao pode ser alterado",
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "description": "Senha do estudante",
+            "type": "string",
+            "examples": ["us3rpassw0rd"]
+          },
+          "studentType": {
+            "description": "Tipo do estudante: Matriculado, Formado ou Tech-Helper",
+            "type": "string",
+            "format": "enum",
+            "enum": ["M", "F", "T"]
+          },
+          "registeredAt": {
+            "description": "Data de registro do estudante, gerada automaticamente",
+            "type": "string",
+            "format": "Date"
+          }
+        }
+      },
+      "SignupRequest": {
+        "allOf": [
+          { "$ref": "#/components/schemas/Student" },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "readOnly": true
+              },
+              "registeredAt": {
+                "type": "string",
+                "readOnly": "true"
+              }
+            }
+          }
+        ]
+      },
+      "LoggedUser": {
+        "type": "object",
+        "properties": {
+          "student": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "name": {
+                "type": "string",
+                "examples": ["João Silva"]
+              },
+              "email": {
+                "type": "string",
+                "format": "email"
+              },
+              "studentType": {
+                "type": "string",
+                "enum": ["M", "F", "T"]
+              }
+            }
+          },
+          "token": {
+            "type": "string",
+            "description": "Token JWT gerado para autenticação",
+            "examples": ["eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."]
+          }
+        }
+      },
+      "Assessment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "examples": ["Avaliação de Matemática I"]
+          },
+          "description": {
+            "type": "string",
+            "examples": [
+              "Avaliação sobre os conceitos básicos de Matemática, incluindo álgebra e geometria."
+            ]
+          },
+          "grade": {
+            "type": "number",
+            "format": "float",
+            "examples": [9.0]
+          },
+          "studentId": {
+            "description": "ID do estudante avaliado",
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdBy": {
+            "description": "Id do usuário criador da avaliação",
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "description": "Data de criação da avaliação, gerada automaticamente",
+            "type": "string",
+            "format": "Date"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "authStudent": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
