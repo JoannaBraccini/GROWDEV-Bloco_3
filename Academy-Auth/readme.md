@@ -7,68 +7,49 @@ Api de controle de estudantes e suas avaliações.
 **Estudantes**
 
 - Cadastro de estudante ✅
-- Listagem de estudantes com filtro pelo nome ou cpf ✅
+- Listagem de estudantes com filtro (opcional) pelo nome ou cpf ✅
 - Busca de um estudante pelo identificador ✅
 - Atualização de um estudante (name, password, type, age) ✅
 - Remover um estudante ✅
 
-**Autenticação**
-
-- Adição de Bcrypt para o salvamento da senha do estudante. ✅
-
-- Login (email e senha) ✅
-- Rotas autenticadas (S/ JWT): ✅
-  - Listagem de estudantes ✅
-  - Busca de um estudante ✅
-  - Atualização de um estudante ✅
-  - Remoção de um estudante ✅
-  - Todas as rotas de avaliações ✅
-
 ## Avaliações
 
-### Cadastro de avaliações ✅
+- Cadastro de avaliações ✅
+- Listagem de avaliações ✅
+- Busca de uma avaliação ✅
+- Atualização de avaliações ✅
+- Remoção de avaliações ✅
 
-**POST** `/assessments`
+---
 
-Enpoint para o cadastro de avaliações.
+**Armazenamento**
 
-```ts
-{
-  title: string;
-  description: string; // Opcional
-  grade: number; // Máx 2 casas dps da vírgula
-  studentId: string;
-}
-```
+- Banco de dados relacional PostgreSQL ✅
 
-### Listagem de avaliações
+**Segurança**
 
-**GET** `/assessments` ✅
+- Bcrypt para o hash da senha do estudante ✅
 
-Enpoint para a listagem de **todas as avaliações de um determinado estudante.** Utilizar o token para identificar qual o studente logado que está acessando o enpoint.
+**Autenticação**
 
-### Busca de uma avaliação
+- Login (email e senha) ✅
+  - Bearer Token JWT
 
-**GET** `/assessments/:id`
+**Autorização**
 
-Enpoint para a busca de uma avaliação pelo identificador, somente será possível buscar avaliações que pertence ao estudante logado.
-
-### Atualização de avaliações
-
-**PUT** `/assessments/:id`
-
-Enpoint para a atualização de uma avaliação pelo identificador. Deve existir uma validação para garantir que a avaliação que está sendo atualizada pertence ao estudante logado.
-
-```ts
-{
-  title: string; // Opcional
-  description: string; // Opcional
-  grade: number; // Opcional (máx 2 casas dps da vírgula)
-}
-```
-
-### Remoção de avaliações
-
-**DELETE** `/assessments/:id`
-
-Enpoint para a remoção de uma avaliação pelo identificador. Deve existir uma validação para garantir que a avaliação que está sendo removida pertence ao estudante logado.
+- Listagem de Estudantes/Avaliações:
+  - Total:
+    - Tech-Helper ✅
+    - Matriculado/Formado: Somente o próprio perfil
+- Atualização de dados de Estudante:
+  - Total:
+    - Tech-Helper ✅
+    - Matriculado/Formado: Apenas o próprio perfil
+- Atualização de dados de Avaliação:
+  - Total:
+    - Tech-Helper ✅
+    - Matriculado/Formado ⛔
+- Remoção de Estudante/Avaliação:
+  - Total:
+    - Tech-Helper ✅
+    - Matriculado/Formado ⛔
