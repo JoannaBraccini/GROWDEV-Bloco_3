@@ -54,9 +54,12 @@ export function TableAssessments() {
     dispatch(deleteAssessmentAsyncThunk({ id }));
   };
 
-  const handleRowClick = (id: string) => {
-    dispatch(findStudentAsyncThunk(id)).then(() => {
-      navigate(`/details/${id}`);
+  const handleRowClick = (assessment: Assessment) => {
+    dispatch(findStudentAsyncThunk(assessment.studentId)).then(() => {
+      dispatch(setAssessentDetail(assessment));
+      setTimeout(() => {
+        navigate(`/details/${assessment.studentId}`);
+      }, 1000);
     });
   };
 
@@ -67,123 +70,114 @@ export function TableAssessments() {
 
   return (
     <TableContainer>
-      {!assessments || assessments.length < 1 ? (
-        <Typography variant="subtitle2" textAlign="center">
-          Nenhuma avaliação registrada. Crie uma!
-        </Typography>
-      ) : (
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Título
-              </TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Descrição
-              </TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Estudante
-              </TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Nota
-              </TableCell>
-              <TableCell
-                align="right"
-                sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}
-              >
-                Criada Em
-              </TableCell>
-              <TableCell
-                align="right"
-                sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}
-              >
-                Criada Por
-              </TableCell>
-              <TableCell
-                align="right"
-                onClick={() => navigate("/home")}
-                sx={{
-                  fontWeight: "bold",
-                  display: "flex",
-                  alignItems: "center",
-                  cursor: "pointer",
-                }}
-              >
-                Voltar
-                <ArrowBack sx={{ margin: 1 }} />
-              </TableCell>
-            </TableRow>
-          </TableHead>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
+            <TableCell align="right" sx={{ fontWeight: "bold" }}>
+              Título
+            </TableCell>
+            <TableCell align="right" sx={{ fontWeight: "bold" }}>
+              Descrição
+            </TableCell>
+            <TableCell align="right" sx={{ fontWeight: "bold" }}>
+              Estudante
+            </TableCell>
+            <TableCell align="right" sx={{ fontWeight: "bold" }}>
+              Nota
+            </TableCell>
+            <TableCell
+              align="right"
+              sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}
+            >
+              Criada Em
+            </TableCell>
+            <TableCell
+              align="right"
+              sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}
+            >
+              Criada Por
+            </TableCell>
+            <TableCell
+              align="right"
+              onClick={() => navigate("/home")}
+              sx={{
+                fontWeight: "bold",
+                display: "flex",
+                alignItems: "center",
+                cursor: "pointer",
+              }}
+            >
+              Voltar
+              <ArrowBack sx={{ margin: 1 }} />
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        {loadingList ? (
+          <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+            <TableCell component="th" scope="row" colSpan={8} align="center">
+              <CircularProgress />
+            </TableCell>
+          </TableRow>
+        ) : !assessments || assessments.length < 1 ? (
+          <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+            <TableCell component="th" scope="row" colSpan={8} align="center">
+              <Typography variant="subtitle2" textAlign="center">
+                Nenhuma avaliação registrada. Crie uma!
+              </Typography>
+            </TableCell>
+          </TableRow>
+        ) : (
           <TableBody>
-            {loadingList ? (
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell
-                  component="th"
-                  scope="row"
-                  colSpan={6}
-                  rowSpan={LIMIT}
-                  align="center"
+            {assessments
+              .filter((row) => row?.id)
+              .map((row, index) => (
+                <TableRow
+                  key={row.id}
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleRowClick(row)}
                 >
-                  <CircularProgress />
-                </TableCell>
-              </TableRow>
-            ) : (
-              assessments
-                .filter((row) => row?.id)
-                .map((row, index) => (
-                  <TableRow
-                    key={row.id}
-                    sx={{
-                      "&:last-child td, &:last-child th": { border: 0 },
-                      cursor: "pointer",
-                    }}
-                    onClick={() => handleRowClick(row.studentId)}
-                  >
-                    <TableCell component="th" scope="row">
-                      {index + 1}
-                    </TableCell>
-                    <TableCell align="right">{row.title}</TableCell>
-                    <TableCell align="right">{row.description}</TableCell>
-                    <TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
-                      {students.find((stud) => stud.id === row.studentId)?.name}
-                    </TableCell>
-                    <TableCell align="right">{row.grade}</TableCell>
-                    <TableCell align="right">
-                      {new Date(row.createdAt).toLocaleDateString("pt-BR")}
-                    </TableCell>
-                    <TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
-                      {students.find((user) => user.id === row.createdBy)
-                        ?.name || "Desconhecido"}
-                    </TableCell>
-                    <TableCell align="right">
-                      {student.studentType === "T" && (
-                        <ActionsMenu>
-                          <MenuItem
-                            onClick={() => handleEdit(row)}
-                            disableRipple
-                          >
-                            <Edit />
-                            Editar
-                          </MenuItem>
-                          <MenuItem
-                            onClick={() => handleDelete(row.id)}
-                            disableRipple
-                          >
-                            <Delete />
-                            Excluir
-                          </MenuItem>
-                        </ActionsMenu>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))
-            )}
+                  <TableCell component="th" scope="row">
+                    {index + 1}
+                  </TableCell>
+                  <TableCell align="right">{row.title}</TableCell>
+                  <TableCell align="right">{row.description}</TableCell>
+                  <TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
+                    {students.find((stud) => stud.id === row.studentId)?.name}
+                  </TableCell>
+                  <TableCell align="right">{row.grade}</TableCell>
+                  <TableCell align="right">
+                    {new Date(row.createdAt).toLocaleDateString("pt-BR")}
+                  </TableCell>
+                  <TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
+                    {students.find((user) => user.id === row.createdBy)?.name ||
+                      "Desconhecido"}
+                  </TableCell>
+                  <TableCell align="right">
+                    {student.studentType === "T" && (
+                      <ActionsMenu>
+                        <MenuItem onClick={() => handleEdit(row)} disableRipple>
+                          <Edit />
+                          Editar
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => handleDelete(row.id)}
+                          disableRipple
+                        >
+                          <Delete />
+                          Excluir
+                        </MenuItem>
+                      </ActionsMenu>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
-        </Table>
-      )}
+        )}
+      </Table>
       <Box sx={{ display: "flex", justifyContent: "end" }}>
         <Pagination
           color="primary"

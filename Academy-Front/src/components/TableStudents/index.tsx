@@ -22,9 +22,13 @@ import { ArrowBack, Delete, Edit } from "@mui/icons-material";
 import { Student } from "../../utils/types";
 import { setStudentDetail } from "../../store/modules/studentDetail/studentDetailSlice";
 import { useNavigate } from "react-router-dom";
-import { fetchAssessmentsAsyncThunk } from "../../store/modules/assessments/assessments.action";
+import {
+  fetchAssessmentsAsyncThunk,
+  findAssessmentAsyncThunk,
+} from "../../store/modules/assessments/assessments.action";
 import { showAlert } from "../../store/modules/alert/alertSlice";
 import { logout } from "../../store/modules/auth/userLoggedSlice";
+import { typeFormat } from "../../utils/functions/type.format";
 
 const LIMIT = 20; // Variavel de ambiente
 
@@ -54,8 +58,13 @@ export function TableStudents() {
     dispatch(deleteStudentAsyncThunk({ id }));
   }
 
-  const handleRowClick = (id: string) => {
-    navigate(`/details/${id}`);
+  const handleRowClick = (student: Student) => {
+    dispatch(findAssessmentAsyncThunk(student.assessments[0].id)).then(() =>
+      dispatch(setStudentDetail(student))
+    );
+    setTimeout(() => {
+      navigate(`/details/${student.id}`);
+    }, 1000);
   };
 
   useEffect(() => {
@@ -67,10 +76,9 @@ export function TableStudents() {
         })
       );
       dispatch(logout());
-
       setTimeout(() => {
         navigate("/login");
-      }, 1500);
+      }, 1000);
     }
   }, []);
 
@@ -81,121 +89,119 @@ export function TableStudents() {
 
   return (
     <TableContainer>
-      {loadingList ? (
-        <CircularProgress />
-      ) : !students || students.length < 1 ? (
-        <Typography variant="subtitle2" textAlign="center">
-          Nenhum estudante registrado.
-        </Typography>
-      ) : (
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Nome
-              </TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                CPF
-              </TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Idade
-              </TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                E-mail
-              </TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Tipo
-              </TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Data de Registro
-              </TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Avaliações
-              </TableCell>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
+            <TableCell align="right" sx={{ fontWeight: "bold" }}>
+              Nome
+            </TableCell>
+            <TableCell align="right" sx={{ fontWeight: "bold" }}>
+              CPF
+            </TableCell>
+            <TableCell align="right" sx={{ fontWeight: "bold" }}>
+              Idade
+            </TableCell>
+            <TableCell align="right" sx={{ fontWeight: "bold" }}>
+              E-mail
+            </TableCell>
+            <TableCell align="right" sx={{ fontWeight: "bold" }}>
+              Tipo
+            </TableCell>
+            <TableCell align="right" sx={{ fontWeight: "bold" }}>
+              Data de Registro
+            </TableCell>
+            <TableCell align="right" sx={{ fontWeight: "bold" }}>
+              Avaliações
+            </TableCell>
+            <TableCell
+              align="right"
+              onClick={() => navigate("/home")}
+              sx={{
+                fontWeight: "bold",
+                display: "flex",
+                alignItems: "center",
+                cursor: "pointer",
+              }}
+            >
+              Voltar
+              <ArrowBack sx={{ margin: 1 }} />
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {loadingList ? (
+            <TableRow
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
               <TableCell
-                align="right"
-                onClick={() => navigate("/home")}
-                sx={{
-                  fontWeight: "bold",
-                  display: "flex",
-                  alignItems: "center",
-                  cursor: "pointer",
-                }}
+                component="th"
+                scope="row"
+                colSpan={6}
+                rowSpan={LIMIT}
+                align="center"
               >
-                Voltar
-                <ArrowBack sx={{ margin: 1 }} />
+                <CircularProgress />
               </TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {loadingList ? (
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell
-                  component="th"
-                  scope="row"
-                  colSpan={6}
-                  rowSpan={LIMIT}
-                  align="center"
+          ) : !students ? (
+            <Typography variant="subtitle2" textAlign="center">
+              Nenhum estudante registrado.
+            </Typography>
+          ) : (
+            students
+              .filter((row) => row?.id)
+              .map((row, index) => (
+                <TableRow
+                  key={row.id}
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleRowClick(row)}
                 >
-                  <CircularProgress />
-                </TableCell>
-              </TableRow>
-            ) : (
-              students
-                .filter((row) => row?.id)
-                .map((row, index) => (
-                  <TableRow
-                    key={row.id}
-                    sx={{
-                      "&:last-child td, &:last-child th": { border: 0 },
-                      cursor: "pointer",
-                    }}
-                    onClick={() => handleRowClick(row.id)}
-                  >
-                    <TableCell component="th" scope="row">
-                      {index + 1}
-                    </TableCell>
-                    <TableCell align="right">{row.name}</TableCell>
-                    <TableCell align="right">{row.cpf}</TableCell>
-                    <TableCell align="right">
-                      {row.age ? row.age : "Not informed"}
-                    </TableCell>
-                    <TableCell align="right">{row.email}</TableCell>
-                    <TableCell align="right">{row.studentType}</TableCell>
-                    <TableCell align="right">
-                      {new Date(row.registeredAt).toLocaleDateString("pt-BR")}
-                    </TableCell>
-                    <TableCell align="right" sx={{ cursor: "pointer" }}>
-                      {
-                        assessments.filter(
-                          (assessment) => assessment.studentId === row.id
-                        ).length
-                      }
-                    </TableCell>
-                    <TableCell align="right">
-                      <ActionsMenu>
-                        <MenuItem onClick={() => handleEdit(row)} disableRipple>
-                          <Edit />
-                          Editar
-                        </MenuItem>
-                        <MenuItem
-                          onClick={() => handleDelete(row.id)}
-                          disableRipple
-                        >
-                          <Delete />
-                          Excluir
-                        </MenuItem>
-                      </ActionsMenu>
-                    </TableCell>
-                  </TableRow>
-                ))
-            )}
-          </TableBody>
-        </Table>
-      )}
+                  <TableCell component="th" scope="row">
+                    {index + 1}
+                  </TableCell>
+                  <TableCell align="right">{row.name}</TableCell>
+                  <TableCell align="right">{row.cpf}</TableCell>
+                  <TableCell align="right">
+                    {row.age ? row.age : "Not informed"}
+                  </TableCell>
+                  <TableCell align="right">{row.email}</TableCell>
+                  <TableCell align="right">
+                    {typeFormat(row.studentType)}
+                  </TableCell>
+                  <TableCell align="right">
+                    {new Date(row.registeredAt).toLocaleDateString("pt-BR")}
+                  </TableCell>
+                  <TableCell align="right" sx={{ cursor: "pointer" }}>
+                    {
+                      assessments.filter(
+                        (assessment) => assessment.studentId === row.id
+                      ).length
+                    }
+                  </TableCell>
+                  <TableCell align="right">
+                    <ActionsMenu>
+                      <MenuItem onClick={() => handleEdit(row)} disableRipple>
+                        <Edit />
+                        Editar
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => handleDelete(row.id)}
+                        disableRipple
+                      >
+                        <Delete />
+                        Excluir
+                      </MenuItem>
+                    </ActionsMenu>
+                  </TableCell>
+                </TableRow>
+              ))
+          )}
+        </TableBody>
+      </Table>
       <Box sx={{ display: "flex", justifyContent: "end" }}>
         <Pagination
           color="primary"

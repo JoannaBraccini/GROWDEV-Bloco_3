@@ -1,25 +1,21 @@
-import { Divider, Grid2, Typography } from "@mui/material";
+import { Box, Grid2 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { FloatButton } from "../components/FloatButton";
-import { UpsertAssessmentModal } from "../components/UpsertAssessmentModal";
 import SnackbarAlert from "../components/SnackbarAlert";
-import { TableDetails } from "../components/TableDetails";
-import { findStudentAsyncThunk } from "../store/modules/students/studentsActions";
-import { Loading } from "../components/Loading";
+import { DetailsAcordion } from "../components/DetailsAcordion";
+import DetailsCard from "../components/DetailsCard";
+import { showAlert } from "../store/modules/alert/alertSlice";
 
 export function Details() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string }>();
   const userLogged = useAppSelector((state) => state.userLogged);
-  const { assessmentDetail, loading } = useAppSelector(
+  const { studentDetail } = useAppSelector((state) => state.studentDetail);
+  const { assessmentDetail } = useAppSelector(
     (state) => state.assessmentDetail
   );
-  const { studentDetail } = useAppSelector((state) => state.studentDetail);
-
-  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     if (!userLogged.token) {
@@ -28,34 +24,25 @@ export function Details() {
   }, [userLogged, navigate]);
 
   useEffect(() => {
-    if (id) {
-      dispatch(findStudentAsyncThunk(id));
+    if (!id || !assessmentDetail || !studentDetail) {
+      dispatch(
+        showAlert({
+          message: "Nenhum dado a ser buscado",
+          type: "error",
+        })
+      );
     }
-  }, [id, dispatch]);
-
-  useEffect(() => {
-    setOpenModal(!!assessmentDetail.id);
-  }, [assessmentDetail]);
+    navigate("/home");
+  }, [id, assessmentDetail, studentDetail]);
 
   return (
     <Grid2 container spacing={2}>
       <Grid2 size={12}>
-        <Typography component="span" variant="h6" sx={{ fontWeight: "bold" }}>
-          Lista de Avaliações de {studentDetail.name}
-        </Typography>
+        <Box>
+          <DetailsCard />
+          <DetailsAcordion />
+        </Box>
       </Grid2>
-      <Grid2 size={12}>
-        <Divider />
-      </Grid2>
-      <Grid2 size={12}>{loading ? <Loading /> : <TableDetails />}</Grid2>
-
-      <FloatButton onClick={() => setOpenModal(true)} />
-
-      <UpsertAssessmentModal
-        open={openModal}
-        onClose={() => setOpenModal(false)}
-      />
-
       <SnackbarAlert />
     </Grid2>
   );
