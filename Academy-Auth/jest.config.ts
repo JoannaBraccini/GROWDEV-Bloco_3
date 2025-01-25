@@ -11,6 +11,6 @@ export default {
   // Configurações de cobertura de códig
   collectCoverageFrom: ["<rootDir>/src/**/*.ts"],
   coverageDirectory: "coverage",
-  coveragePathIgnorePatterns: ["\\\\node_modules\\\\"],
+  coveragePathIgnorePatterns: ["/node_modules/"],
   setupFilesAfterEnv: ["<rootDir>/tests/config/prisma.mock.ts"],
 };
