@@ -16,8 +16,6 @@ export interface StudentDto {
 export interface QueryFilterDto {
   name?: string;
   cpf?: string;
-  id: string;
-  studentType: StudentType;
 }
 
 export interface UpdateStudentDto {

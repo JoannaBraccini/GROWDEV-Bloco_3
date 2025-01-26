@@ -9,44 +9,43 @@ import { ResponseApi } from "../types";
 import { Bcrypt } from "../utils/bcrypt";
 
 export class StudentService {
-  public async findAll({
-    name,
-    cpf,
-    id,
-    studentType,
-  }: QueryFilterDto): Promise<ResponseApi> {
-    const where: Prisma.StudentWhereInput = {};
+  public async findAll({ name, cpf }: QueryFilterDto): Promise<ResponseApi> {
+    try {
+      const where: Prisma.StudentWhereInput = {};
 
-    if (name) {
-      where.name = { contains: name, mode: "insensitive" };
-    }
+      if (name) {
+        where.name = { contains: name, mode: "insensitive" };
+      }
 
-    if (cpf) {
-      where.cpf = { contains: cpf };
-    }
+      if (cpf) {
+        where.cpf = { contains: cpf };
+      }
 
-    // if (studentType !== "T") {
-    //   where.id = { equals: id };
-    // }
+      const students = await prisma.student.findMany({
+        where,
+      });
 
-    const students = await prisma.student.findMany({
-      where,
-    });
+      if (!students) {
+        return {
+          ok: false,
+          code: 404,
+          message: "Dados não encontrados!",
+        };
+      }
 
-    if (!students) {
+      return {
+        ok: true,
+        code: 200,
+        message: "Estudantes buscados com sucesso!",
+        data: students.map((student) => this.mapToDto(student)), // StudentDto[]
+      };
+    } catch (error) {
       return {
         ok: false,
-        code: 404,
-        message: "Dados não encontrados",
+        code: 500,
+        message: "Erro interno do servidor.",
       };
     }
-
-    return {
-      ok: true,
-      code: 200,
-      message: "Estudantes buscados com sucesso!",
-      data: students.map((student) => this.mapToDto(student)), // StudentDto[]
-    };
   }
 
   public async findOneById(
@@ -63,30 +62,38 @@ export class StudentService {
       };
     }
 
-    // 1 - Buscar => id é pk, id é unico
-    const student = await prisma.student.findUnique({
-      where: { id },
-      include: {
-        assessments: true,
-      },
-    });
+    try {
+      // 1 - Buscar => id é pk, id é unico
+      const student = await prisma.student.findUnique({
+        where: { id },
+        include: {
+          assessments: true,
+        },
+      });
 
-    // 2 - Validar se existe
-    if (!student) {
+      // 2 - Validar se existe
+      if (!student) {
+        return {
+          ok: false,
+          code: 404, // Not Found
+          message: "Estudante não encontrado!",
+        };
+      }
+
+      // 3 - Retornar o dado
+      return {
+        ok: true,
+        code: 200,
+        message: "Estudante encontrado!",
+        data: this.mapToDto(student),
+      };
+    } catch (error) {
       return {
         ok: false,
-        code: 404, // Not Found
-        message: "Estudante não encontrado!",
+        code: 500,
+        message: "Erro interno do servidor.",
       };
     }
-
-    // 3 - Retornar o dado
-    return {
-      ok: true,
-      code: 200,
-      message: "Estudante encontrado!",
-      data: this.mapToDto(student),
-    };
   }
 
   public async update(
@@ -107,76 +114,92 @@ export class StudentService {
       };
     }
 
-    const student = await prisma.student.findUnique({
-      where: { id },
-    });
+    try {
+      const student = await prisma.student.findUnique({
+        where: { id },
+      });
 
-    if (!student) {
-      return {
-        ok: false,
-        code: 404,
-        message: "Estudante não encontrado!",
-      };
-    }
-
-    if (passwordOld && passwordNew) {
-      const bcrypt = new Bcrypt();
-      const passwordValid = bcrypt.verify(passwordOld, student.password);
-      if (!passwordValid) {
+      if (!student) {
         return {
           ok: false,
-          code: 400,
-          message: "Senha incorreta!",
-        };
-      } else if (passwordNew === passwordOld) {
-        return {
-          ok: false,
-          code: 400,
-          message: "Nova senha não pode ser igual à senha anterior!",
+          code: 404,
+          message: "Estudante não encontrado!",
         };
       }
+
+      if (passwordOld && passwordNew) {
+        const bcrypt = new Bcrypt();
+        const passwordValid = bcrypt.verify(passwordOld, student.password);
+        if (!passwordValid) {
+          return {
+            ok: false,
+            code: 400,
+            message: "Senha incorreta!",
+          };
+        } else if (passwordNew === passwordOld) {
+          return {
+            ok: false,
+            code: 400,
+            message: "Nova senha não pode ser igual à senha anterior!",
+          };
+        }
+      }
+
+      // 2 - Atualizar (prisma)
+      const studentUpdated = await prisma.student.update({
+        where: { id },
+        data: { ...filteredStudent }, // Espalha as propriedades
+      });
+
+      // 3 - Retornar o dado att.
+      return {
+        ok: true,
+        code: 200,
+        message: "Estudante atualizado com sucesso!",
+        data: this.mapToDto(studentUpdated),
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        code: 500,
+        message: "Erro interno do servidor.",
+      };
     }
-
-    // 2 - Atualizar (prisma)
-    const studentUpdated = await prisma.student.update({
-      where: { id },
-      data: { ...filteredStudent }, // Espalha as propriedades
-    });
-
-    // 3 - Retornar o dado att.
-    return {
-      ok: true,
-      code: 200,
-      message: "Estudante atualizado com sucesso!",
-      data: this.mapToDto(studentUpdated),
-    };
   }
 
   public async remove(id: string): Promise<ResponseApi> {
-    // 1 - Validar se o id informado é válido
-    const student = await prisma.student.findUnique({ where: { id } });
+    try {
+      // 1 - Validar se o id informado é válido
+      const student = await prisma.student.findUnique({ where: { id } });
 
-    if (!student) {
+      if (!student) {
+        return {
+          ok: false,
+          code: 404,
+          message: "Estudante não encontrado!",
+        };
+      }
+
+      // 2 - Remover o dado
+      const studentDeleted = await prisma.student.delete({
+        where: { id },
+      });
+
+      // include => JOIN
+      // 3 - Retornar o dado/feeback
+      return {
+        ok: true,
+        code: 200,
+        message: "Estudante removido com sucesso!",
+        data: this.mapToDto(studentDeleted),
+      };
+    } catch (error) {
       return {
         ok: false,
-        code: 404,
-        message: "Estudante não encontrado!",
+        code: 500,
+        message: "Erro interno do servidor.",
       };
     }
-
-    // 2 - Remover o dado
-    const studentDeleted = await prisma.student.delete({
-      where: { id },
-    });
-
-    // include => JOIN
-    // 3 - Retornar o dado/feeback
-    return {
-      ok: true,
-      code: 200,
-      message: "Estudante removido com sucesso!",
-      data: this.mapToDto(studentDeleted),
-    };
   }
 
   private mapToDto(

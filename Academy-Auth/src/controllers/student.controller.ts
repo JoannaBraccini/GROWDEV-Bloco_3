@@ -6,15 +6,12 @@ export class StudentController {
     try {
       // 1- Pegar do query
       const { name, cpf } = req.query;
-      const { id, studentType } = req.authStudent;
 
       // 2 - Chamar o responsável
       const service = new StudentService();
       const result = await service.findAll({
         name: name as string,
         cpf: cpf as string,
-        id,
-        studentType,
       });
 
       // 3 - Reponder para o cliente
