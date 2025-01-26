@@ -14,20 +14,24 @@
     "test:verbose": "jest --verbose --runInBand --detectOpenHandles",
     "test:coverage": "jest --runInBand --coverage",
     "test:watch": "jest --silent --noStackTrace --runInBand --watchAll",
-    "test:unit": "jest -c jest.unit.config.ts --verbose --noStackTrace"
+    "test:unit": "jest -c jest.unit.config.ts --verbose --noStackTrace",
+    "test:api": "jest -c jest.api.config.ts --verbose  --noStackTrace"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@prisma/client": "^6.2.1",
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/jsonwebtoken": "^9.0.8",
     "@types/node": "^22.10.10",
+    "@types/supertest": "^6.0.2",
     "@types/swagger-ui-express": "^4.1.7",
     "dotenv": "^16.4.7",
+    "jest": "^29.7.0",
     "npmlog": "^7.0.1",
     "prisma": "^6.2.1",
     "rimraf": "^6.0.1",
@@ -36,14 +40,14 @@
     "typescript": "^5.7.3"
   },
   "dependencies": {
-    "@prisma/client": "^6.2.1",
     "academy-api": "file:",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "express": "^4.21.2",
-    "jest": "^29.7.0",
     "jest-mock-extended": "^4.0.0-beta1",
     "jsonwebtoken": "^9.0.2",
+    "ms": "^2.1.3",
+    "supertest": "^7.0.0",
     "swagger-ui-express": "^5.0.1"
   }
 }

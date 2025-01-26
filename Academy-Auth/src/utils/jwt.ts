@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt, { SignOptions } from "jsonwebtoken";
 import { AuthStudent } from "../types/student.type";
 
 /**
@@ -10,26 +10,32 @@ import { AuthStudent } from "../types/student.type";
 export class JWT {
   // Gerar o token
   public generateToken(data: AuthStudent): string {
-    if (!process.env.JWT_SECRET) {
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
       throw new Error("Secret not defined");
     }
 
-    const token = jwt.sign(data, process.env.JWT_SECRET, {
+    const options: SignOptions = {
       algorithm: "HS256",
-      expiresIn: process.env.JWT_EXPIRES_IN,
-    });
+      // expiresIn: process.env.JWT_EXPIRES_IN, --> verificar!
+    };
 
-    return token;
+    try {
+      const token = jwt.sign(data, secret, options);
+      return token;
+    } catch (err: any) {
+      throw new Error(`Error generating token: ${err.message}`);
+    }
   }
 
   // Verificar o token
   public verifyToken(token: string): AuthStudent | null {
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+      throw new Error("Secret not defined");
+    }
     try {
-      if (!process.env.JWT_SECRET) {
-        throw new Error("Secret not defined");
-      }
-
-      const data = jwt.verify(token, process.env.JWT_SECRET) as AuthStudent;
+      const data = jwt.verify(token, secret) as AuthStudent;
       return data;
     } catch {
       return null;

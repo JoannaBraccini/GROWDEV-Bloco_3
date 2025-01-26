@@ -10,7 +10,6 @@ jest.mock("../../src/database/prisma.database", () => ({
 
 // Hook - Antes de cada teste (it ou test)
 beforeEach(() => {
-  // console.log("Resetou o mock do prisma!");
   mockReset(prismaMock);
 });
 

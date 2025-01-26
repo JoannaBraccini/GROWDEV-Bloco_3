@@ -1,5 +1,6 @@
 import defaultConfig from "./jest.config";
+
 export default {
   ...defaultConfig,
-  testMatch: ["**/*.spec.ts"],
+  testMatch: ["<rootDir>/tests/routes/**/*.test.ts"],
 };
