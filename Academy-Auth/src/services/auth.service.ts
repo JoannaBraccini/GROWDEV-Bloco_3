@@ -9,54 +9,62 @@ export class AuthService {
   public async login(data: LoginDto): Promise<ResponseApi> {
     const { email, password } = data;
 
-    // 1 - Verificar o email
-    const student = await prisma.student.findUnique({
-      where: { email },
-    });
+    try {
+      // 1 - Verificar o email
+      const student = await prisma.student.findUnique({
+        where: { email },
+      });
 
-    if (!student) {
+      if (!student) {
+        return {
+          ok: false,
+          code: 400,
+          message: "E-mail ou senha incorretos.",
+        };
+      }
+
+      // 2 - Verficar a senha (hash - bcrypt)
+      const hash = student.password;
+      const bcrypt = new Bcrypt();
+      const isValidPassword = await bcrypt.verify(password, hash);
+
+      if (!isValidPassword) {
+        return {
+          ok: false,
+          code: 400,
+          message: "E-mail ou senha incorretos.",
+        };
+      }
+
+      // 3 - Gerar o token (uid)
+      const jwt = new JWT();
+
+      const payload: AuthStudent = {
+        id: student.id,
+        name: student.name,
+        email: student.email,
+        studentType: student.studentType,
+      };
+
+      const token = jwt.generateToken(payload);
+
+      // 4 - Feed de sucesso retornando o token (uid)
+      return {
+        ok: true,
+        code: 200,
+        message: "Login efetuado com sucesso!",
+        data: {
+          student: payload,
+          token,
+        },
+      };
+    } catch (error) {
       return {
         ok: false,
-        code: 400,
-        message: "E-mail ou senha incorretos.",
+        code: 500,
+        message: "Erro interno do servidor.",
       };
     }
-
-    // 2 - Verficar a senha (hash - bcrypt)
-    const hash = student.password;
-    const bcrypt = new Bcrypt();
-    const isValidPassword = await bcrypt.verify(password, hash);
-
-    if (!isValidPassword) {
-      return {
-        ok: false,
-        code: 400,
-        message: "E-mail ou senha incorretos.",
-      };
-    }
-
-    // 3 - Gerar o token (uid)
-    const jwt = new JWT();
-
-    const payload: AuthStudent = {
-      id: student.id,
-      name: student.name,
-      email: student.email,
-      studentType: student.studentType,
-    };
-
-    const token = jwt.generateToken(payload);
-
-    // 4 - Feed de sucesso retornando o token (uid)
-    return {
-      ok: true,
-      code: 200,
-      message: "Login efetuado com sucesso!",
-      data: {
-        student: payload,
-        token,
-      },
-    };
   }
 
   public async signup(data: SignupDto): Promise<ResponseApi> {

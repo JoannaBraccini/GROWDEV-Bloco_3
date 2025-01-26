@@ -58,7 +58,7 @@ describe("Signup Auth Service", () => {
     });
   });
 
-  it("Deve retornar 'Erro interno ao processar a solicitação' quando não puder gerar o hash da senha", async () => {
+  it("Deve retornar 'Erro interno do servidor' quando não puder gerar o hash da senha", async () => {
     const sut = createSut();
     const dto = makeSignup();
     prismaMock.student.findFirst.mockResolvedValueOnce(null);
@@ -71,11 +71,11 @@ describe("Signup Auth Service", () => {
     expect(result).toEqual({
       ok: false,
       code: 500,
-      message: "Erro interno ao processar a solicitação.",
+      message: "Erro interno ao do servidor.",
     });
   });
 
-  it("Deve retornar 'Erro interno ao processar a solicitação' quando não puder cadastrar no banco", async () => {
+  it("Deve retornar 'Erro interno do servidor' quando não puder cadastrar no banco", async () => {
     const sut = createSut();
     const dto = makeSignup();
     prismaMock.student.findFirst.mockResolvedValueOnce(null);
@@ -92,7 +92,7 @@ describe("Signup Auth Service", () => {
     expect(result).toEqual({
       ok: false,
       code: 500,
-      message: "Erro interno ao processar a solicitação.",
+      message: "Erro interno do servidor.",
     });
   });
 
