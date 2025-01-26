@@ -88,27 +88,35 @@ export class AuthService {
       }
     }
 
-    // 3 - Criação do nosso hash (password)
-    const bcrypt = new Bcrypt();
-    const passwordHash = await bcrypt.generateHash(password);
+    try {
+      // 3 - Criação do nosso hash (password)
+      const bcrypt = new Bcrypt();
+      const passwordHash = await bcrypt.generateHash(password);
 
-    // 4 - Criação do nosso estudante no banco de dados
-    const studentCreated = await prisma.student.create({
-      data: {
-        name: name,
-        cpf: cpf,
-        email: email,
-        password: passwordHash,
-        studentType: studentType,
-        age: age,
-      },
-    });
+      // 4 - Criação do nosso estudante no banco de dados
+      const studentCreated = await prisma.student.create({
+        data: {
+          name: name,
+          cpf: cpf,
+          email: email,
+          password: passwordHash,
+          studentType: studentType,
+          age: age,
+        },
+      });
 
-    return {
-      ok: true,
-      code: 201,
-      message: "Estudante cadastrado com sucesso!",
-      data: studentCreated,
-    };
+      return {
+        ok: true,
+        code: 201,
+        message: "Estudante cadastrado com sucesso!",
+        data: studentCreated,
+      };
+    } catch (error) {
+      return {
+        code: 500,
+        ok: false,
+        message: "Erro interno ao processar a solicitação.",
+      };
+    }
   }
 }
