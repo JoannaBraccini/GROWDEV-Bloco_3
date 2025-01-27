@@ -58,7 +58,7 @@ describe("Signup Auth Service", () => {
     });
   });
 
-  it("Deve retornar 'Erro interno do servidor' quando não puder gerar o hash da senha", async () => {
+  it("Deve retornar 'Erro interno ao processar a solicitação.' quando não puder gerar o hash da senha", async () => {
     const sut = createSut();
     const dto = makeSignup();
     prismaMock.student.findFirst.mockResolvedValueOnce(null);
@@ -71,11 +71,11 @@ describe("Signup Auth Service", () => {
     expect(result).toEqual({
       ok: false,
       code: 500,
-      message: "Erro interno ao do servidor.",
+      message: "Erro interno ao processar a solicitação.",
     });
   });
 
-  it("Deve retornar 'Erro interno do servidor' quando não puder cadastrar no banco", async () => {
+  it("Deve retornar 'Erro interno ao processar a solicitação.' quando não puder cadastrar no banco", async () => {
     const sut = createSut();
     const dto = makeSignup();
     prismaMock.student.findFirst.mockResolvedValueOnce(null);
@@ -92,38 +92,41 @@ describe("Signup Auth Service", () => {
     expect(result).toEqual({
       ok: false,
       code: 500,
-      message: "Erro interno do servidor.",
+      message: "Erro interno ao processar a solicitação.",
     });
   });
 
   it("Deve retornar 'Estudante cadastrado com sucesso!' quando fornecidos dados válidos", async () => {
     const sut = createSut();
     const dto = makeSignup();
-    const studentMock = StudentMock.build();
+
     prismaMock.student.findFirst.mockResolvedValueOnce(null); //Sem conflito no cpf e email
+    prismaMock.student.create.mockResolvedValue({
+      ...dto,
+      id: expect.any(String),
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+      password: "hashed_pass",
+    });
 
     const bcrypt = jest
       .spyOn(Bcrypt.prototype, "generateHash")
       .mockResolvedValueOnce("hashed_pass");
 
-    prismaMock.student.create.mockResolvedValue(studentMock);
-
     const result = await sut.signup(dto);
-    console.log("Data recebido no signup:", result.data);
 
-    expect(bcrypt).toHaveBeenCalledTimes(1);
+    expect(bcrypt).toHaveBeenCalledWith(dto.password);
     expect(result).toEqual({
       ok: true,
       code: 201,
       message: "Estudante cadastrado com sucesso!",
-      data: expect.objectContaining({
+      data: {
         id: expect.any(String),
         name: dto.name,
         email: dto.email,
         studentType: dto.studentType,
-        age: dto.age,
-        cpf: dto.cpf,
-      }),
+        createdAt: expect.any(Date),
+      },
     });
   });
 });

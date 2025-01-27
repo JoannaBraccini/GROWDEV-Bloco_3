@@ -56,7 +56,7 @@ describe("Login Auth Service", () => {
     expect(result.message).toMatch("E-mail ou senha incorretos.");
   });
 
-  it("Deve retornar 'Erro interno do servidor' quando ocorrer erro no banco de dados", async () => {
+  it("Deve retornar 'Erro interno ao processar a solicitação.' quando ocorrer erro no banco de dados", async () => {
     const sut = createSut();
     const dto = { email: "any_email", password: "any_pass" };
 
@@ -69,7 +69,7 @@ describe("Login Auth Service", () => {
     expect(result).toEqual({
       ok: false,
       code: 500,
-      message: "Erro interno do servidor.",
+      message: "Erro interno ao processar a solicitação.",
     });
   });
 

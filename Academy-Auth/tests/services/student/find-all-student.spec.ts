@@ -121,7 +121,7 @@ describe("Find All Student Service", () => {
     });
   });
 
-  it("Deve retornar 'Erro interno do servidor.' quando ocorrer um erro no banco de dados", async () => {
+  it("Deve retornar 'Erro interno ao processar a solicitação.' quando ocorrer um erro no banco de dados", async () => {
     const sut = createSut();
     const queries: QueryFilterDto = {
       name: "Nome de Aluno",
@@ -135,7 +135,7 @@ describe("Find All Student Service", () => {
 
     expect(result.ok).toBeFalsy;
     expect(result.code).toBe(500);
-    expect(result.message).toMatch("Erro interno do servidor.");
+    expect(result.message).toMatch("Erro interno ao processar a solicitação.");
     expect(result.data).toBeUndefined();
   });
 });

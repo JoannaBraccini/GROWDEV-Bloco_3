@@ -62,7 +62,7 @@ export class AuthService {
       return {
         ok: false,
         code: 500,
-        message: "Erro interno do servidor.",
+        message: "Erro interno ao processar a solicitação.",
       };
     }
   }
@@ -117,7 +117,13 @@ export class AuthService {
         ok: true,
         code: 201,
         message: "Estudante cadastrado com sucesso!",
-        data: studentCreated,
+        data: {
+          id: studentCreated.id,
+          name: studentCreated.name,
+          email: studentCreated.email,
+          studentType: studentCreated.studentType,
+          createdAt: studentCreated.createdAt,
+        },
       };
     } catch (error) {
       return {
