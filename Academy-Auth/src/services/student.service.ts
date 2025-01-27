@@ -9,27 +9,27 @@ import { ResponseApi } from "../types";
 import { Bcrypt } from "../utils/bcrypt";
 
 export class StudentService {
-  public async findAll({ name, cpf }: QueryFilterDto): Promise<ResponseApi> {
+  public async findAll(query?: QueryFilterDto): Promise<ResponseApi> {
     try {
       const where: Prisma.StudentWhereInput = {};
 
-      if (name) {
-        where.name = { contains: name, mode: "insensitive" };
+      if (query?.name) {
+        where.name = { contains: query?.name, mode: "insensitive" };
       }
 
-      if (cpf) {
-        where.cpf = { contains: cpf };
+      if (query?.cpf) {
+        where.cpf = { contains: query.cpf };
       }
 
       const students = await prisma.student.findMany({
         where,
       });
 
-      if (!students) {
+      if (!students || students.length < 1) {
         return {
           ok: false,
           code: 404,
-          message: "Dados não encontrados!",
+          message: "Nenhum estudante encontrado!",
         };
       }
 
