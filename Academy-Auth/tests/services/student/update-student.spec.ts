@@ -1,4 +1,3 @@
-import { StudentType } from "@prisma/client";
 import { UpdateStudentDto } from "../../../src/dtos";
 import { StudentService } from "../../../src/services/student.service";
 import { Bcrypt } from "../../../src/utils/bcrypt";

@@ -14,44 +14,52 @@ export class AssessmentService {
     const { title, description, grade, studentId, studentType } =
       createAssessment;
 
-    // studentId = Existe no banco
-    const student = await prisma.student.findUnique({
-      where: { id: studentId },
-    });
+    try {
+      // studentId = Existe no banco
+      const student = await prisma.student.findUnique({
+        where: { id: studentId },
+      });
 
-    if (!student) {
+      if (!student) {
+        return {
+          ok: false,
+          code: 404,
+          message: "Estudante não encontrado.",
+        };
+      }
+
+      if (studentType !== "T" && student.id !== studentId) {
+        return {
+          ok: false,
+          code: 401,
+          message: "Estudante não autorizado.",
+        };
+      }
+
+      const assessmentCreated = await prisma.assessment.create({
+        data: {
+          title: title,
+          description: description,
+          grade: grade,
+          //caso seja TechHelper, pega o Id fornecido na requisição, senão busca do registro do aluno
+          studentId: studentType === "T" ? studentId : student.id,
+          createdBy: student.id,
+        },
+      });
+
+      return {
+        ok: true,
+        code: 201,
+        message: "Avaliação cadastrada com sucesso.",
+        data: this.mapToDto(assessmentCreated),
+      };
+    } catch (error) {
       return {
         ok: false,
-        code: 404,
-        message: "Estudante não encontrado.",
+        code: 500,
+        message: "Erro interno ao processar a solicitação.",
       };
     }
-
-    if (studentType !== "T" && student.id !== studentId) {
-      return {
-        ok: false,
-        code: 401,
-        message: "Estudante não autorizado.",
-      };
-    }
-
-    const assessmentCreated = await prisma.assessment.create({
-      data: {
-        title: title,
-        description: description,
-        grade: grade,
-        //caso seja TechHelper, pega o Id fornecido na requisição, senão busca do registro do aluno
-        studentId: studentType === "T" ? studentId : student.id,
-        createdBy: student.id,
-      },
-    });
-
-    return {
-      ok: true,
-      code: 201,
-      message: "Avaliação cadastrada com sucesso.",
-      data: this.mapToDto(assessmentCreated),
-    };
   }
 
   public async findAll(
@@ -59,37 +67,37 @@ export class AssessmentService {
     studentType: StudentType,
     query?: { page?: number; take?: number }
   ): Promise<ResponseApi> {
-    try {
-      let where: Prisma.AssessmentWhereInput = {};
-      if (studentType !== "T") {
-        where = { studentId: id };
-      }
+    let where: Prisma.AssessmentWhereInput = {};
+    if (studentType !== "T") {
+      where = { studentId: id };
+    }
 
+    try {
       const assessmentList = await prisma.assessment.findMany({
         skip: query?.page, // 1 page
         take: query?.take, // quantidade
         where: where,
       });
 
-      if (!assessmentList) {
+      if (!assessmentList || assessmentList.length < 1) {
         return {
           ok: false,
           code: 404,
-          message: "Avaliação do estudante não encontrada",
+          message: "Avaliações do estudante não encontradas",
         };
       }
 
       return {
         ok: true,
         code: 200,
-        message: "Avaliações buscadas com sucesso !!.",
+        message: "Avaliações buscadas com sucesso.",
         data: assessmentList.map((ass) => this.mapToDto(ass)),
       };
     } catch (error) {
       return {
         ok: false,
         code: 500,
-        message: `Erro do servidor: ${error}`,
+        message: "Erro interno ao processar a solicitação.",
       };
     }
   }
@@ -99,50 +107,45 @@ export class AssessmentService {
     studentId: string,
     studentType: StudentType
   ): Promise<ResponseApi> {
-    const assessment = await prisma.assessment.findUnique({
-      where: { id },
-    });
+    try {
+      const assessment = await prisma.assessment.findUnique({
+        where: { id },
+      });
 
-    if (!assessment) {
+      if (!assessment) {
+        return {
+          ok: false,
+          code: 404, // Not Found
+          message: "Avaliação não encontrada.",
+        };
+      }
+      if (studentType !== "T" && studentId !== assessment.studentId) {
+        return {
+          ok: false,
+          code: 401,
+          message: "Usuário não autorizado.",
+        };
+      }
+
+      return {
+        ok: true,
+        code: 200,
+        message: "Avaliação buscada com sucesso.",
+        data: assessment,
+      };
+    } catch (error) {
       return {
         ok: false,
-        code: 404, // Not Found
-        message: "Avaliaçao não encontrado.",
+        code: 500,
+        message: "Erro interno ao processar a solicitação.",
       };
     }
-
-    if (studentType !== "T" && studentId !== assessment.studentId) {
-      return {
-        ok: false,
-        code: 401,
-        message: "Usuário não autorizado.",
-      };
-    }
-
-    return {
-      ok: true,
-      code: 200,
-      message: "Avaliação buscada com sucesso.",
-      data: assessment,
-    };
   }
 
   public async update(
     id: string,
     updateAssessment: UpdateAssessmentDto
   ): Promise<ResponseApi> {
-    const assessment = await prisma.assessment.findUnique({
-      where: { id },
-    });
-
-    if (!assessment) {
-      return {
-        ok: false,
-        code: 404,
-        message: "Avaliação não encontrada.",
-      };
-    }
-
     // Filtrar campos vazios ou inválidos
     const filteredAssessment = removeEmptyFields(updateAssessment);
     // Verificar se restam campos para atualizar
@@ -153,42 +156,68 @@ export class AssessmentService {
         message: "Nenhum campo válido para atualizar.",
       };
     }
+    try {
+      const assessment = await prisma.assessment.findUnique({
+        where: { id },
+      });
 
-    const updatedAssessment = await prisma.assessment.update({
-      where: { id },
-      data: { ...filteredAssessment },
-    });
+      if (!assessment) {
+        return {
+          ok: false,
+          code: 404,
+          message: "Avaliação não encontrada.",
+        };
+      }
+      const updatedAssessment = await prisma.assessment.update({
+        where: { id },
+        data: { ...filteredAssessment },
+      });
 
-    return {
-      ok: true,
-      code: 200,
-      message: "Avaluação atualizada com sucesso.",
-      data: this.mapToDto(updatedAssessment),
-    };
+      return {
+        ok: true,
+        code: 200,
+        message: "Avaluação atualizada com sucesso.",
+        data: this.mapToDto(updatedAssessment),
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        code: 500,
+        message: "Erro interno ao processar a solicitação.",
+      };
+    }
   }
 
   public async remove(id: string): Promise<ResponseApi> {
-    const assessment = await prisma.assessment.findUnique({
-      where: { id },
-    });
+    try {
+      const assessment = await prisma.assessment.findUnique({
+        where: { id },
+      });
 
-    if (!assessment) {
+      if (!assessment) {
+        return {
+          ok: false,
+          code: 404,
+          message: "Avaliação não encontrada.",
+        };
+      }
+
+      const removeAssessment = await prisma.assessment.delete({
+        where: { id },
+      });
+      return {
+        ok: true,
+        code: 200,
+        message: "Avaliação excluída com sucesso.",
+        data: this.mapToDto(removeAssessment),
+      };
+    } catch (error) {
       return {
         ok: false,
-        code: 404,
-        message: "Avaliação não encontrada.",
+        code: 500,
+        message: "Erro interno ao processar a solicitação.",
       };
     }
-
-    const removeAssessment = await prisma.assessment.delete({
-      where: { id },
-    });
-    return {
-      ok: true,
-      code: 200,
-      message: "Avaliação excluída com sucesso.",
-      data: this.mapToDto(removeAssessment),
-    };
   }
 
   private mapToDto(assessment: Assessment): AssessmentDto {
