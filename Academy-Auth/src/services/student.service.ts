@@ -214,7 +214,7 @@ export class StudentService {
       }
 
       // 2 - Remover o dado
-      const studentDeleted = await prisma.student.delete({
+      await prisma.student.delete({
         where: { id },
       });
 
@@ -224,7 +224,7 @@ export class StudentService {
         ok: true,
         code: 200,
         message: "Estudante removido com sucesso.",
-        data: this.mapToDto(studentDeleted),
+        data: this.mapToDto(student), //dados que foram removidos
       };
     } catch (error) {
       return {
