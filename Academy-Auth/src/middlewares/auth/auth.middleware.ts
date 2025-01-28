@@ -17,7 +17,7 @@ export class AuthMiddleware {
     if (!authorization) {
       res.status(401).json({
         ok: false,
-        message: "Não autenticado!",
+        message: "Não autenticado.",
       });
       return;
     }
@@ -28,7 +28,7 @@ export class AuthMiddleware {
     if (!authorization.startsWith("Bearer ") || !token) {
       res.status(401).json({
         ok: false,
-        message: "Token ausente ou inválido!",
+        message: "Token ausente ou inválido.",
       });
       return;
     }
@@ -39,7 +39,7 @@ export class AuthMiddleware {
     if (!studentDecoded) {
       res.status(401).json({
         ok: false,
-        message: "Token inválido ou expirado!",
+        message: "Token inválido ou expirado.",
       });
       return;
     }

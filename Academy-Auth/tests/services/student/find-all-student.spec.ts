@@ -24,7 +24,7 @@ describe("Find All Student Service", () => {
 
     expect(result.ok).toBeFalsy;
     expect(result.code).toBe(404);
-    expect(result.message).toMatch("Nenhum estudante encontrado!");
+    expect(result.message).toMatch("Nenhum estudante encontrado.");
     expect(result.data).toBeUndefined();
   });
 
@@ -48,7 +48,7 @@ describe("Find All Student Service", () => {
     expect(result).toEqual({
       ok: true,
       code: 200,
-      message: "Estudantes buscados com sucesso!",
+      message: "Estudantes buscados com sucesso.",
       data: [
         {
           id: expect.any(String),
@@ -83,7 +83,7 @@ describe("Find All Student Service", () => {
 
     expect(result.code).toBe(200);
     expect(result.ok).toBeTruthy;
-    expect(result.message).toMatch("Estudantes buscados com sucesso!");
+    expect(result.message).toMatch("Estudantes buscados com sucesso.");
     expect(result.data).toHaveLength(3);
     result.data.forEach((student: Student, index: number) => {
       expect(student).toEqual({
@@ -115,7 +115,7 @@ describe("Find All Student Service", () => {
 
     expect(result.data).toHaveLength(10);
     expect(result.code).toBe(200);
-    expect(result.message).toMatch("Estudantes buscados com sucesso!");
+    expect(result.message).toMatch("Estudantes buscados com sucesso.");
     result.data.forEach((student: Student) => {
       expect(student).toHaveProperty("id");
     });

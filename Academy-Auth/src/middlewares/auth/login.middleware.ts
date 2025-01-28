@@ -12,7 +12,7 @@ export class LoginMiddleware {
     if (!email) {
       res.status(400).json({
         ok: false,
-        message: "E-mail é obrigatório!",
+        message: "E-mail é obrigatório.",
       });
       return;
     }
@@ -20,7 +20,7 @@ export class LoginMiddleware {
     if (!password) {
       res.status(400).json({
         ok: false,
-        message: "Senha é obrigatório!",
+        message: "Senha é obrigatório.",
       });
       return;
     }
@@ -35,7 +35,7 @@ export class LoginMiddleware {
     if (typeof email !== "string") {
       res.status(400).json({
         ok: false,
-        message: "E-mail deve ser uma string!",
+        message: "E-mail deve ser uma string.",
       });
       return;
     }
@@ -43,7 +43,7 @@ export class LoginMiddleware {
     if (typeof password !== "string") {
       res.status(400).json({
         ok: false,
-        message: "Senha deve ser uma string!",
+        message: "Senha deve ser uma string.",
       });
       return;
     }

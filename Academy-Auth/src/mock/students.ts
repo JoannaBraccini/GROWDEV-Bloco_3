@@ -110,7 +110,7 @@ async function main() {
   }
 
   await prisma.student.createMany({ data: students });
-  console.log("Dados inseridos com sucesso!");
+  console.log("Dados inseridos com sucesso.");
 }
 
 main()

@@ -52,7 +52,7 @@ export class AuthService {
       return {
         ok: true,
         code: 200,
-        message: "Login efetuado com sucesso!",
+        message: "Login efetuado com sucesso.",
         data: {
           student: payload,
           token,
@@ -116,7 +116,7 @@ export class AuthService {
       return {
         ok: true,
         code: 201,
-        message: "Estudante cadastrado com sucesso!",
+        message: "Estudante cadastrado com sucesso.",
         data: {
           id: studentCreated.id,
           name: studentCreated.name,

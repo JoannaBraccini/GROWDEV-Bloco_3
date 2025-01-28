@@ -119,7 +119,7 @@ describe("Signup Auth Service", () => {
     expect(result).toEqual({
       ok: true,
       code: 201,
-      message: "Estudante cadastrado com sucesso!",
+      message: "Estudante cadastrado com sucesso.",
       data: {
         id: expect.any(String),
         name: dto.name,

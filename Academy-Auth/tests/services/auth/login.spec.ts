@@ -100,7 +100,7 @@ describe("Login Auth Service", () => {
     expect(jwt).toHaveBeenCalledTimes(1);
     expect(result.code).toBe(200);
     expect(result.ok).toBeTruthy;
-    expect(result.message).toMatch("Login efetuado com sucesso!");
+    expect(result.message).toMatch("Login efetuado com sucesso.");
     expect(result).toHaveProperty("data");
     expect(result.data).toEqual({
       student: {

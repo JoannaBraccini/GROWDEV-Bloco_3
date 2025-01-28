@@ -95,7 +95,7 @@ async function main() {
     });
   }
 
-  console.log("Avaliações criadas com sucesso!");
+  console.log("Avaliações criadas com sucesso.");
 }
 
 main()

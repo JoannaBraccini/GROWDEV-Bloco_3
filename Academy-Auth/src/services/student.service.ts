@@ -29,14 +29,14 @@ export class StudentService {
         return {
           ok: false,
           code: 404,
-          message: "Nenhum estudante encontrado!",
+          message: "Nenhum estudante encontrado.",
         };
       }
 
       return {
         ok: true,
         code: 200,
-        message: "Estudantes buscados com sucesso!",
+        message: "Estudantes buscados com sucesso.",
         data: students.map((student) => this.mapToDto(student)), // StudentDto[]
       };
     } catch (error) {
@@ -58,7 +58,7 @@ export class StudentService {
         ok: false,
         code: 403, // Forbidden
         message:
-          "Não autorizado! Somente Tech-Helpers podem acessar os dados de outros alunos.",
+          "Não autorizado. Somente Tech-Helpers podem acessar os dados de outros alunos.",
       };
     }
 
@@ -76,7 +76,7 @@ export class StudentService {
         return {
           ok: false,
           code: 404, // Not Found
-          message: "Estudante não encontrado!",
+          message: "Estudante não encontrado.",
         };
       }
 
@@ -84,7 +84,7 @@ export class StudentService {
       return {
         ok: true,
         code: 200,
-        message: "Estudante encontrado!",
+        message: "Estudante encontrado.",
         data: this.mapToDto(student),
       };
     } catch (error) {
@@ -101,7 +101,7 @@ export class StudentService {
     updateStudent: UpdateStudentDto
   ): Promise<ResponseApi> {
     // 1 - Verificar se o id informado existe
-    const { passwordOld, passwordNew } = updateStudent;
+    const { name, age, passwordOld, passwordNew } = updateStudent;
 
     // Filtrar campos vazios ou inválidos
     const filteredStudent = removeEmptyFields(updateStudent);
@@ -123,39 +123,72 @@ export class StudentService {
         return {
           ok: false,
           code: 404,
-          message: "Estudante não encontrado!",
+          message: "Estudante não encontrado.",
         };
       }
 
+      if (name && name === student.name) {
+        return {
+          ok: false,
+          code: 400,
+          message: "O novo nome não pode ser igual ao nome atual.",
+        };
+      }
+
+      if (age && age === student.age) {
+        return {
+          ok: false,
+          code: 400,
+          message: "A nova idade não pode ser igual à idade atual.",
+        };
+      }
+
+      let newPassword: string | undefined;
       if (passwordOld && passwordNew) {
         const bcrypt = new Bcrypt();
-        const passwordValid = bcrypt.verify(passwordOld, student.password);
+        const passwordValid = await bcrypt.verify(
+          passwordOld,
+          student.password
+        );
+
         if (!passwordValid) {
           return {
             ok: false,
             code: 400,
-            message: "Senha incorreta!",
+            message: "Senha incorreta.",
           };
-        } else if (passwordNew === passwordOld) {
+        }
+
+        const passwordCompare = await bcrypt.verify(
+          passwordNew,
+          student.password
+        );
+
+        if (passwordCompare) {
           return {
             ok: false,
             code: 400,
-            message: "Nova senha não pode ser igual à senha anterior!",
+            message: "A nova senha não pode ser igual à senha anterior.",
           };
         }
+
+        newPassword = await bcrypt.generateHash(passwordNew);
       }
 
       // 2 - Atualizar (prisma)
       const studentUpdated = await prisma.student.update({
         where: { id },
-        data: { ...filteredStudent }, // Espalha as propriedades
+        data: {
+          ...filteredStudent, // Espalha as propriedades
+          ...(passwordNew && { password: newPassword }),
+        },
       });
 
       // 3 - Retornar o dado att.
       return {
         ok: true,
         code: 200,
-        message: "Estudante atualizado com sucesso!",
+        message: "Estudante atualizado com sucesso.",
         data: this.mapToDto(studentUpdated),
       };
     } catch (error) {
@@ -176,7 +209,7 @@ export class StudentService {
         return {
           ok: false,
           code: 404,
-          message: "Estudante não encontrado!",
+          message: "Estudante não encontrado.",
         };
       }
 
@@ -190,7 +223,7 @@ export class StudentService {
       return {
         ok: true,
         code: 200,
-        message: "Estudante removido com sucesso!",
+        message: "Estudante removido com sucesso.",
         data: this.mapToDto(studentDeleted),
       };
     } catch (error) {

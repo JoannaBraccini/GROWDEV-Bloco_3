@@ -23,7 +23,7 @@ export class AssessmentService {
       return {
         ok: false,
         code: 404,
-        message: "Estudante não encontrado!",
+        message: "Estudante não encontrado.",
       };
     }
 
@@ -31,7 +31,7 @@ export class AssessmentService {
       return {
         ok: false,
         code: 401,
-        message: "Estudante não autorizado!",
+        message: "Estudante não autorizado.",
       };
     }
 
@@ -49,7 +49,7 @@ export class AssessmentService {
     return {
       ok: true,
       code: 201,
-      message: "Avaliação cadastrada com sucesso!",
+      message: "Avaliação cadastrada com sucesso.",
       data: this.mapToDto(assessmentCreated),
     };
   }
@@ -82,7 +82,7 @@ export class AssessmentService {
       return {
         ok: true,
         code: 200,
-        message: "Avaliações buscadas com sucesso !!!",
+        message: "Avaliações buscadas com sucesso !!.",
         data: assessmentList.map((ass) => this.mapToDto(ass)),
       };
     } catch (error) {
@@ -107,7 +107,7 @@ export class AssessmentService {
       return {
         ok: false,
         code: 404, // Not Found
-        message: "Avaliaçao não encontrado!",
+        message: "Avaliaçao não encontrado.",
       };
     }
 
@@ -115,14 +115,14 @@ export class AssessmentService {
       return {
         ok: false,
         code: 401,
-        message: "Usuário não autorizado!",
+        message: "Usuário não autorizado.",
       };
     }
 
     return {
       ok: true,
       code: 200,
-      message: "Avaliação buscada com sucesso!",
+      message: "Avaliação buscada com sucesso.",
       data: assessment,
     };
   }
@@ -139,7 +139,7 @@ export class AssessmentService {
       return {
         ok: false,
         code: 404,
-        message: "Avaliação não encontrada!",
+        message: "Avaliação não encontrada.",
       };
     }
 
@@ -162,7 +162,7 @@ export class AssessmentService {
     return {
       ok: true,
       code: 200,
-      message: "Avaluação atualizada com sucesso!",
+      message: "Avaluação atualizada com sucesso.",
       data: this.mapToDto(updatedAssessment),
     };
   }
@@ -176,7 +176,7 @@ export class AssessmentService {
       return {
         ok: false,
         code: 404,
-        message: "Avaliação não encontrada!",
+        message: "Avaliação não encontrada.",
       };
     }
 
@@ -186,7 +186,7 @@ export class AssessmentService {
     return {
       ok: true,
       code: 200,
-      message: "Avaliação excluída com sucesso!",
+      message: "Avaliação excluída com sucesso.",
       data: this.mapToDto(removeAssessment),
     };
   }
