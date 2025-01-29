@@ -20,7 +20,7 @@ export class LoginMiddleware {
     if (!password) {
       res.status(400).json({
         ok: false,
-        message: "Senha é obrigatório.",
+        message: "Senha é obrigatória.",
       });
       return;
     }
