@@ -39,46 +39,6 @@ describe("Update Student Service", () => {
     expect(result.message).toContain("Estudante não encontrado.");
   });
 
-  it("Deve retornar 'O novo nome não pode ser igual ao nome atual.' quando o nome fornecido for igual ao já armazenado", async () => {
-    const sut = createSut();
-    const dto: UpdateStudentDto = {
-      name: "Nome Repetido",
-    };
-    const studentMock = StudentMock.build({
-      id: "id-do-aluno",
-      name: "Nome Repetido",
-    });
-    prismaMock.student.findUnique.mockResolvedValueOnce(studentMock);
-
-    const result = await sut.update("id-do-aluno", dto);
-
-    expect(result.code).toBe(400);
-    expect(result.ok).toBeFalsy();
-    expect(result.message).toContain(
-      "O novo nome não pode ser igual ao nome atual."
-    );
-  });
-
-  it("Deve retornar 'A nova idade não pode ser igual à idade atual.' quando a idade fornecida for igual a já armazenada", async () => {
-    const sut = createSut();
-    const dto: UpdateStudentDto = {
-      age: 20,
-    };
-    const studentMock = StudentMock.build({
-      id: "id-do-aluno",
-      age: 20,
-    });
-    prismaMock.student.findUnique.mockResolvedValueOnce(studentMock);
-
-    const result = await sut.update("id-do-aluno", dto);
-
-    expect(result.code).toBe(400);
-    expect(result.ok).toBeFalsy();
-    expect(result.message).toMatch(
-      "A nova idade não pode ser igual à idade atual."
-    );
-  });
-
   it("Deve retornar 'Senha incorreta.' quando a senha fornecida for diferente do hash armazenado", async () => {
     const sut = createSut();
     const dto: UpdateStudentDto = {

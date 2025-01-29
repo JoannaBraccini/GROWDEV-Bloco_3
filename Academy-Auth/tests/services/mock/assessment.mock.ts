@@ -1,5 +1,4 @@
 import { Assessment } from "@prisma/client";
-import { Decimal } from "@prisma/client/runtime/library";
 import { randomUUID } from "crypto";
 
 interface AssessmentMockParams {
@@ -17,7 +16,7 @@ export class AssessmentMock {
       id: params?.id || randomUUID(),
       title: params?.title || "any_title",
       description: params?.description || "any_desc",
-      grade: new Decimal(params?.grade || 10),
+      grade: params?.grade || 10,
       studentId: params?.studentId || randomUUID(),
       createdBy: params?.createdBy || "any_id",
       createdAt: new Date(),

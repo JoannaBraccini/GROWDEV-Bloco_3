@@ -176,7 +176,7 @@ export class AssessmentService {
       return {
         ok: true,
         code: 200,
-        message: "Avaluação atualizada com sucesso.",
+        message: "Avaliação atualizada com sucesso.",
         data: this.mapToDto(updatedAssessment),
       };
     } catch (error) {
@@ -202,14 +202,14 @@ export class AssessmentService {
         };
       }
 
-      const removeAssessment = await prisma.assessment.delete({
+      await prisma.assessment.delete({
         where: { id },
       });
       return {
         ok: true,
         code: 200,
         message: "Avaliação excluída com sucesso.",
-        data: this.mapToDto(removeAssessment),
+        data: this.mapToDto(assessment),
       };
     } catch (error) {
       return {
@@ -229,6 +229,9 @@ export class AssessmentService {
       studentId: assessment.studentId,
       createdBy: assessment.createdBy,
       createdAt: assessment.createdAt,
+      ...(assessment.updatedAt !== assessment.createdAt && {
+        updatedAt: assessment.updatedAt,
+      }),
     };
   }
 }

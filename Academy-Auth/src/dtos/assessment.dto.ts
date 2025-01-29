@@ -22,4 +22,5 @@ export interface AssessmentDto {
   studentId: string;
   createdBy: string;
   createdAt: Date;
+  updatedAt?: Date;
 }

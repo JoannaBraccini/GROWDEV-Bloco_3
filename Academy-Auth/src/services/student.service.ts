@@ -127,22 +127,6 @@ export class StudentService {
         };
       }
 
-      if (name && name === student.name) {
-        return {
-          ok: false,
-          code: 400,
-          message: "O novo nome não pode ser igual ao nome atual.",
-        };
-      }
-
-      if (age && age === student.age) {
-        return {
-          ok: false,
-          code: 400,
-          message: "A nova idade não pode ser igual à idade atual.",
-        };
-      }
-
       let newPassword: string | undefined;
       if (passwordOld && passwordNew) {
         const bcrypt = new Bcrypt();
