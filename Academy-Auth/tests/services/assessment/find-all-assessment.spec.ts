@@ -77,8 +77,6 @@ describe("Find All Assessment Service", () => {
 
     const result = await sut.findAll("student_id", "T");
 
-    console.log(result);
-
     expect(result).toEqual({
       ok: false,
       code: 500,

@@ -51,7 +51,15 @@ export class AssessmentService {
         ok: true,
         code: 201,
         message: "Avaliação cadastrada com sucesso.",
-        data: this.mapToDto(assessmentCreated),
+        data: {
+          id: assessmentCreated.id,
+          title: assessmentCreated.title,
+          description: assessmentCreated.description,
+          grade: Number(assessmentCreated.grade),
+          studentId: assessmentCreated.studentId,
+          createdBy: assessmentCreated.createdBy,
+          createdAt: assessmentCreated.createdAt,
+        },
       };
     } catch (error) {
       return {
@@ -229,9 +237,7 @@ export class AssessmentService {
       studentId: assessment.studentId,
       createdBy: assessment.createdBy,
       createdAt: assessment.createdAt,
-      ...(assessment.updatedAt !== assessment.createdAt && {
-        updatedAt: assessment.updatedAt,
-      }),
+      updatedAt: assessment.updatedAt,
     };
   }
 }

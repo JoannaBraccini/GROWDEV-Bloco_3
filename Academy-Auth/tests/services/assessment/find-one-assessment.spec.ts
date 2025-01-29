@@ -57,7 +57,6 @@ describe("Find One Assessment Service", () => {
     prismaMock.assessment.findUnique.mockResolvedValueOnce(assessmentMock);
 
     const result = await sut.findOneById("assess-id", "tech-id", "T");
-    console.log(result);
 
     expect(result).toHaveProperty("data");
     expect(result.data).toMatchObject(assessmentMock);

@@ -28,7 +28,6 @@ describe("Remove Assessment Service", () => {
     prismaMock.assessment.findUnique.mockResolvedValueOnce(assessmentMock);
 
     const result = await sut.remove(dto.id);
-    console.log(result);
 
     expect(result).toEqual({
       ok: true,

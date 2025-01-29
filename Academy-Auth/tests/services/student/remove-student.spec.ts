@@ -28,7 +28,6 @@ describe("Remove Student Service", () => {
     prismaMock.student.findUnique.mockResolvedValueOnce(studentMock);
 
     const result = await sut.remove(studentMock.id);
-    console.log(result.data);
 
     expect(result.code).toBe(200);
     expect(result.ok).toBeTruthy;
