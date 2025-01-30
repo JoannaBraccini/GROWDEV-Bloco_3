@@ -121,7 +121,7 @@ describe("Find All Student Service", () => {
     });
   });
 
-  it("Deve retornar 'Erro interno ao processar a solicitação.' quando ocorrer um erro no banco de dados", async () => {
+  it("Deve retornar 500 quando ocorrer um erro de exceção", async () => {
     const sut = createSut();
     const queries: QueryFilterDto = {
       name: "Nome de Aluno",

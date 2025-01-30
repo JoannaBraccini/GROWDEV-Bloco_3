@@ -1,7 +1,6 @@
 import supertest from "supertest";
 import { createServer } from "../../../src/express.server";
 import { AuthService } from "../../../src/services";
-import { StudentType } from "@prisma/client";
 import { prismaMock } from "../../config/prisma.mock";
 // SUT
 const server = createServer();

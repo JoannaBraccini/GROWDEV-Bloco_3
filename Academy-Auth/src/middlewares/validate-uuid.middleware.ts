@@ -14,6 +14,7 @@ export class ValidateUuidMiddleware {
         ok: false,
         message: "Identificador precisa ser um UUID.",
       });
+      return;
     }
 
     next();

@@ -11,17 +11,13 @@ export class FindAllStudentMidlleware {
     const { name, cpf } = req.query;
 
     if (name && typeof name !== "string") {
-      res.status(400).json({
-        ok: false,
-        message: "Nome deve ser uma string.",
-      });
+      res.status(400).json({ ok: false, message: "Nome deve ser uma string." });
+      return;
     }
 
     if (cpf && typeof cpf !== "string") {
-      res.status(400).json({
-        ok: false,
-        message: "CPF deve ser uma string.",
-      });
+      res.status(400).json({ ok: false, message: "CPF deve ser uma string." });
+      return;
     }
 
     next();

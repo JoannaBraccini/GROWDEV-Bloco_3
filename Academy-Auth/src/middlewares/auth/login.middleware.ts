@@ -10,18 +10,12 @@ export class LoginMiddleware {
     const { email, password } = req.body;
 
     if (!email) {
-      res.status(400).json({
-        ok: false,
-        message: "E-mail é obrigatório.",
-      });
+      res.status(400).json({ ok: false, message: "E-mail é obrigatório." });
       return;
     }
 
     if (!password) {
-      res.status(400).json({
-        ok: false,
-        message: "Senha é obrigatória.",
-      });
+      res.status(400).json({ ok: false, message: "Senha é obrigatória." });
       return;
     }
 
@@ -33,18 +27,16 @@ export class LoginMiddleware {
     const { email, password } = req.body;
 
     if (typeof email !== "string") {
-      res.status(400).json({
-        ok: false,
-        message: "E-mail deve ser uma string.",
-      });
+      res
+        .status(400)
+        .json({ ok: false, message: "E-mail deve ser uma string." });
       return;
     }
 
     if (typeof password !== "string") {
-      res.status(400).json({
-        ok: false,
-        message: "Senha deve ser uma string.",
-      });
+      res
+        .status(400)
+        .json({ ok: false, message: "Senha deve ser uma string." });
       return;
     }
 

@@ -11,11 +11,7 @@ export class StudentRoutes {
     // FIND ALL - GET
     router.get(
       "/students",
-      [
-        AuthMiddleware.validate,
-        // TypeMiddleware.validate([StudentType.T]), //somente tech-helpers podem visualizar a lista de estudantes
-        FindAllStudentMidlleware.validateTypes,
-      ],
+      [AuthMiddleware.validate, FindAllStudentMidlleware.validateTypes],
       StudentController.findAll
     );
 

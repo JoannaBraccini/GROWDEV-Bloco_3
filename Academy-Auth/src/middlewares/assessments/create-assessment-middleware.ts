@@ -11,18 +11,12 @@ export class CreateAssessmentMiddleware {
     console.log("Middleware ->", student);
 
     if (!title) {
-      res.status(400).json({
-        ok: false,
-        message: "Título é obrigatório.",
-      });
+      res.status(400).json({ ok: false, message: "Título é obrigatório." });
       return;
     }
 
     if (!grade) {
-      res.status(400).json({
-        ok: false,
-        message: "Nota é obrigatória.",
-      });
+      res.status(400).json({ ok: false, message: "Nota é obrigatória." });
       return;
     }
 
@@ -33,26 +27,21 @@ export class CreateAssessmentMiddleware {
     const { title, description, grade } = req.body;
 
     if (typeof title !== "string") {
-      res.status(400).json({
-        ok: false,
-        message: "Título deve ser uma string.",
-      });
+      res
+        .status(400)
+        .json({ ok: false, message: "Título deve ser uma string." });
       return;
     }
 
     if (description && typeof description !== "string") {
-      res.status(400).json({
-        ok: false,
-        message: "Descrição deve ser uma string.",
-      });
+      res
+        .status(400)
+        .json({ ok: false, message: "Descrição deve ser uma string." });
       return;
     }
 
     if (typeof grade !== "number") {
-      res.status(400).json({
-        ok: false,
-        message: "Nota deve ser um Number.",
-      });
+      res.status(400).json({ ok: false, message: "Nota deve ser um Number." });
       return;
     }
 
@@ -67,6 +56,7 @@ export class CreateAssessmentMiddleware {
         ok: false,
         message: "Título deve conter no mínimo 4 caracteres.",
       });
+      return;
     }
 
     if (description && description.length < 5) {
@@ -74,6 +64,7 @@ export class CreateAssessmentMiddleware {
         ok: false,
         message: "Descrição deve conter no minimo 6 caracteres.",
       });
+      return;
     }
 
     return next();

@@ -15,10 +15,7 @@ export class AuthMiddleware {
     const authorization = req.headers.authorization; // token
 
     if (!authorization) {
-      res.status(401).json({
-        ok: false,
-        message: "Não autenticado.",
-      });
+      res.status(401).json({ ok: false, message: "Usuário não autenticado." });
       return;
     }
 
@@ -26,10 +23,9 @@ export class AuthMiddleware {
     const token = authorization.split(" ")[1];
 
     if (!authorization.startsWith("Bearer ") || !token) {
-      res.status(401).json({
-        ok: false,
-        message: "Token ausente ou inválido.",
-      });
+      res
+        .status(401)
+        .json({ ok: false, message: "Token ausente ou inválido." });
       return;
     }
 
@@ -37,10 +33,9 @@ export class AuthMiddleware {
     const studentDecoded = jwt.verifyToken(token);
 
     if (!studentDecoded) {
-      res.status(401).json({
-        ok: false,
-        message: "Token inválido ou expirado.",
-      });
+      res
+        .status(401)
+        .json({ ok: false, message: "Token inválido ou expirado." });
       return;
     }
 

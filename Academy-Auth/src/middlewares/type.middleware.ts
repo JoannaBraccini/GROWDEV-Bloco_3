@@ -17,6 +17,7 @@ export class TypeMiddleware {
           ok: false,
           message: `Somente estudantes do(s) tipo(s) ${alloweds} podem acessar essa funcionalidade.`,
         });
+        return;
       }
 
       next();
