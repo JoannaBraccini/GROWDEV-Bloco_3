@@ -64,14 +64,14 @@ describe("Signup Auth Service", () => {
     prismaMock.student.findFirst.mockResolvedValueOnce(null);
     jest
       .spyOn(Bcrypt.prototype, "generateHash")
-      .mockRejectedValueOnce(new Error("Erro ao gerar hash"));
+      .mockRejectedValueOnce(new Error("Exceção"));
 
     const result = await sut.signup(dto);
 
     expect(result).toEqual({
       ok: false,
       code: 500,
-      message: "Erro interno ao processar a solicitação.",
+      message: `Erro do servidor: Exceção`,
     });
   });
 
@@ -83,16 +83,14 @@ describe("Signup Auth Service", () => {
       .spyOn(Bcrypt.prototype, "generateHash")
       .mockResolvedValueOnce("hashed_pass");
 
-    prismaMock.student.create.mockRejectedValueOnce(
-      new Error("Erro ao salvar no banco")
-    );
+    prismaMock.student.create.mockRejectedValueOnce(new Error("Exceção"));
 
     const result = await sut.signup(dto);
 
     expect(result).toEqual({
       ok: false,
       code: 500,
-      message: "Erro interno ao processar a solicitação.",
+      message: `Erro do servidor: Exceção`,
     });
   });
 

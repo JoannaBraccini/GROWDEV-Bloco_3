@@ -67,15 +67,13 @@ describe("Find One By ID Student Service", () => {
 
   it("Deve retornar 'Erro interno ao processar a solicitação.' quando ocorrer um erro no banco de dados", async () => {
     const sut = createSut();
-    prismaMock.student.findUnique.mockRejectedValueOnce(
-      new Error("Erro no banco de dados")
-    );
+    prismaMock.student.findUnique.mockRejectedValueOnce(new Error("Exceção"));
 
     const result = await sut.findOneById("id-do-aluno", "id-do-aluno", "M");
 
     expect(result.ok).toBeFalsy;
     expect(result.code).toBe(500);
-    expect(result.message).toMatch("Erro interno ao processar a solicitação.");
+    expect(result.message).toMatch(`Erro do servidor: Exceção`);
     expect(result.data).toBeUndefined();
   });
 });

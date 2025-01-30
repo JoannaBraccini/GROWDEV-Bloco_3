@@ -113,7 +113,7 @@ describe("POST /login", () => {
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual({
       ok: true,
-      message: "Login efetuado com sucesso!",
+      message: "Login efetuado com sucesso.",
       data: {
         student: expect.any(Object),
         token: expect.any(String),

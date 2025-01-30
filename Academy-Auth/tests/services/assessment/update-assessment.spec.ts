@@ -66,7 +66,7 @@ describe("Update Assessment Service", () => {
     expect(result.data).toEqual(assessmentMock);
   });
 
-  it("Deve retornar 500 quando ocorrer erro no banco de dados", async () => {
+  it("Deve retornar 500 quando houver uma exceção - erro", async () => {
     const sut = createSut();
     const dto: UpdateAssessmentDto = {
       title: "updated_title",
@@ -80,16 +80,14 @@ describe("Update Assessment Service", () => {
 
     prismaMock.assessment.findUnique.mockResolvedValueOnce(assessmentMock);
 
-    prismaMock.assessment.update.mockRejectedValueOnce(
-      new Error("Erro no banco de dados")
-    );
+    prismaMock.assessment.update.mockRejectedValueOnce(new Error("Exceção"));
 
     const result = await sut.update("assess_id", dto);
 
     expect(result).toEqual({
       ok: false,
       code: 500,
-      message: "Erro interno ao processar a solicitação.",
+      message: `Erro do servidor: Exceção`,
     });
   });
 });

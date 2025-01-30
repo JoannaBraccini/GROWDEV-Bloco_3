@@ -68,11 +68,11 @@ describe("Find One Assessment Service", () => {
     });
   });
 
-  it("Deve retornar 500 quando ocorrer erro no banco de dados", async () => {
+  it("Deve retornar 500 quando houver uma exceção - erro", async () => {
     const sut = createSut();
 
     prismaMock.assessment.findUnique.mockRejectedValueOnce(
-      new Error("Erro no banco de dados")
+      new Error("Exceção")
     );
 
     const result = await sut.findOneById("assess-id", "stud-id", "T");
@@ -80,7 +80,7 @@ describe("Find One Assessment Service", () => {
     expect(result).toEqual({
       ok: false,
       code: 500,
-      message: "Erro interno ao processar a solicitação.",
+      message: `Erro do servidor: Exceção`,
     });
   });
 });

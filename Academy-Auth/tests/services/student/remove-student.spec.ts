@@ -35,22 +35,20 @@ describe("Remove Student Service", () => {
     expect(result.data).toHaveProperty("id", studentMock.id);
   });
 
-  it("Deve retornar 500 quando ocorrer erro interno", async () => {
+  it("Deve retornar 500 quando houver uma exceção - erro", async () => {
     const sut = createSut();
     const dto = { id: "id-do-aluno" };
     const studentMock = StudentMock.build(dto);
 
     prismaMock.student.findUnique.mockResolvedValueOnce(studentMock);
-    prismaMock.student.delete.mockRejectedValueOnce(
-      new Error("Internal Server Error")
-    );
+    prismaMock.student.delete.mockRejectedValueOnce(new Error("Exceção"));
 
     const result = await sut.remove(studentMock.id);
 
     expect(result).toEqual({
       ok: false,
       code: 500,
-      message: "Erro interno ao processar a solicitação.",
+      message: `Erro do servidor: Exceção`,
     });
   });
 });

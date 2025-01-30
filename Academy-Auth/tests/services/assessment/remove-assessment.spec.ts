@@ -37,22 +37,20 @@ describe("Remove Assessment Service", () => {
     });
   });
 
-  it("Deve retornar 500 quando ocorrer erro no banco de dados", async () => {
+  it("Deve retornar 500 quando houver uma exceção - erro", async () => {
     const sut = createSut();
     const dto = { id: "assess-id" };
     const assessmentMock = AssessmentMock.build({ id: "assess-id" });
 
     prismaMock.assessment.findUnique.mockResolvedValueOnce(assessmentMock);
-    prismaMock.assessment.delete.mockRejectedValueOnce(
-      new Error("Erro no banco de dados")
-    );
+    prismaMock.assessment.delete.mockRejectedValueOnce(new Error("Exceção"));
 
     const result = await sut.remove(dto.id);
 
     expect(result).toEqual({
       ok: false,
       code: 500,
-      message: "Erro interno ao processar a solicitação.",
+      message: `Erro do servidor: Exceção`,
     });
   });
 });

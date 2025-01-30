@@ -85,20 +85,18 @@ describe("Create Assessment Service", () => {
     });
   });
 
-  it("Deve retornar 500 quando ocorrer erro no banco", async () => {
+  it("Deve retornar 500 quando houver uma exceção - erro", async () => {
     const sut = createSut();
     const dto = makeCreateAssessment();
     const studentMock = StudentMock.build();
     prismaMock.student.findUnique.mockResolvedValueOnce(studentMock);
-    prismaMock.assessment.create.mockRejectedValueOnce(
-      new Error("Erro no banco de dados")
-    );
+    prismaMock.assessment.create.mockRejectedValueOnce(new Error("Exceção"));
     const result = await sut.create(dto);
 
     expect(result).toEqual({
       ok: false,
       code: 500,
-      message: "Erro interno ao processar a solicitação.",
+      message: `Erro do servidor: Exceção`,
     });
   });
 });

@@ -60,16 +60,14 @@ describe("Login Auth Service", () => {
     const sut = createSut();
     const dto = { email: "any_email", password: "any_pass" };
 
-    prismaMock.student.findUnique.mockRejectedValueOnce(
-      new Error("Database Error")
-    );
+    prismaMock.student.findUnique.mockRejectedValueOnce(new Error("Exceção"));
 
     const result = await sut.login(dto);
 
     expect(result).toEqual({
       ok: false,
       code: 500,
-      message: "Erro interno ao processar a solicitação.",
+      message: `Erro do servidor: Exceção`,
     });
   });
 

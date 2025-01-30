@@ -62,7 +62,7 @@ export class AuthService {
       return {
         ok: false,
         code: 500,
-        message: "Erro interno ao processar a solicitação.",
+        message: `Erro do servidor: ${error}`,
       };
     }
   }
@@ -129,7 +129,7 @@ export class AuthService {
       return {
         code: 500,
         ok: false,
-        message: "Erro interno ao processar a solicitação.",
+        message: `Erro do servidor: ${error}`,
       };
     }
   }

@@ -127,7 +127,7 @@ describe("Update Student Service", () => {
     });
   });
 
-  it("Deve retornar 500 ao ocorrer um erro no banco durante a atualização", async () => {
+  it("Deve retornar 500 quando houver uma exceção - erro", async () => {
     const sut = createSut();
     const dto: UpdateStudentDto = {
       age: 25,
@@ -138,16 +138,12 @@ describe("Update Student Service", () => {
     });
     prismaMock.student.findUnique.mockResolvedValueOnce(studentMock);
 
-    prismaMock.student.update.mockRejectedValueOnce(
-      new Error("Erro inesperado")
-    );
+    prismaMock.student.update.mockRejectedValueOnce(new Error("Exceção"));
 
     const result = await sut.update("id-do-aluno", dto);
 
     expect(result.code).toBe(500);
     expect(result.ok).toBeFalsy();
-    expect(result.message).toContain(
-      "Erro interno ao processar a solicitação."
-    );
+    expect(result.message).toContain(`Erro do servidor: Exceção`);
   });
 });

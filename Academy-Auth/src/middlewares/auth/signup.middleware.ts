@@ -40,7 +40,7 @@ export class SignupMiddleware {
     if (!cpf) {
       res.status(400).json({
         ok: false,
-        message: "Cpf é obrigatório.",
+        message: "CPF é obrigatório.",
       });
     }
 
@@ -74,7 +74,7 @@ export class SignupMiddleware {
     if (typeof cpf !== "string") {
       res.status(400).json({
         ok: false,
-        message: "Cpf deve ser uma string.",
+        message: "CPF deve ser uma string.",
       });
     }
 
@@ -102,7 +102,7 @@ export class SignupMiddleware {
   }
 
   public static validateData(req: Request, res: Response, next: NextFunction) {
-    const { name, email, password, studentType, age, cpf } = req.body;
+    const { name, email, password, cpf } = req.body;
 
     if (name.length < 3) {
       res.status(400).json({
@@ -125,7 +125,7 @@ export class SignupMiddleware {
       });
     }
 
-    if (cpf.length < 11) {
+    if (cpf.length !== 11) {
       res.status(400).json({
         ok: false,
         message: "CPF inválido.",

@@ -43,7 +43,7 @@ export class StudentService {
       return {
         ok: false,
         code: 500,
-        message: "Erro interno ao processar a solicitação.",
+        message: `Erro do servidor: ${error}`,
       };
     }
   }
@@ -91,7 +91,7 @@ export class StudentService {
       return {
         ok: false,
         code: 500,
-        message: "Erro interno ao processar a solicitação.",
+        message: `Erro do servidor: ${error}`,
       };
     }
   }
@@ -179,7 +179,7 @@ export class StudentService {
       return {
         ok: false,
         code: 500,
-        message: "Erro interno ao processar a solicitação.",
+        message: `Erro do servidor: ${error}`,
       };
     }
   }
@@ -214,7 +214,7 @@ export class StudentService {
       return {
         ok: false,
         code: 500,
-        message: "Erro interno ao processar a solicitação.",
+        message: `Erro do servidor: ${error}`,
       };
     }
   }
