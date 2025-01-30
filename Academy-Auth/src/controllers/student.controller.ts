@@ -29,8 +29,6 @@ export class StudentController {
     try {
       // 1- Pegar o identificador
       const studentLogged = req.authStudent;
-      console.log(studentLogged);
-
       const { id } = req.params;
 
       // 2 - Chamar o responsável

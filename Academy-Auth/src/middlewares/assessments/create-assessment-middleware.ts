@@ -6,9 +6,7 @@ export class CreateAssessmentMiddleware {
     res: Response,
     next: NextFunction
   ) {
-    const { title, grade, student } = req.body;
-
-    console.log("Middleware ->", student);
+    const { title, grade } = req.body;
 
     if (!title) {
       res.status(400).json({ ok: false, message: "Título é obrigatório." });
