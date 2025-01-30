@@ -133,7 +133,7 @@ describe("Find All Student Service", () => {
 
     expect(result.ok).toBeFalsy;
     expect(result.code).toBe(500);
-    expect(result.message).toMatch(`Erro do servidor: Exceção`);
+    expect(result.message).toMatch("Erro do servidor: Exceção");
     expect(result.data).toBeUndefined();
   });
 });

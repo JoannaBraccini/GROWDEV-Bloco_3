@@ -7,12 +7,12 @@ export class SignupMiddleware {
     res: Response,
     next: NextFunction
   ) {
-    const { name, email, password, studentType, age, cpf } = req.body;
+    const { name, email, password, studentType, cpf } = req.body;
 
-    if (!name) {
+    if (!name || name.length === 0) {
       res.status(400).json({
         ok: false,
-        message: "Name é obrigatório.",
+        message: "Nome é obrigatório.",
       });
     }
 
@@ -26,7 +26,7 @@ export class SignupMiddleware {
     if (!password) {
       res.status(400).json({
         ok: false,
-        message: "Senha é obrigatório.",
+        message: "Senha é obrigatória.",
       });
     }
 
@@ -44,7 +44,7 @@ export class SignupMiddleware {
       });
     }
 
-    return next();
+    next();
   }
 
   public static validateTypes(req: Request, res: Response, next: NextFunction) {
@@ -78,11 +78,7 @@ export class SignupMiddleware {
       });
     }
 
-    if (
-      studentType !== StudentType.F &&
-      studentType !== StudentType.M &&
-      studentType !== StudentType.T
-    ) {
+    if (!["T", "M", "F"].includes(studentType)) {
       res.status(400).json({
         ok: false,
         message: "Tipo deve ser T, M, F.",
@@ -98,7 +94,7 @@ export class SignupMiddleware {
       }
     }
 
-    return next();
+    next();
   }
 
   public static validateData(req: Request, res: Response, next: NextFunction) {
@@ -132,7 +128,7 @@ export class SignupMiddleware {
       });
     }
 
-    return next();
+    next();
   }
 }
 

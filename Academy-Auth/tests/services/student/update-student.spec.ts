@@ -144,6 +144,6 @@ describe("Update Student Service", () => {
 
     expect(result.code).toBe(500);
     expect(result.ok).toBeFalsy();
-    expect(result.message).toContain(`Erro do servidor: Exceção`);
+    expect(result.message).toContain("Erro do servidor: Exceção");
   });
 });

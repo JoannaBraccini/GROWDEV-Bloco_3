@@ -61,11 +61,11 @@ export class AssessmentService {
           createdAt: assessmentCreated.createdAt,
         },
       };
-    } catch (error) {
+    } catch (error: any) {
       return {
         ok: false,
         code: 500,
-        message: `Erro do servidor: ${error}`,
+        message: `Erro do servidor: ${error.message}`,
       };
     }
   }
@@ -101,11 +101,11 @@ export class AssessmentService {
         message: "Avaliações buscadas com sucesso.",
         data: assessmentList.map((ass) => this.mapToDto(ass)),
       };
-    } catch (error) {
+    } catch (error: any) {
       return {
         ok: false,
         code: 500,
-        message: `Erro do servidor: ${error}`,
+        message: `Erro do servidor: ${error.message}`,
       };
     }
   }
@@ -141,11 +141,11 @@ export class AssessmentService {
         message: "Avaliação buscada com sucesso.",
         data: assessment,
       };
-    } catch (error) {
+    } catch (error: any) {
       return {
         ok: false,
         code: 500,
-        message: `Erro do servidor: ${error}`,
+        message: `Erro do servidor: ${error.message}`,
       };
     }
   }
@@ -187,11 +187,11 @@ export class AssessmentService {
         message: "Avaliação atualizada com sucesso.",
         data: this.mapToDto(updatedAssessment),
       };
-    } catch (error) {
+    } catch (error: any) {
       return {
         ok: false,
         code: 500,
-        message: `Erro do servidor: ${error}`,
+        message: `Erro do servidor: ${error.message}`,
       };
     }
   }
@@ -219,11 +219,11 @@ export class AssessmentService {
         message: "Avaliação excluída com sucesso.",
         data: this.mapToDto(assessment),
       };
-    } catch (error) {
+    } catch (error: any) {
       return {
         ok: false,
         code: 500,
-        message: `Erro do servidor: ${error}`,
+        message: `Erro do servidor: ${error.message}`,
       };
     }
   }

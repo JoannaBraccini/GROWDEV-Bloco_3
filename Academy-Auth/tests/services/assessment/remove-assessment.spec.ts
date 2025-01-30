@@ -50,7 +50,7 @@ describe("Remove Assessment Service", () => {
     expect(result).toEqual({
       ok: false,
       code: 500,
-      message: `Erro do servidor: Exceção`,
+      message: "Erro do servidor: Exceção",
     });
   });
 });

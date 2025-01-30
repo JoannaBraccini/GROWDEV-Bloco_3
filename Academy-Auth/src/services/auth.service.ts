@@ -58,11 +58,11 @@ export class AuthService {
           token,
         },
       };
-    } catch (error) {
+    } catch (error: any) {
       return {
-        ok: false,
         code: 500,
-        message: `Erro do servidor: ${error}`,
+        ok: false,
+        message: `Erro do servidor: ${error.message}`,
       };
     }
   }
@@ -125,11 +125,11 @@ export class AuthService {
           createdAt: studentCreated.createdAt,
         },
       };
-    } catch (error) {
+    } catch (error: any) {
       return {
         code: 500,
         ok: false,
-        message: `Erro do servidor: ${error}`,
+        message: `Erro do servidor: ${error.message}`,
       };
     }
   }

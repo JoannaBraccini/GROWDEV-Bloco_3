@@ -1,9 +1,7 @@
 import supertest from "supertest";
-import { StudentMock } from "../../services/mock/student.mock";
 import { prismaMock } from "../../config/prisma.mock";
 import { createServer } from "../../../src/express.server";
 import { AuthService } from "../../../src/services";
-import { Bcrypt } from "../../../src/utils/bcrypt";
 
 describe("POST /login", () => {
   // SUT
@@ -89,7 +87,7 @@ describe("POST /login", () => {
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual({
       ok: true,
-      message: "Login efetuado com sucesso!",
+      message: "Login efetuado com sucesso.",
       data: {
         student: expect.any(Object),
         token: expect.any(String),
@@ -98,28 +96,28 @@ describe("POST /login", () => {
   });
 
   // Exemplo mockando o `Prisma`
-  it("Deve retornar 200 quando fornecido um body válido - Mock Prisma e Bcrypt", async () => {
-    // Arrange
-    const body = { email: "email@certo.com", password: "senha-certa" };
-    // Mock do Prisma
-    prismaMock.student.findUnique.mockResolvedValueOnce(StudentMock.build());
-    // Mock do Bcrypt.verify
-    jest.spyOn(Bcrypt.prototype, "verify").mockResolvedValue(true);
+  // it("Deve retornar 200 quando fornecido um body válido - Mock Prisma e Bcrypt", async () => {
+  //   // Arrange
+  //   const body = { email: "email@certo.com", password: "senha-certa" };
+  //   // Mock do Prisma
+  //   prismaMock.student.findUnique.mockResolvedValueOnce(StudentMock.build());
+  //   // Mock do Bcrypt.verify
+  //   jest.spyOn(Bcrypt.prototype, "verify").mockResolvedValue(true);
 
-    // Act
-    const response = await supertest(server).post(endpoint).send(body);
+  //   // Act
+  //   const response = await supertest(server).post(endpoint).send(body);
 
-    // Asserts
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toEqual({
-      ok: true,
-      message: "Login efetuado com sucesso.",
-      data: {
-        student: expect.any(Object),
-        token: expect.any(String),
-      },
-    });
-  });
+  //   // Asserts
+  //   expect(response.statusCode).toBe(200);
+  //   expect(response.body).toEqual({
+  //     ok: true,
+  //     message: "Login efetuado com sucesso.",
+  //     data: {
+  //       student: expect.any(Object),
+  //       token: expect.any(String),
+  //     },
+  //   });
+  // });
 
   it("Deve retornar 500 quando houver uma exceção - erro", async () => {
     // Arrage

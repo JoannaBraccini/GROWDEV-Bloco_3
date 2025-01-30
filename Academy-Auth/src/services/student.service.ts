@@ -39,11 +39,11 @@ export class StudentService {
         message: "Estudantes buscados com sucesso.",
         data: students.map((student) => this.mapToDto(student)), // StudentDto[]
       };
-    } catch (error) {
+    } catch (error: any) {
       return {
-        ok: false,
         code: 500,
-        message: `Erro do servidor: ${error}`,
+        ok: false,
+        message: `Erro do servidor: ${error.message}`,
       };
     }
   }
@@ -87,11 +87,11 @@ export class StudentService {
         message: "Estudante encontrado.",
         data: this.mapToDto(student),
       };
-    } catch (error) {
+    } catch (error: any) {
       return {
-        ok: false,
         code: 500,
-        message: `Erro do servidor: ${error}`,
+        ok: false,
+        message: `Erro do servidor: ${error.message}`,
       };
     }
   }
@@ -175,11 +175,11 @@ export class StudentService {
         message: "Estudante atualizado com sucesso.",
         data: this.mapToDto(studentUpdated),
       };
-    } catch (error) {
+    } catch (error: any) {
       return {
-        ok: false,
         code: 500,
-        message: `Erro do servidor: ${error}`,
+        ok: false,
+        message: `Erro do servidor: ${error.message}`,
       };
     }
   }
@@ -210,11 +210,11 @@ export class StudentService {
         message: "Estudante removido com sucesso.",
         data: this.mapToDto(student), //dados que foram removidos
       };
-    } catch (error) {
+    } catch (error: any) {
       return {
-        ok: false,
         code: 500,
-        message: `Erro do servidor: ${error}`,
+        ok: false,
+        message: `Erro do servidor: ${error.message}`,
       };
     }
   }
