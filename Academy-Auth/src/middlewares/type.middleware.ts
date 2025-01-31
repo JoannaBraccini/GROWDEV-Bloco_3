@@ -11,7 +11,7 @@ export class TypeMiddleware {
       }
 
       if (type && !allowedTypes.includes(type)) {
-        const alloweds = allowedTypes.join(", ");
+        const alloweds = allowedTypes.join(" e ");
 
         res.status(401).json({
           ok: false,

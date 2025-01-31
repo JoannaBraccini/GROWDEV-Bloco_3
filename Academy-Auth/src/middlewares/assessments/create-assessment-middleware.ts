@@ -18,7 +18,7 @@ export class CreateAssessmentMiddleware {
       return;
     }
 
-    return next();
+    next();
   }
 
   public static validateTypes(req: Request, res: Response, next: NextFunction) {
@@ -39,17 +39,17 @@ export class CreateAssessmentMiddleware {
     }
 
     if (typeof grade !== "number") {
-      res.status(400).json({ ok: false, message: "Nota deve ser um Number." });
+      res.status(400).json({ ok: false, message: "Nota deve ser um number." });
       return;
     }
 
-    return next();
+    next();
   }
 
   public static validateData(req: Request, res: Response, next: NextFunction) {
     const { title, description } = req.body;
 
-    if (title.length < 3) {
+    if (title.length < 4) {
       res.status(400).json({
         ok: false,
         message: "Título deve conter no mínimo 4 caracteres.",
@@ -57,7 +57,7 @@ export class CreateAssessmentMiddleware {
       return;
     }
 
-    if (description && description.length < 5) {
+    if (description && description.length < 6) {
       res.status(400).json({
         ok: false,
         message: "Descrição deve conter no minimo 6 caracteres.",
@@ -65,6 +65,6 @@ export class CreateAssessmentMiddleware {
       return;
     }
 
-    return next();
+    next();
   }
 }
