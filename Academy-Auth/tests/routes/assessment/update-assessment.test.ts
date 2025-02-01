@@ -5,12 +5,13 @@ import { makeToken } from "../make-token";
 import { AssessmentService } from "../../../src/services/assessments.service";
 import { AssessmentMock } from "../../services/mock/assessment.mock";
 
-describe("POST /assessments", () => {
+describe("PUT /assessments/:id", () => {
   const server = createServer();
   const endpoint = "/assessments";
-  //Auth
+
+  // Auth
   it("Deve retornar 401 quando não for informado token", async () => {
-    const response = await supertest(server).post(endpoint);
+    const response = await supertest(server).put(`${endpoint}/any_id`);
 
     expect(response).toHaveProperty("statusCode", 401);
     expect(response).toHaveProperty("body", {
@@ -21,7 +22,7 @@ describe("POST /assessments", () => {
 
   it("Deve retornar 401 quando for informado token sem Bearer", async () => {
     const response = await supertest(server)
-      .post(endpoint)
+      .put(`${endpoint}/any_id`)
       .set("Authorization", "any_token");
 
     expect(response).toHaveProperty("statusCode", 401);
@@ -33,7 +34,7 @@ describe("POST /assessments", () => {
 
   it("Deve retornar 401 quando for informado token inválido", async () => {
     const response = await supertest(server)
-      .post(endpoint)
+      .put(`${endpoint}/any_id`)
       .set("Authorization", "Bearer any_token");
 
     expect(response.statusCode).toBe(401);
@@ -42,74 +43,50 @@ describe("POST /assessments", () => {
       message: "Token inválido ou expirado.",
     });
   });
-  //StudentType
-  it("Deve retornar 401 quando for informado token válido mas tipo do estudante não for autorizado", async () => {
-    const token = makeToken({ studentType: StudentType.F });
+
+  // UUID
+  it("Deve retornar 400 quando for informado UUID inválido", async () => {
+    const token = makeToken({ studentType: StudentType.T });
+    const id = "invalid_uuid";
 
     const response = await supertest(server)
-      .post(endpoint)
+      .put(`${endpoint}/${id}`)
       .set("Authorization", `Bearer ${token}`);
 
-    expect(response.statusCode).toBe(401);
+    expect(response.statusCode).toBe(400);
     expect(response).toHaveProperty("body", {
       ok: false,
-      message:
-        "Somente estudantes do(s) tipo(s) T e M podem acessar essa funcionalidade.",
+      message: "Identificador precisa ser um UUID.",
     });
   });
-  //Required
-  it("Deve retornar 400 quando Título não for fornecido", async () => {
+
+  // Validation
+  it("Deve retornar 400 quando o título for inválido", async () => {
     const token = makeToken({ studentType: StudentType.T });
+    const id = "f7a2f963-9ab0-4a24-a55d-f24911565993";
+    const payload = { title: 123 };
 
     const response = await supertest(server)
-      .post(endpoint)
+      .put(`${endpoint}/${id}`)
       .set("Authorization", `Bearer ${token}`)
-      .send({ title: null, grade: null, description: null });
+      .send(payload);
 
     expect(response.statusCode).toBe(400);
     expect(response).toHaveProperty("body", {
       ok: false,
-      message: "Título é obrigatório.",
+      message: "Titulo deve ser uma string",
     });
   });
 
-  it("Deve retornar 400 quando Nota não for fornecida", async () => {
+  it("Deve retornar 400 quando a descrição for inválida", async () => {
     const token = makeToken({ studentType: StudentType.T });
+    const id = "f7a2f963-9ab0-4a24-a55d-f24911565993";
+    const payload = { description: 123 };
 
     const response = await supertest(server)
-      .post(endpoint)
+      .put(`${endpoint}/${id}`)
       .set("Authorization", `Bearer ${token}`)
-      .send({ title: "Any Title", grade: null, description: null });
-
-    expect(response.statusCode).toBe(400);
-    expect(response).toHaveProperty("body", {
-      ok: false,
-      message: "Nota é obrigatória.",
-    });
-  });
-  //Types
-  it("Deve retornar 400 quando tipo do título for inválido", async () => {
-    const token = makeToken({ studentType: StudentType.T });
-
-    const response = await supertest(server)
-      .post(endpoint)
-      .set("Authorization", `Bearer ${token}`)
-      .send({ title: 1234, grade: 9, description: null });
-
-    expect(response.statusCode).toBe(400);
-    expect(response).toHaveProperty("body", {
-      ok: false,
-      message: "Título deve ser uma string.",
-    });
-  });
-
-  it("Deve retornar 400 quando tipo da descrição for inválido", async () => {
-    const token = makeToken({ studentType: StudentType.T });
-
-    const response = await supertest(server)
-      .post(endpoint)
-      .set("Authorization", `Bearer ${token}`)
-      .send({ title: "Novo Título", grade: 9, description: 1234 });
+      .send(payload);
 
     expect(response.statusCode).toBe(400);
     expect(response).toHaveProperty("body", {
@@ -118,13 +95,15 @@ describe("POST /assessments", () => {
     });
   });
 
-  it("Deve retornar 400 quando tipo da nota for inválido", async () => {
+  it("Deve retornar 400 quando a nota for inválida", async () => {
     const token = makeToken({ studentType: StudentType.T });
+    const id = "f7a2f963-9ab0-4a24-a55d-f24911565993";
+    const payload = { grade: "invalid_grade" };
 
     const response = await supertest(server)
-      .post(endpoint)
+      .put(`${endpoint}/${id}`)
       .set("Authorization", `Bearer ${token}`)
-      .send({ title: "Novo Título", grade: "9", description: null });
+      .send(payload);
 
     expect(response.statusCode).toBe(400);
     expect(response).toHaveProperty("body", {
@@ -132,15 +111,16 @@ describe("POST /assessments", () => {
       message: "Nota deve ser um number.",
     });
   });
-  //Data
-  it("Deve retornar 400 quando title.length for inválido", async () => {
-    // const id = "f7a2f963-9ab0-4a24-a55d-f24911565993";
+
+  it("Deve retornar 400 quando o título tiver menos de 4 caracteres", async () => {
     const token = makeToken({ studentType: StudentType.T });
+    const id = "f7a2f963-9ab0-4a24-a55d-f24911565993";
+    const payload = { title: "abc" };
 
     const response = await supertest(server)
-      .post(endpoint)
+      .put(`${endpoint}/${id}`)
       .set("Authorization", `Bearer ${token}`)
-      .send({ title: "Nov", grade: 9 });
+      .send(payload);
 
     expect(response.statusCode).toBe(400);
     expect(response).toHaveProperty("body", {
@@ -149,13 +129,15 @@ describe("POST /assessments", () => {
     });
   });
 
-  it("Deve retornar 400 quando description.length for inválido", async () => {
+  it("Deve retornar 400 quando a descrição tiver menos de 6 caracteres", async () => {
     const token = makeToken({ studentType: StudentType.T });
+    const id = "f7a2f963-9ab0-4a24-a55d-f24911565993";
+    const payload = { description: "abcde" };
 
     const response = await supertest(server)
-      .post(endpoint)
+      .put(`${endpoint}/${id}`)
       .set("Authorization", `Bearer ${token}`)
-      .send({ title: "Novo Título", grade: 9, description: "Descr" });
+      .send(payload);
 
     expect(response.statusCode).toBe(400);
     expect(response).toHaveProperty("body", {
@@ -163,33 +145,43 @@ describe("POST /assessments", () => {
       message: "Descrição deve conter no minimo 6 caracteres.",
     });
   });
-  //Service Mock
-  it("Deve retornar 201 quando informado o token e body válidos", async () => {
-    const token = makeToken({ studentType: StudentType.M });
-    const mockAssessment = AssessmentMock.build();
+
+  // Service Mock
+  it("Deve retornar 200 quando informado token e ID válidos", async () => {
+    const token = makeToken({ studentType: StudentType.T });
+    const id = "f7a2f963-9ab0-4a24-a55d-f24911565993";
+    const payload = {
+      title: "new_title",
+      description: "new_description",
+      grade: 9,
+    };
+    const mockAssessment = AssessmentMock.build({
+      id: "f7a2f963-9ab0-4a24-a55d-f24911565993",
+      ...payload,
+    });
     const mockService = {
       ok: true,
-      code: 201,
-      message: "Avaliação cadastrada com sucesso.",
+      code: 200,
+      message: "Avaliação atualizada.",
       data: mockAssessment,
     };
 
-    const { code, ...responseBody } = mockService;
-
     jest
-      .spyOn(AssessmentService.prototype, "create")
+      .spyOn(AssessmentService.prototype, "update")
       .mockResolvedValue(mockService);
 
     const response = await supertest(server)
-      .post(endpoint)
+      .put(`${endpoint}/${id}`)
       .set("Authorization", `Bearer ${token}`)
-      .send({ title: mockAssessment.title, grade: 9 });
+      .send(payload);
 
-    expect(response).toHaveProperty("statusCode", 201);
+    expect(response.status).toBe(200);
+    expect(response.body.ok).toBeTruthy();
+    expect(response.body.message).toMatch("Avaliação atualizada.");
     expect(response.body.data).toEqual({
-      ...responseBody.data,
-      createdAt: responseBody.data.createdAt.toISOString(),
-      updatedAt: responseBody.data.updatedAt.toISOString(),
+      ...mockAssessment,
+      createdAt: mockAssessment.createdAt.toISOString(),
+      updatedAt: mockAssessment.updatedAt.toISOString(),
     });
   });
 });

@@ -1,14 +1,15 @@
 import supertest from "supertest";
 import { createServer } from "../../../src/express.server";
-import * as studentService from "../../../src/services/student.service";
 import { StudentType } from "@prisma/client";
 import { makeToken } from "../make-token";
-import { StudentMock } from "../../services/mock/student.mock";
+import { AssessmentService } from "../../../src/services/assessments.service";
+import { AssessmentMock } from "../../services/mock/assessment.mock";
 
-describe("GET /students/id", () => {
+describe("GET /assessments", () => {
   const server = createServer();
-  const endpoint = "/students";
-  //Auth
+  const endpoint = "/assessments";
+
+  // Auth
   it("Deve retornar 401 quando não for informado token", async () => {
     const response = await supertest(server).get(endpoint);
 
@@ -42,50 +43,52 @@ describe("GET /students/id", () => {
       message: "Token inválido ou expirado.",
     });
   });
-  //UUID
-  it("Deve retornar 400 quando for informado  UUID inválido", async () => {
-    const token = makeToken({ studentType: StudentType.M });
-    const id = "f7a2f963-9ab0-4a24-a55d-65993";
 
-    const response = await supertest(server)
-      .get(`${endpoint}/${id}`)
-      .set("Authorization", `Bearer ${token}`);
-
-    expect(response.statusCode).toBe(400);
-    expect(response).toHaveProperty("body", {
-      ok: false,
-      message: "Identificador precisa ser um UUID.",
-    });
-  });
-
-  it("Deve retornar 200 quando informado token e ID válidos", async () => {
+  // Service Mock
+  it("Deve retornar 200 quando informado o token válido", async () => {
     const token = makeToken({ studentType: StudentType.T });
-    const id = "f7a2f963-9ab0-4a24-a55d-f24911565993";
-    const mockStudent = StudentMock.build({
-      id: "f7a2f963-9ab0-4a24-a55d-f24911565993",
-    });
     const mockService = {
       ok: true,
       code: 200,
-      message: "Estudante encontrado.",
-      data: mockStudent,
+      message: "Avaliações encontradas com sucesso.",
+      data: [],
     };
+
+    const { code, ...responseBody } = mockService;
+
     jest
-      .spyOn(studentService.StudentService.prototype, "findOneById")
+      .spyOn(AssessmentService.prototype, "findAll")
       .mockResolvedValue(mockService);
 
     const response = await supertest(server)
-      .get(`${endpoint}/${id}`)
+      .get(endpoint)
       .set("Authorization", `Bearer ${token}`);
-    console.log(response);
 
-    expect(response.status).toBe(200);
-    expect(response.body.ok).toBeTruthy;
-    expect(response.body.message).toMatch("Estudante encontrado.");
-    expect(response.body.data).toEqual({
-      ...mockStudent,
-      createdAt: mockStudent.createdAt.toISOString(),
-      updatedAt: mockStudent.updatedAt.toISOString(),
-    });
+    expect(response).toHaveProperty("statusCode", 200);
+    expect(response.body).toEqual(responseBody);
+  });
+
+  it("Deve retornar 200 com paginação quando informado o token válido e query params", async () => {
+    const token = makeToken({ studentType: StudentType.T });
+    const mockService = {
+      ok: true,
+      code: 200,
+      message: "Avaliações encontradas com sucesso.",
+      data: [],
+    };
+
+    const { code, ...responseBody } = mockService;
+
+    jest
+      .spyOn(AssessmentService.prototype, "findAll")
+      .mockResolvedValue(mockService);
+
+    const response = await supertest(server)
+      .get(endpoint)
+      .set("Authorization", `Bearer ${token}`)
+      .query({ page: 1, take: 2 });
+
+    expect(response).toHaveProperty("statusCode", 200);
+    expect(response.body).toEqual(responseBody);
   });
 });

@@ -46,7 +46,7 @@ describe("PUT /students/id", () => {
     });
   });
   //UUID
-  it("Deve retornar 400 quando for informado token válido mas ID inválido", async () => {
+  it("Deve retornar 400 quando for informado  UUID inválido", async () => {
     const token = makeToken({ studentType: StudentType.M });
     const id = "f7a2f963-9ab0-4a24-a55d-65993";
 

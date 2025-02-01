@@ -9,7 +9,9 @@ export class UpdateAssessmentMiddleware {
     const { title, description, grade } = req.body;
 
     if (title && typeof title !== "string") {
-      res.status(400).json({ ok: false, message: "Titulo deve ser um texto" });
+      res
+        .status(400)
+        .json({ ok: false, message: "Titulo deve ser uma string" });
       return;
     }
     if (description && typeof description !== "string") {
@@ -19,7 +21,7 @@ export class UpdateAssessmentMiddleware {
       return;
     }
     if (grade && typeof grade !== "number") {
-      res.status(400).json({ ok: false, message: "Nota deve ser um Number." });
+      res.status(400).json({ ok: false, message: "Nota deve ser um number." });
       return;
     }
 
@@ -29,14 +31,14 @@ export class UpdateAssessmentMiddleware {
   public static validateData(req: Request, res: Response, next: NextFunction) {
     const { title, description } = req.body;
 
-    if (title && title.length < 3) {
+    if (title && title.length < 4) {
       res.status(400).json({
         ok: false,
         message: "Título deve conter no mínimo 4 caracteres.",
       });
       return;
     }
-    if (description && description.length < 5) {
+    if (description && description.length < 6) {
       res.status(400).json({
         ok: false,
         message: "Descrição deve conter no minimo 6 caracteres.",
